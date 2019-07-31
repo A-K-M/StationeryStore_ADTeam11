@@ -404,6 +404,8 @@
     <Content Include="Statics\webfonts\fa-solid-900.ttf" />
     <Content Include="Statics\webfonts\fa-solid-900.woff" />
     <Content Include="Statics\webfonts\fa-solid-900.woff2" />
+    <Content Include="Views\StoreManager\AddSupplier.cshtml" />
+    <Content Include="Views\StoreManager\Suppliers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -412,7 +414,6 @@
     <Folder Include="Views\DepartmentHead\" />
     <Folder Include="Views\DepartmentRepresentative\" />
     <Folder Include="Views\StoreClerk\" />
-    <Folder Include="Views\StoreManager\" />
     <Folder Include="Views\StoreSupervisor\" />
   </ItemGroup>
   <ItemGroup>
