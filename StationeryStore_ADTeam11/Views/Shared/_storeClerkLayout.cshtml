@@ -2,7 +2,15 @@
 <html>
 
     <head>
- 
+        <link rel="stylesheet" href="~/Statics/vendor/bootstrap/css/bootstrap.min.css">
+        <link href="~/Statics/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="~/Statics/css/fontastic.css" rel="stylesheet" />
+        <link href="~/Statics/css/grasp_mobile_progress_circle-1.0.0.min.css" rel="stylesheet" />
+        <link href="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+        <link href="~/Statics/css/style.default.css" rel="stylesheet" />
+        <link href="~/Statics/css/fa-all.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
 
     <body>
@@ -90,8 +98,25 @@
                 </nav>
             </header>
             <section class="statistics">
-                @RenderBody()
+                <div class="container-fluid">
+                    <div class="row d-flex">
+                        <div class="col-12">
+                            <div class="card">
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
+        <script src="~/Statics/vendor/jquery/jquery.min.js"></script>
+        <script src="~/Statics/vendor/popper.js/umd/popper.min.js"></script>
+        <script src="~/Statics/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="~/Statics/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+        <script src="~/Statics/vendor/jquery.cookie/jquery.cookie.js"></script>
+        <script src="~/Statics/vendor/chart.js/Chart.min.js"></script>
+        <script src="~/Statics/vendor/jquery-validation/jquery.validate.min.js"></script>
+        <script src="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script src="~/Statics/js/charts-home.js"></script>
     </body>
 </html>
