@@ -8,7 +8,7 @@ namespace StationeryStore_ADTeam11.Models
     public class Employee
     {
         private int _id;
-        private string _departmentId;
+        private int _departmentId;
         private string _name;
         private string _userName;
         private string _password;

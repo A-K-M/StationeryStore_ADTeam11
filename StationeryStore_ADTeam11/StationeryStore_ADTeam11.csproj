@@ -130,6 +130,7 @@
     <Compile Include="Controllers\StoreSupervisorController.cs" />
     <Compile Include="DAOs\DAO.cs" />
     <Compile Include="DAOs\DatabaseConnection.cs" />
+    <Compile Include="DAOs\EmployeeDAO.cs" />
     <Compile Include="DAOs\SupplierDAO.cs" />
     <Compile Include="Filters\AuthenticationFilter.cs" />
     <Compile Include="Filters\LayoutFilter.cs" />
