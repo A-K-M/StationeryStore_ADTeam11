@@ -40,4 +40,33 @@ public class SupplierDAO : DAO
 
         return suppliers;
     }
+
+    public static bool addSupplier(Supplier supp)
+    {
+        bool saved = false;
+
+        try
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sqlAddSupp = @"INSERT INTO Supplier (ID, Name, GSTNo, ContactName, PhoneNo, Fax, Address) 
+                                VALUES ('" + supp.Id + "', '" + supp.Name + "', '" + supp.GstNumber + "', '" + supp.ContactName + "', "
+                                            + supp.PhoneNo + ", " + supp.Fax + ", '" + supp.Address + "')";
+                SqlCommand cmd = new SqlCommand(sqlAddSupp, conn);
+                cmd.ExecuteNonQuery();
+
+                conn.Close();
+            }
+            saved = true;
+        }
+        catch (Exception e)
+        {
+            saved = false;
+        }
+
+
+        return saved;
+    }
 }

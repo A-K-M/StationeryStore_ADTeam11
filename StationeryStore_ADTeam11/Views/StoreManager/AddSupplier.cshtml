@@ -1,0 +1,30 @@
+﻿
+
+@{
+    ViewBag.Title = "addSupplierStatus";
+
+    var saved = (bool)ViewData["saved"];
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+
+<body>
+<h2>addSupplierStatus</h2>
+
+@{
+    if (saved == true)
+    {
+        <p>Supplier record successfully created</p>
+    }
+    else
+    {
+        <p>Error, supplier record not saved</p>
+    }
+}
+
+</body>
+</html>
