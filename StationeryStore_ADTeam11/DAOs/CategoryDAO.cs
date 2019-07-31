@@ -34,6 +34,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 categories.Add(category);
             }
 
+            data.Close();
             return categories;
         }
     }

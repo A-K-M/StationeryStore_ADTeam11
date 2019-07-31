@@ -16,11 +16,11 @@ namespace StationeryStore_ADTeam11.Models
         private string _uom;
         private string _binNo;
         private string _firstSupplier;
-        private decimal _firstPrice;
+        private double _firstPrice;
         private string _secondSupplier;
-        private decimal _secondPrice;
+        private double _secondPrice;
         private string _thirdSupplier;
-        private decimal _thirdPrice;
+        private double _thirdPrice;
 
         public int Id { get; set; }
         public int CategoryId { get; set; }
@@ -30,11 +30,11 @@ namespace StationeryStore_ADTeam11.Models
         public string Uom { get; set; }
         public string BinNo { get; set; }
         public string FirstSupplier { get; set; }
-        public decimal FirstPrice { get; set; }
+        public double FirstPrice { get; set; }
         public string SecondSupplier { get; set; }
-        public decimal SecondPrice { get; set; }
+        public double SecondPrice { get; set; }
         public string ThirdSupplier { get; set; }
-        public decimal ThirdPrice { get; set; }
+        public double ThirdPrice { get; set; }
  
     }
 }
