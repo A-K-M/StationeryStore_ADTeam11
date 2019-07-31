@@ -11,14 +11,13 @@ namespace StationeryStore_ADTeam11.DAOs
     public class DatabaseConnection
     {
         protected SqlConnection connection;
-        private string _connectionString = "SERVER=DESKTOP-KO5CS62; DATABASE=StationeryInventory; Integrated Security=true";
 
-        public SqlConnection GetConnection()
+        private string _connectionString = "SERVER=KOKOSITE; DATABASE=StationeryInventory; Integrated Security=true";
+
+        public DatabaseConnection()
         {
             connection = new SqlConnection(_connectionString);
-            return connection;
         }
-       
     }
 }
 

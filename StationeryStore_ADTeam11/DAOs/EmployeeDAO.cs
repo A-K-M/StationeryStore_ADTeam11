@@ -12,7 +12,7 @@ namespace StationeryStore_ADTeam11.DAOs
         public Employee GetEmployeeByUsername(string username)
         {
             Employee employee = null;
-            SqlConnection conn = GetConnection();
+            SqlConnection conn = connection;
             conn.Open();
             string sql = @"select id,DeptID,Name,UserName,Password,Email,Role from employee where UserName = '" + username + "'";
             SqlCommand command = new SqlCommand(sql, conn);

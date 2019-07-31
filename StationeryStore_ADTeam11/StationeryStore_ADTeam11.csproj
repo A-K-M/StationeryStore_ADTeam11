@@ -128,9 +128,12 @@
     <Compile Include="Controllers\StoreClerkController.cs" />
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Controllers\StoreSupervisorController.cs" />
+    <Compile Include="DAOs\AdjustmentVoucherDAO.cs" />
+    <Compile Include="DAOs\CategoryDAO.cs" />
     <Compile Include="DAOs\DAO.cs" />
     <Compile Include="DAOs\DatabaseConnection.cs" />
     <Compile Include="DAOs\EmployeeDAO.cs" />
+    <Compile Include="DAOs\ItemDAO.cs" />
     <Compile Include="DAOs\SupplierDAO.cs" />
     <Compile Include="Filters\AuthenticationFilter.cs" />
     <Compile Include="Filters\LayoutFilter.cs" />
@@ -407,6 +410,7 @@
     <Content Include="Statics\webfonts\fa-solid-900.woff2" />
     <Content Include="Views\StoreManager\AddSupplier.cshtml" />
     <Content Include="Views\StoreManager\Suppliers.cshtml" />
+    <Content Include="Views\StoreClerk\CreateAdjustmentVoucher.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -414,7 +418,6 @@
     <Folder Include="Views\DepartmentEmployee\" />
     <Folder Include="Views\DepartmentHead\" />
     <Folder Include="Views\DepartmentRepresentative\" />
-    <Folder Include="Views\StoreClerk\" />
     <Folder Include="Views\StoreSupervisor\" />
   </ItemGroup>
   <ItemGroup>
