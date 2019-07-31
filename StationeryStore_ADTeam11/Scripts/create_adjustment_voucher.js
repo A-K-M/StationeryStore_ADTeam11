@@ -17,7 +17,7 @@ function loadItems(CategoryID) {
             clearOption();
 
             $.each(result, function (key, item) {
-                $("#item").append("<option value='" + item.ID + "'>" + item.Description +"</option >");
+                $("#item").append("<option value='" + item.Id + "'>" + item.Description +"</option >");
             });            
         },
         error: function (errormessage) {
