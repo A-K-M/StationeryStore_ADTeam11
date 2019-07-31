@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+  
+    </head>
+
+    <body>
+        <!-- Side Navbar -->
+        <nav class="side-navbar">
+            <div class="side-navbar-wrapper">
+                <!-- Sidebar Header    -->
+                <div class="sidenav-header d-flex align-items-center justify-content-center">
+                    <!-- User Info-->
+                    <div class="sidenav-header-inner text-center">
+                        <h2 class="h5">Liong Choon</h2><span>Department Head</span>
+                    </div>
+                    <!-- Small Brand information, appears on minimized sidebar-->
+                    <div class="sidenav-header-logo">
+                        <a href="head_index.html" class="brand-small text-center">
+                            <strong>B</strong><strong class="text-success">D</strong>
+                        </a>
+                    </div>
+                </div>
+                <!-- Sidebar Navigation Menus-->
+                <div class="main-menu">
+                    <h5 class="sidenav-heading">Main</h5>
+                    <ul id="side-main-menu" class="side-menu list-unstyled">
+                        <li><a href="head_index.html"> <i class="icon-home"></i>Home </a></li>
+                        <li><a href="delegation.html"> <i class="fas fa-user"></i>Deligation </a></li>
+                        <li><a href="stationary.html"> <i class="fa fa-file-alt"></i>Stationary Requests </a></li>
+                        <li><a href="emp_list.html"> <i class="fa fa-users"></i>Employees </a></li>
+                        <li><a href="collection_points.html"> <i class="fa fa-map-marker-alt"></i>Collection Points </a></li>
+                    </ul>
+                </div>
+                <div class="admin-menu">
+                    <h5 class="sidenav-heading">Lists</h5>
+                    <ul id="side-admin-menu" class="side-menu list-unstyled">
+                        <li> <a href="#"> <i class="icon-screen"> </i>Demo</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="page">
+            <!-- navbar-->
+            <header class="header">
+                <nav class="navbar">
+                    <div class="container-fluid">
+                        <div class="navbar-holder d-flex align-items-center justify-content-between">
+                            <div class="navbar-header">
+                                <!-- <a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand"> -->
+                                <div class="brand-text d-none d-md-inline-block"><strong class="text-success">Stationary Store</strong></div></a>
+                            </div>
+                            <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                                <!-- Notifications dropdown-->
+                                <li class="nav-item dropdown">
+                                    <a id="notifications" rel="nofollow" data-target="#" href="#"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">
+                                        <i class="fa fa-bell"></i><span class="badge badge-warning">2</span>
+                                    </a>
+                                    <ul aria-labelledby="notifications" class="dropdown-menu">
+                                        <li>
+                                            <a rel="nofollow" href="#" class="dropdown-item">
+                                                <div class="notification d-flex justify-content-between">
+                                                    <div class="notification-content"></i>Sample Notification</div>
+                                                    <!--<div class="notification-time"><small>4 minutes ago</small></div>-->
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a rel="nofollow" href="#" class="dropdown-item">
+                                                <div class="notification d-flex justify-content-between">
+                                                    <div class="notification-content"></i>Sample Notification</div>
+                                                    <!-- <div class="notification-time"><small>4 minutes ago</small></div> -->
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!-- Log out-->
+                                <li class="nav-item">
+                                    <a href="head_login.html" class="nav-link logout">
+                                        <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            <section class="statistics">
+                @RenderBody()
+            </section>
+        </div>
+    </body>
+</html>

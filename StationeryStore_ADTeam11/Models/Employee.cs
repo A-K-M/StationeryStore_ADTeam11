@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace StationeryStore_ADTeam11.Models
+{
+    public class Employee
+    {
+        private int _id;
+        private string _departmentId;
+        private string _name;
+        private string _userName;
+        private string _password;
+        private string _email;
+        private string _role;
+
+        public int Id { get; set; }
+        public int DepartmentId { get; set; }
+        public string Name { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
+    }
+}

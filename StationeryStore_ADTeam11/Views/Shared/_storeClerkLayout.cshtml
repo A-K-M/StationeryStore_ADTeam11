@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+
+    <head>
+ 
+    </head>
+
+    <body>
+        <!-- Side Navbar -->
+        <nav class="side-navbar">
+            <div class="side-navbar-wrapper">
+                <!-- Sidebar Header    -->
+                <div class="sidenav-header d-flex align-items-center justify-content-center">
+                    <!-- User Info-->
+                    <div class="sidenav-header-inner text-center">
+                        <h2 class="h5">Esther Tan</h2><span>Store clerk</span>
+
+                    </div>
+                    <!-- Small Brand information, appears on minimized sidebar-->
+                    <div class="sidenav-header-logo">
+                        <a href="clerk_index.html" class="brand-small text-center">
+                            <strong>B</strong><strong class="text-success">D</strong>
+                        </a>
+                    </div>
+                </div>
+                <!-- Sidebar Navigation Menus-->
+                <div class="main-menu">
+                    <h5 class="sidenav-heading">Main</h5>
+                    <ul id="side-main-menu" class="side-menu list-unstyled">
+                        <li><a href="index.html"> <i class="icon-home"></i>Home </a></li>
+                        <li><a href="approved_request.html"> <i class="icon-list-1"></i>Approved Requests</a></li>
+                        <li><a href="clerk_retrieval_category.html"> <i class="icon-padnote"></i>Create Retrieval Form</a></li>
+                        <li><a href="clerk_disbursment.html"> <i class="icon-bill"></i>Disbursment List</a></li>
+                        <li><a href="adjustmant.html"> <i class="icon-form"></i>Adjustment Voucher</a></li>
+                        <li><a href="clerk_low_stock.html"> <i class="icon-page"></i>Low-stock Items</a></li>
+                        <li><a href="stock_card.html"> <i class="icon-website"></i>Stock Card</a></li>
+                        <li><a href="clerk_suppliers.html"> <i class="icon-user"></i>Suppliers</a></li>
+                        <li><a href="clerk_item_list.html"> <i class="icon-pencil-case"></i>Items</a></li>
+                        <li><a href="clerk_category.html"> <i class="icon-bars"></i>Categories</a></li>
+                        <li><a href="clerk_purchase_order.html"> <i class="icon-list"></i>Purchase Orders</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="page">
+            <!-- navbar-->
+            <header class="header">
+                <nav class="navbar">
+                    <div class="container-fluid">
+                        <div class="navbar-holder d-flex align-items-center justify-content-between">
+                            <div class="navbar-header">
+                                <!-- <a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand"> -->
+                                <div class="brand-text d-none d-md-inline-block"><strong class="text-success">Stationary Store</strong></div></a>
+                            </div>
+                            <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                                <!-- Notifications dropdown-->
+                                <li class="nav-item dropdown">
+                                    <a id="notifications" rel="nofollow" data-target="#" href="#"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">
+                                        <i class="fa fa-bell"></i><span class="badge badge-warning">2</span>
+                                    </a>
+                                    <ul aria-labelledby="notifications" class="dropdown-menu">
+                                        <li>
+                                            <a rel="nofollow" href="#" class="dropdown-item">
+                                                <div class="notification d-flex justify-content-between">
+                                                    <div class="notification-content"></i>Sample Notification</div>
+                                                    <!--<div class="notification-time"><small>4 minutes ago</small></div>-->
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a rel="nofollow" href="#" class="dropdown-item">
+                                                <div class="notification d-flex justify-content-between">
+                                                    <div class="notification-content"></i>Sample Notification</div>
+                                                    <!-- <div class="notification-time"><small>4 minutes ago</small></div> -->
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!-- Log out-->
+                                <li class="nav-item">
+                                    <a href="clerk_login.html" class="nav-link logout">
+                                        <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            <section class="statistics">
+                @RenderBody()
+            </section>
+        </div>
+    </body>
+</html>
