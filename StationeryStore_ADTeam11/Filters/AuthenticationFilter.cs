@@ -12,21 +12,34 @@ namespace ADProjectTeam11.Filters
     {
         public void OnAuthorization(AuthorizationContext filterContext)
         {
-            throw new NotImplementedException();
+            string sessionId = HttpContext.Current.Session["sessionID"].ToString();
+            if (sessionId == null)
+            {
+                filterContext.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary
+                    {
+                        { "controller", "base" },
+                        { "action", "Login" }
+                    }
+                );
+            }
+
         }
 
         public void OnAuthenticationChallenge(AuthenticationChallengeContext filterContext)
         {
+
             if (filterContext.Result == null || filterContext.Result is HttpUnauthorizedResult)
             {
                 filterContext.Result = new RedirectToRouteResult(
 
                                             new RouteValueDictionary
                                             {
-                                                {"controller", "BaseController"},
-                                                { "action", "Login"}                                                 
+                                                {"controller", "base"},
+                                                { "action", "Login"}
                                             });
             }
         }
     }
+    
 }

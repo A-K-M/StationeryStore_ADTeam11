@@ -98,15 +98,17 @@
                 </nav>
             </header>
             <section class="statistics">
-                <div class="container-fluid">
+                @RenderBody()
+
+                @*<div class="container-fluid">
                     <div class="row d-flex">
                         <div class="col-12">
                             <div class="card">
-                                @RenderBody()
+                    body here
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>*@
             </section>
         </div>
         <script src="~/Statics/vendor/jquery/jquery.min.js"></script>

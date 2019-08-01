@@ -37,11 +37,13 @@ namespace StationeryStore_ADTeam11.Controllers
                 ViewData["error"] = error;
                 return View(); 
             }
+            string sessionID = Guid.NewGuid().ToString();
+            Session["sessionID"] = sessionID;
             Session["username"] = employee.UserName;
             Session["role"] = employee.Role;
             ViewData["error"] = error;
-            //return RedirectToAction("Gallery", "Product", new { sessionId });
-            return View();
+            return RedirectToAction( "HeadIndex", "DepartmentHead");
+           // return View();
         }
 
         public ActionResult LogOut()

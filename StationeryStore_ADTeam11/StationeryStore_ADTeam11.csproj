@@ -185,7 +185,6 @@
     <Content Include="Statics\css\fa-all.css" />
     <Content Include="Statics\css\fontastic.css" />
     <Content Include="Statics\css\grasp_mobile_progress_circle-1.0.0.min.css" />
-    <Content Include="Statics\css\style.blue.css" />
     <Content Include="Statics\css\style.default.css" />
     <Content Include="Statics\fonts\dashboard.svg" />
     <Content Include="Statics\js\bar.js" />
@@ -411,12 +410,12 @@
     <Content Include="Views\StoreManager\AddSupplier.cshtml" />
     <Content Include="Views\StoreManager\Suppliers.cshtml" />
     <Content Include="Views\StoreClerk\CreateAdjustmentVoucher.cshtml" />
+    <Content Include="Views\DepartmentHead\HeadIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\DepartmentEmployee\" />
-    <Folder Include="Views\DepartmentHead\" />
     <Folder Include="Views\DepartmentRepresentative\" />
     <Folder Include="Views\StoreSupervisor\" />
   </ItemGroup>
