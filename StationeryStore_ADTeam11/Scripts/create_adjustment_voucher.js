@@ -7,6 +7,7 @@ function clearOption() {
 
 //Load Items base on Category
 function loadItems(CategoryID) {
+
     $.ajax({
         url: "/StoreClerk/GetItemByCategory/" + CategoryID,
         type: "GET",
@@ -19,6 +20,28 @@ function loadItems(CategoryID) {
             $.each(result, function (key, item) {
                 $("#item").append("<option value='" + item.Id + "'>" + item.Description +"</option >");
             });            
+        },
+        error: function (errormessage) {
+            alert(errormessage.responseText);
+        }
+    });
+}
+
+//Add Adjustment Voucher
+function addVoucher() {
+
+    var items = createJSONList();
+
+    $.ajax({
+        url: "/StoreClerk/AddAdjustmentVoucher",
+        type: "POST",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify(items),
+        success: function (result) {
+
+            alert(result);
+            location.href = "/StoreClerk/CreateAdjustmentVoucher";
         },
         error: function (errormessage) {
             alert(errormessage.responseText);
@@ -47,7 +70,7 @@ function addItem() {
                             <div class="row">
                               <div class="col-6"></div>
                               <div class="col-3">
-                                <button class="btn btn-outline-success" onclick="generateDynamicIds()">Submit</button>
+                                <button class="btn btn-outline-success" onclick="addVoucher()">Submit</button>
                               </div>
                             </div>
                           </div>
@@ -83,6 +106,10 @@ function generateDynamicIds() {
 
     for (var i = 1; i <= index.length; i++) {
 
+        if (index[i] === undefined) {
+            return false;
+        }
+
         index[i].setAttribute("id", "tr_" + i); //set id for each tr
 
         index[i].cells[0].childNodes[0].setAttribute("id", "item_" + i); //set id for hidden box within tr
@@ -91,4 +118,26 @@ function generateDynamicIds() {
 
         index[i].cells[2].setAttribute("id", "reason_" + i); //set id for reason td
     }
+}
+
+function createJSONList() {
+
+    generateDynamicIds();
+
+    let total_tr = $("#item-data > tr");
+
+    let jsonObj = [];
+
+    for (let i = 1; i <= total_tr.length - 1; i++) {
+
+        let item = {};
+
+        item["itemId"] = $("#item_" + i).val();
+        item["quantity"] = $("#qty_" + i).val();
+        item["reason"] = $("#reason_" + i).text();
+
+        jsonObj.push(item);
+    }
+
+    return jsonObj;
 }
