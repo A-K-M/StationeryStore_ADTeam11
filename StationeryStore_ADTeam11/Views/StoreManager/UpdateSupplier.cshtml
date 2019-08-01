@@ -1,48 +1,63 @@
 ﻿@using StationeryStore_ADTeam11.Models
+@model StationeryStore_ADTeam11.Models.Supplier
 
 @{
+    Layout = "~/Views/Shared/_storeManagerLayout.cshtml";
+
     ViewBag.Title = "UpdateSupplier";
+
     var supplier = (Supplier)ViewData["supplier"];
     var updated = (bool)ViewData["updated"];
 }
 
-<h2>UpdateSupplier</h2>
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2>UpdateSupplier</h2>
 
-@{
-            if (updated)
-            {
-                <p>Supplier record for supplier code @supplier.Id successfully updated.</p>
-            }
-            else
-            {
-                <p>Supplier record for supplier code @supplier.Id not updated</p>
-            }
-}
-@*<table>
-    <tr>
-        <td>
-            <p align="left">Supplier Code</p>
-            <p align="left">Supplier Name</p>
-            <p align="left">GST Registration no</p>
-            <p align="left">Contact Name</p>
-            <p align="left">Phone No</p>
-            <p align="left">Fax No</p>
-            <p align="left">Address</p>
-        </td>
-        <td>
-            <p align="left">: @supplier.Id</p>
-            <p align="left">: @supplier.Name</p>
-            <p align="left">: @supplier.GstNumber</p>
-            <p align="left">: @supplier.ContactName</p>
-            <p align="left">: @supplier.PhoneNo</p>
-            <p align="left">: @supplier.Fax</p>
-            <p align="left">: @supplier.Address</p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <p>@message</p>
-        </td>
-    </tr>
-</table>*@
-<a href="@Url.Content("~/StoreManager/Suppliers")">Supplier List</a>
+                    @{
+                        if (updated)
+                        {
+                            <p>Supplier record for supplier code @supplier.Id successfully updated.</p>
+                        }
+                        else
+                        {
+                            <p>Supplier record for supplier code @supplier.Id not updated</p>
+                        }
+                    }
+                    @*<table>
+                            <tr>
+                                <td>
+                                    <p align="left">Supplier Code</p>
+                                    <p align="left">Supplier Name</p>
+                                    <p align="left">GST Registration no</p>
+                                    <p align="left">Contact Name</p>
+                                    <p align="left">Phone No</p>
+                                    <p align="left">Fax No</p>
+                                    <p align="left">Address</p>
+                                </td>
+                                <td>
+                                    <p align="left">: @supplier.Id</p>
+                                    <p align="left">: @supplier.Name</p>
+                                    <p align="left">: @supplier.GstNumber</p>
+                                    <p align="left">: @supplier.ContactName</p>
+                                    <p align="left">: @supplier.PhoneNo</p>
+                                    <p align="left">: @supplier.Fax</p>
+                                    <p align="left">: @supplier.Address</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p>@message</p>
+                                </td>
+                            </tr>
+                        </table>*@
+                    <a href="@Url.Content("~/StoreManager/Suppliers")">Supplier List</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

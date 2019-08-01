@@ -1,0 +1,68 @@
+﻿@model StationeryStore_ADTeam11.Models.Supplier
+
+@{
+    ViewBag.Title = "CreateSupplier";
+    Layout = "~/Views/Shared/_storeManagerLayout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2>CreateSupplier</h2>
+                    @using (Html.BeginForm("AddSupplier", "StoreManager", FormMethod.Post))
+                    {
+                        <table align="left">
+                            <tr>
+                                <td>@Html.LabelFor(supp => supp.Id)</td>
+                                <td>@Html.TextBoxFor(supp => supp.Id)</td>
+                                <td>@Html.ValidationMessageFor(supp => supp.Id)</td>
+                            </tr>
+                            <tr>
+                                <td>@Html.LabelFor(supp => supp.Name)</td>
+                                <td>@Html.TextBoxFor(supp => supp.Name)</td>
+                                <td>@Html.ValidationMessageFor(supp => supp.Name)</td>
+                            </tr>
+                            <tr>
+                                <td>@Html.LabelFor(supp => supp.GstNumber)</td>
+                                <td>@Html.TextBoxFor(supp => supp.GstNumber)</td>
+                                <td>@Html.ValidationMessageFor(supp => supp.GstNumber)</td>
+                            </tr>
+                            <tr>
+                                <td>@Html.LabelFor(supp => supp.ContactName)</td>
+                                <td>@Html.TextBoxFor(supp => supp.ContactName)</td>
+                                <td>@Html.ValidationMessageFor(supp => supp.ContactName)</td>
+                            </tr>
+                            <tr>
+                                <td>@Html.LabelFor(supp => supp.PhoneNo)</td>
+                                <td>@Html.TextBoxFor(supp => supp.PhoneNo)</td>
+                                <td>@Html.ValidationMessageFor(supp => supp.PhoneNo)</td>
+                            </tr>
+                            <tr>
+                                <td>@Html.LabelFor(supp => supp.Fax)</td>
+                                <td>@Html.TextBoxFor(supp => supp.Fax)</td>
+                                <td>@Html.ValidationMessageFor(supp => supp.Fax)</td>
+                            </tr>
+                            <tr>
+                                <td>@Html.LabelFor(supp => supp.Address)</td>
+                                <td>@Html.TextBoxFor(supp => supp.Address)</td>
+                                <td>@Html.ValidationMessageFor(supp => supp.Address)</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="@Url.Content("~/StoreManager/Suppliers")" class="btn btn-danger btn-sm">Back</a>
+                                    <a><input type="submit" value="Submit" class="btn btn-success btn-sm"></a>
+                                </td>
+                            </tr>
+                        </table>
+                    }
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
