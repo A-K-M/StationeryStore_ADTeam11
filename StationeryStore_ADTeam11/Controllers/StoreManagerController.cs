@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using StationeryStore_ADTeam11.Filters;
 using System.Web.Mvc;
 using StationeryStore_ADTeam11.Models;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
+    [LayoutFilter("_storeManagerLayout")]
     public class StoreManagerController : Controller
     {
         // GET: StoreManager
@@ -20,6 +22,12 @@ namespace StationeryStore_ADTeam11.Controllers
             List<Supplier> suppliers = SupplierDAO.getAllSuppliers();
 
             ViewData["Suppliers"] = suppliers;
+            return View();
+        }
+
+        public ActionResult CreateSupplier(Supplier supplier)
+        {
+
             return View();
         }
 

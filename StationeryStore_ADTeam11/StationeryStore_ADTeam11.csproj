@@ -415,6 +415,10 @@
     <Content Include="Views\StoreManager\Suppliers.cshtml" />
     <Content Include="Views\StoreClerk\CreateAdjustmentVoucher.cshtml" />
     <Content Include="Views\DepartmentHead\HeadIndex.cshtml" />
+    <Content Include="Views\StoreManager\UpdateSupplier.cshtml" />
+    <Content Include="Views\StoreManager\editSupplier.cshtml" />
+    <Content Include="Views\StoreManager\DeleteSupplier.cshtml" />
+    <Content Include="Views\StoreManager\CreateSupplier.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

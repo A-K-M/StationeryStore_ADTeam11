@@ -36,19 +36,18 @@ function addItem() {
     //    return false;
     //}
 
-    let row = `
-                <tr>
-                    <td><input type="hidden" value="${$('#item option:selected').val()}">${$('#item option:selected').text()}</td>
-                    <td><input type="text" value="${$('#quantity').val()}"></td>
-                    <td>${$('#reason').val()}</td>
-                    <td><button class="btn btn-outline-danger btn-sm" onclick="">Remove</button></td>
+    let row = `<tr>
+                    <td><input type="hidden" class="item-id" value="${$('#item option:selected').val()}">${$('#item option:selected').text()}</td>
+                    <td><input type="text" class="item-qty" value="${$('#quantity').val()}"></td>
+                    <td class="item-reason">${$('#reason').val()}</td>
+                    <td><button class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">Remove</button></td>
                 </tr>`;
 
     let btnSubmit = `<div class="col-6">
                             <div class="row">
                               <div class="col-6"></div>
                               <div class="col-3">
-                                <button class="btn btn-outline-success">Submit</button>
+                                <button class="btn btn-outline-success" onclick="generateDynamicIds()">Submit</button>
                               </div>
                             </div>
                           </div>
@@ -64,65 +63,32 @@ function addItem() {
     let rowCount = $("#data-body tbody tr").length -1 ;
 
     if (rowCount > 0) {
-        //let something = document.getElementById('submit-placeholder');
-
-        //something.innerHTML = btnSubmit;
-        //alert(something);
-        //$("#submit-placeholder").append(btnSubmit);
-
         $("#submit-placeholder").html(btnSubmit);
-    }
-    
+    }    
 }
 
+function removeRow(element) {
+    
+    element.parentNode.parentNode.remove();
 
+    if ($("#data-body tbody tr").length - 1 == 0) {
 
-//const addItem = () => {
+        $("#submit-placeholder").empty();
+    }
+}
 
-//    counter += 1;
+function generateDynamicIds() {
 
-//    let trId = 'tr' + counter;
+    let index = $("#item-data > tr");
 
-//    let item = document.getElementById('item');
-//    let quantity = document.getElementById('quantity');
-//    let reason = document.getElementById('reason');
+    for (var i = 1; i <= index.length; i++) {
 
-//    if (isNaN(quantity.value) || quantity.value == '' || item.value == 0 || reason.value == '') {
+        index[i].setAttribute("id", "tr_" + i); //set id for each tr
 
-//        alert("Please input valid data!");
+        index[i].cells[0].childNodes[0].setAttribute("id", "item_" + i); //set id for hidden box within tr
 
-//        return false;
-//    }
+        index[i].cells[1].childNodes[0].setAttribute("id", "qty_" + i); //set id for qty input type
 
-//    let row = `
-//           <tr id="${trId}">
-//                <td><input type="hidden" value="${item.options[item.selectedIndex].value}">${item.options[item.selectedIndex].text}</td>
-//                <td><input type="text" value="${quantity.value}"></td>
-//                <td>${reason.value}</td>
-//                <td><button class="btn btn-outline-danger btn-sm" onclick="removeItem(${trId})">Remove</button></td>
-//           </tr>`;
-
-//    let btnSubmit = `<div class="col-6">
-//                            <div class="row">
-//                              <div class="col-6"></div>
-//                              <div class="col-3">
-//                                <button class="btn btn-outline-success">Submit</button>
-//                              </div>
-//                            </div>
-//                          </div>
-//                        </div>`;
-
-//    let itemData = document.getElementById('item-data');
-
-//    itemData.innerHTML += row;
-
-//    item.options[0].selected = true;
-//    quantity.value = null;
-//    reason.value = null;
-
-//    if (checkTableRow()) {
-
-//        let placeholder = document.getElementById('submit-placeholder');
-//        placeholder.innerHTML = btnSubmit;
-//    }
-//};
+        index[i].cells[2].setAttribute("id", "reason_" + i); //set id for reason td
+    }
+}
