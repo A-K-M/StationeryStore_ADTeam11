@@ -12,7 +12,6 @@ namespace StationeryStore_ADTeam11.Controllers
     [LayoutFilter("_storeClerkLayout")]
     public class StoreClerkController : Controller
     {
-        // GET: StoreClerk
         public ActionResult Index()
         {
             return View();
@@ -29,6 +28,13 @@ namespace StationeryStore_ADTeam11.Controllers
             ViewData["Categories"] = categories;
 
             return View();
+        }
+
+        public JsonResult GetItemByCategory(int id)
+        {
+            ItemDAO itemDAO = new ItemDAO();
+
+            return Json(itemDAO.GetItems(id), JsonRequestBehavior.AllowGet);
         }
     }
 }
