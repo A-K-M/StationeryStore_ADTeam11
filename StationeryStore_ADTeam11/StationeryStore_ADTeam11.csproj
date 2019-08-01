@@ -188,6 +188,8 @@
     <Content Include="Statics\css\fontastic.css" />
     <Content Include="Statics\css\grasp_mobile_progress_circle-1.0.0.min.css" />
     <Content Include="Statics\css\style.default.css" />
+    <Content Include="Statics\error-css\font-awesome.min.css" />
+    <Content Include="Statics\error-css\style.css" />
     <Content Include="Statics\fonts\dashboard.svg" />
     <Content Include="Statics\js\bar.js" />
     <Content Include="Statics\js\charts-custom.js" />
@@ -375,7 +377,7 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\ShowError.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />

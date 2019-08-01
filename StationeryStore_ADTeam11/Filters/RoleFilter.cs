@@ -28,7 +28,7 @@ namespace StationeryStore_ADTeam11.Filters
                                            new RouteValueDictionary
                                            {
                                                 {"controller", "base"},
-                                                { "action", "RedirectBack"}
+                                                { "action", "Error"}
                                            });
             }
         }

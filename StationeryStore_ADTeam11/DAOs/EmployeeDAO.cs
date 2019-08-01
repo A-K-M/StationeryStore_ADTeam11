@@ -22,7 +22,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 employee = new Employee()
                 {
                     Id = (int)reader["id"],
-                    DepartmentId = (int)reader["deptID"],
+                    DepartmentId = (string)reader["deptID"],
                     Name = (string)reader["Name"],
                     UserName = (string)reader["UserName"],
                     Password = (string)reader["Password"],

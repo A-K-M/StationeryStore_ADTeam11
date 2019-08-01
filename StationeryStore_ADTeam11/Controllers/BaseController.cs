@@ -15,8 +15,12 @@ namespace StationeryStore_ADTeam11.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            string error = null;
-            ViewData["error"] = error;
+            if (ViewData["error"] == null)
+            {
+                string error = null;
+                ViewData["error"] = error;
+            }
+            
             return View();
         }
 
@@ -28,7 +32,7 @@ namespace StationeryStore_ADTeam11.Controllers
             EmployeeDAO employeeDAO = new EmployeeDAO();
             Employee employee = employeeDAO.GetEmployeeByUsername(username);
 
-            if(employee == null)
+            if(employee == null || employee.Role == null)
             {
                 error = "No Employee with this name.";
                 ViewData["error"] = error;
@@ -45,13 +49,31 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["username"] = employee.UserName;
             Session["role"] = employee.Role;
             ViewData["error"] = error;
-            return RedirectToAction( "HeadIndex", "DepartmentHead");
-           // return View();
+            switch (employee.Role)
+            {
+                case "Head":
+                    return RedirectToAction("HeadIndex", "DepartmentHead");
+                case "Employee":
+                    return RedirectToAction("EmployeeIndex", "DepartmentEmployee");
+                case "Representative":
+                    return RedirectToAction("RepIndex", "DepartmentRepresentative");
+                case "Manager":
+                    return RedirectToAction("ManagerIndex", "StoreManager");
+                case "Supervisor":
+                    return RedirectToAction("SuperviosrIndex", "StoreSupervisor");
+                case "Clerk":
+                    return RedirectToAction("ClerkIndex", "StoreClerk");
+                default:
+                    break;
+            }
+            return RedirectToAction("ShowError","Base");
+
         }
 
         [AuthenticationFilter]
         public ActionResult LogOut()
         {
+            Session["sessionID"] = null;
             Session["username"] = null;
             Session["role"] = null;
             return RedirectToAction("Base", "Login");
@@ -60,10 +82,16 @@ namespace StationeryStore_ADTeam11.Controllers
         [AuthenticationFilter]
         public ActionResult RedirectBack()
         {
+            return Redirect(Request.UrlReferrer.ToString());
+        }
 
+
+        [AllowAnonymous]
+        public ActionResult ShowError()
+        {
             string error = "You dont have permission to access this page.";
             ViewData["error"] = error;
-            return Redirect(Request.UrlReferrer.ToString());
+            return View();
         }
 
 
