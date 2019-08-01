@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "DeleteSupplier";
+
+    var supplierId = (string)ViewData["id"];
+    var deleted = (bool)ViewData["deleted"];
+}
+
+<h2>DeleteSupplier</h2>
+
+@{
+    if (deleted)
+    {
+        <p>Supplier record for supplier code @supplierId successfully deleted.</p>
+    }
+    else
+    {
+        <p>Supplier record for supplier code @supplierId not deleted</p>
+    }
+}
+<a href="@Url.Content("~/StoreManager/Suppliers")">Supplier List</a>
