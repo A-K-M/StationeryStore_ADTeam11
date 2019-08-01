@@ -10,13 +10,13 @@ namespace StationeryStore_ADTeam11.DAOs
     // CHANGE _connectionString ACCORDING TO YOUR SETTINGS
     public class DatabaseConnection
     {
-        private string _connectionString = "SERVER=YourServerName; DATABASE=StationeryInventory; Integrated Security=true";
+        protected SqlConnection connection;
 
-        public SqlConnection GetConnection()
+        private string _connectionString = "SERVER=DESKTOP-KO5CS62; DATABASE=StationeryInventory; Integrated Security=true";
+
+        public DatabaseConnection()
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
-
-            return connection;
+            connection = new SqlConnection(_connectionString);
         }
     }
 }

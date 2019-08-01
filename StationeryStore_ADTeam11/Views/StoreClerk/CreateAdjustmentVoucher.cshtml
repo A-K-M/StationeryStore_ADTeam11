@@ -1,0 +1,82 @@
+﻿@using StationeryStore_ADTeam11.Models;
+@{
+    var categories = (List<Category>)ViewData["Categories"];
+}
+
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/create_adjustment_voucher.js")">
+
+    </script>
+}
+<div class="card-header d-flex align-items-center">
+    <h4>Adjustment Voucher</h4>
+</div>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-6 form-group">
+            <label for="item-categories">Item Categories</label>
+            <select id="item-categories" class="form-control" onchange="loadItems(this.value)">
+                <option value="0" selected>-- Select item --</option>
+                @foreach (var category in categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 form-group">
+            <label for="item">Items</label>
+            <select id="item" class="form-control">
+                <option value="0" selected>-- Select item --</option>
+            </select>
+        </div>
+        <div class="col-6 form-group">
+            <label for="">Quantity</label>
+            <input type="text" id="quantity" class="form-control" placeholder="Quantity">
+        </div>
+        <div class="col-12 form-group">
+            <label for="">Reason</label>
+            <input type="text" id="reason" class="form-control" placeholder="Reason">
+        </div>
+        <div class="col-12 form-group">
+            <div class="row">
+                <div class="col-5"></div>
+                <div class="col-3">
+                    <button class="btn btn-outline-success" onclick="addItem()">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <table id="data-body" class="table  table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity Adjustified</th>
+                                <th>Reason</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="item-data">
+                            <tr id="append-node"></tr>
+                        </tbody>
+                    </table>
+                    <div class="row" id="submit-placeholder">
+                       
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

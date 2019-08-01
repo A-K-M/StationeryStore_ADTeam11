@@ -2,7 +2,15 @@
 <html>
 
     <head>
- 
+        <link rel="stylesheet" href="~/Statics/vendor/bootstrap/css/bootstrap.min.css">
+        <link href="~/Statics/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="~/Statics/css/fontastic.css" rel="stylesheet" />
+        <link href="~/Statics/css/grasp_mobile_progress_circle-1.0.0.min.css" rel="stylesheet" />
+        <link href="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+        <link href="~/Statics/css/style.default.css" rel="stylesheet" />
+        <link href="~/Statics/css/fa-all.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
 
     <body>
@@ -50,7 +58,7 @@
                         <div class="navbar-holder d-flex align-items-center justify-content-between">
                             <div class="navbar-header">
                                 <!-- <a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand"> -->
-                                <div class="brand-text d-none d-md-inline-block"><strong class="text-success">Stationary Store</strong></div></a>
+                                <div class="brand-text d-none d-md-inline-block"><strong class="text-success">Stationary Store</strong></div>
                             </div>
                             <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
                                 <!-- Notifications dropdown-->
@@ -63,7 +71,7 @@
                                         <li>
                                             <a rel="nofollow" href="#" class="dropdown-item">
                                                 <div class="notification d-flex justify-content-between">
-                                                    <div class="notification-content"></i>Sample Notification</div>
+                                                    <div class="notification-content">Sample Notification</div>
                                                     <!--<div class="notification-time"><small>4 minutes ago</small></div>-->
                                                 </div>
                                             </a>
@@ -71,7 +79,7 @@
                                         <li>
                                             <a rel="nofollow" href="#" class="dropdown-item">
                                                 <div class="notification d-flex justify-content-between">
-                                                    <div class="notification-content"></i>Sample Notification</div>
+                                                    <div class="notification-content">Sample Notification</div>
                                                     <!-- <div class="notification-time"><small>4 minutes ago</small></div> -->
                                                 </div>
                                             </a>
@@ -91,7 +99,28 @@
             </header>
             <section class="statistics">
                 @RenderBody()
+
+                @*<div class="container-fluid">
+                    <div class="row d-flex">
+                        <div class="col-12">
+                            <div class="card">
+                    body here
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
             </section>
         </div>
+        <script src="~/Statics/vendor/jquery/jquery.min.js"></script>
+        <script src="~/Statics/vendor/popper.js/umd/popper.min.js"></script>
+        <script src="~/Statics/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="~/Statics/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+        <script src="~/Statics/vendor/jquery.cookie/jquery.cookie.js"></script>
+        <script src="~/Statics/vendor/chart.js/Chart.min.js"></script>
+        <script src="~/Statics/vendor/jquery-validation/jquery.validate.min.js"></script>
+        <script src="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script src="~/Statics/js/charts-home.js"></script>
+
+        @RenderSection("Scripts", false)
     </body>
 </html>
