@@ -44,17 +44,18 @@ function addItem() {
                     <td><button class="btn btn-outline-danger btn-sm" onclick="">Remove</button></td>
                 </tr>`;
 
-    $(row).insertAfter("#append-node");
-
     let btnSubmit = `<div class="col-6">
-                        <div class="row">
-                            <div class="col-6"></div>
-                            <div class="col-3">
-                            <button class="btn btn-outline-success">Submit</button>
+                            <div class="row">
+                              <div class="col-6"></div>
+                              <div class="col-3">
+                                <button class="btn btn-outline-success">Submit</button>
+                              </div>
                             </div>
-                        </div>
-                        </div>
-                    </div>`;
+                          </div>
+                        </div>`;
+
+
+    $(row).insertAfter("#append-node");
 
     $("#item").val("0");
     $("#quantity").val("");
@@ -63,22 +64,15 @@ function addItem() {
     let rowCount = $("#data-body tbody tr").length -1 ;
 
     if (rowCount > 0) {
+        //let something = document.getElementById('submit-placeholder');
 
-        let btnSubmit = `
-                    <div class="row">
-                    <div class="col-6">
-                        <div class="row">
-                            <div class="col-6"></div>
-                            <div class="col-3">
-                            <button class="btn btn-outline-success">Submit</button>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                </div>`;
+        //something.innerHTML = btnSubmit;
+        //alert(something);
+        //$("#submit-placeholder").append(btnSubmit);
 
-        $(btnSubmit).insertAfter('submit-append-node');
+        $("#submit-placeholder").html(btnSubmit);
     }
+    
 }
 
 
