@@ -406,6 +406,9 @@
     <Content Include="Statics\webfonts\fa-solid-900.woff2" />
     <Content Include="Views\StoreManager\AddSupplier.cshtml" />
     <Content Include="Views\StoreManager\Suppliers.cshtml" />
+    <Content Include="Views\StoreManager\EditSupplier.cshtml" />
+    <Content Include="Views\StoreManager\UpdateSupplier.cshtml" />
+    <Content Include="Views\StoreManager\DeleteSupplier.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

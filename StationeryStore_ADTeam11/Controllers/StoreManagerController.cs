@@ -30,5 +30,31 @@ namespace StationeryStore_ADTeam11.Controllers
             ViewData["saved"] = saved;
             return View();
         }
+
+        public ActionResult EditSupplier(Supplier supp)
+        {
+            Supplier supplier = SupplierDAO.editSupplier(supp.Id);
+
+            ViewData["supplier"] = supplier;
+            return View();
+        }
+
+        public ActionResult UpdateSupplier(Supplier supp)
+        {
+            bool updated = SupplierDAO.updateSupplier(supp);
+
+            ViewData["updated"] = updated;
+            ViewData["supplier"] = supp;
+            return View();
+        }
+
+        public ActionResult DeleteSupplier(string id)
+        {
+            bool deleted = SupplierDAO.deleteSupplier(id);
+
+            ViewData["deleted"] = deleted;
+            ViewData["id"] =id;
+            return View();
+        }
     }
 }

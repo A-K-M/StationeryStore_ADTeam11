@@ -1,0 +1,93 @@
+﻿@model StationeryStore_ADTeam11.Models.Supplier
+@using StationeryStore_ADTeam11.Models
+
+
+@{
+    ViewBag.Title = "editSupplier";
+
+    var supplier = (Supplier)ViewData["supplier"];
+}
+
+<h2>editSupplier</h2>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+        <div>
+            <table align="left">
+                @{
+                    using (Html.BeginForm("UpdateSupplier", "StoreManager", FormMethod.Post))
+                    {
+                        <tr>
+                            <td>
+                                <p align="left">Supplier Code</p>
+                            </td>
+                            <td>
+                                <p align="left">: @Html.TextBoxFor(supp => supp.Id, new {@readonly = "readonly", @Value = supplier.Id}) </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p align="left">Supplier Name</p>
+                            </td>
+                            <td>
+                                <p align="left">: @Html.TextBoxFor(supp => supp.Name, new {@Value = supplier.Name}) </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p align="left">GST Registration no</p>
+                            </td>
+                            <td>
+                                <p align="left">: @Html.TextBoxFor(supp => supp.GstNumber, new { @Value = supplier.GstNumber}) </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p align="left">Contact Name</p>
+                            </td>
+                            <td>
+                                <p align="left">: @Html.TextBoxFor(supp => supp.ContactName, new { @Value = supplier.ContactName}) </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p align="left">Contact Number</p>
+                            </td>
+                            <td>
+                                <p align="left">: @Html.TextBoxFor(supp => supp.PhoneNo, new { @Value = supplier.PhoneNo}) </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p align="left">Fax No</p>
+                            </td>
+                            <td>
+                                <p align="left">: @Html.TextBoxFor(supp => supp.Fax, new { @Value = supplier.Fax}) </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p align="left">Address</p>
+                            </td>
+                            <td>
+                                <p align="left">: @Html.TextBoxFor(supp => supp.Address, new { @Value = supplier.Address}) </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="submit" value="Save">
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </table>
+
+
+        </div>
+</body>
+</html>

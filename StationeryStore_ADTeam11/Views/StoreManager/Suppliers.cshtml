@@ -19,74 +19,102 @@
 </head>
 <body>
     <div>
-        <p>Supplier List</p>
-        <table align="left">
-            @{ 
-                foreach (var supplier in suppliers)
-                {
-                    <tr>
-                                    <td>
-                                        <p align="center">@supplier.Id</p>
-                                        <p align="center">@supplier.Name</p>
-                                        <p align="center">@supplier.GstNumber</p>
-                                        <p align="center">@supplier.ContactName</p>
-                                        <p align="center">@supplier.PhoneNo</p>
-                                        <p align="center">@supplier.Fax</p>
-                                        <p align="center">@supplier.Address</p>
-                                    </td>
-                    </tr>
+        <div>
+            <p>Supplier List</p>
+            <table align="left">
+                @{
+                    foreach (var supplier in suppliers)
+                    {
+                        <tr>
+                            <td>
+                                <p align="left">Supplier Code</p>
+                                <p align="left">Supplier Name</p>
+                                <p align="left">GST Registration no</p>
+                                <p align="left">Contact Name</p>
+                                <p align="left">Phone No</p>
+                                <p align="left">Fax No</p>
+                                <p align="left">Address</p>
+                            </td>
+                            <td>
+                                <p align="left">: @supplier.Id</p>
+                                <p align="left">: @supplier.Name</p>
+                                <p align="left">: @supplier.GstNumber</p>
+                                <p align="left">: @supplier.ContactName</p>
+                                <p align="left">: @supplier.PhoneNo</p>
+                                <p align="left">: @supplier.Fax</p>
+                                <p align="left">: @supplier.Address</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @using (Html.BeginForm("EditSupplier", "StoreManager", FormMethod.Post))
+                                {
+                                    @Html.HiddenFor(supp => supp.Id, new {@Value = supplier.Id })
+                                    <input type="submit" value="Edit">
+                                }
+                                @using (Html.BeginForm("DeleteSupplier", "StoreManager", FormMethod.Post))
+                                {
+                                    @Html.HiddenFor(supp => supp.Id, new { @readonly = "readonly", @Value = supplier.Id })
+                                    <input type="submit" value="Delete">
+                                }
+                            </td>
+                            <td>
+                                <p> </p>
+                            </td>
+                        </tr>
 
+                    }
                 }
-            }
 
-        </table>
+            </table>
     
 
-    </div>
-    <div>
-        @using (Html.BeginForm("AddSupplier", "StoreManager", FormMethod.Post))
-         {
-            <table align="left">
-                <tr>
-                    <td>@Html.LabelFor(supp => supp.Id)</td>
-                    <td>@Html.TextBoxFor(supp => supp.Id)</td>
-                    <td>@Html.ValidationMessageFor(supp => supp.Id)</td>
-                </tr>
-                <tr>
-                    <td>@Html.LabelFor(supp => supp.Name)</td>
-                    <td>@Html.TextBoxFor(supp => supp.Name)</td>
-                    <td>@Html.ValidationMessageFor(supp => supp.Name)</td>
-                </tr>
-                <tr>
-                    <td>@Html.LabelFor(supp => supp.GstNumber)</td>
-                    <td>@Html.TextBoxFor(supp => supp.GstNumber)</td>
-                    <td>@Html.ValidationMessageFor(supp => supp.GstNumber)</td>
-                </tr>
-                <tr>
-                    <td>@Html.LabelFor(supp => supp.ContactName)</td>
-                    <td>@Html.TextBoxFor(supp => supp.ContactName)</td>
-                    <td>@Html.ValidationMessageFor(supp => supp.ContactName)</td>
-                </tr>
-                <tr>
-                    <td>@Html.LabelFor(supp => supp.PhoneNo)</td>
-                    <td>@Html.TextBoxFor(supp => supp.PhoneNo)</td>
-                    <td>@Html.ValidationMessageFor(supp => supp.PhoneNo)</td>
-                </tr>
-                <tr>
-                    <td>@Html.LabelFor(supp => supp.Fax)</td>
-                    <td>@Html.TextBoxFor(supp => supp.Fax)</td>
-                    <td>@Html.ValidationMessageFor(supp => supp.Fax)</td>
-                </tr>
-                <tr>
-                    <td>@Html.LabelFor(supp => supp.Address)</td>
-                    <td>@Html.TextBoxFor(supp => supp.Address)</td>
-                    <td>@Html.ValidationMessageFor(supp => supp.Address)</td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="right"><input type="submit" value="Submit"></td>
-                </tr>
-            </table>
-         }
+        </div>
+        <div>
+            @using (Html.BeginForm("AddSupplier", "StoreManager", FormMethod.Post))
+             {
+                <table align="left">
+                    <tr>
+                        <td>@Html.LabelFor(supp => supp.Id)</td>
+                        <td>@Html.TextBoxFor(supp => supp.Id)</td>
+                        <td>@Html.ValidationMessageFor(supp => supp.Id)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.LabelFor(supp => supp.Name)</td>
+                        <td>@Html.TextBoxFor(supp => supp.Name)</td>
+                        <td>@Html.ValidationMessageFor(supp => supp.Name)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.LabelFor(supp => supp.GstNumber)</td>
+                        <td>@Html.TextBoxFor(supp => supp.GstNumber)</td>
+                        <td>@Html.ValidationMessageFor(supp => supp.GstNumber)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.LabelFor(supp => supp.ContactName)</td>
+                        <td>@Html.TextBoxFor(supp => supp.ContactName)</td>
+                        <td>@Html.ValidationMessageFor(supp => supp.ContactName)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.LabelFor(supp => supp.PhoneNo)</td>
+                        <td>@Html.TextBoxFor(supp => supp.PhoneNo)</td>
+                        <td>@Html.ValidationMessageFor(supp => supp.PhoneNo)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.LabelFor(supp => supp.Fax)</td>
+                        <td>@Html.TextBoxFor(supp => supp.Fax)</td>
+                        <td>@Html.ValidationMessageFor(supp => supp.Fax)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.LabelFor(supp => supp.Address)</td>
+                        <td>@Html.TextBoxFor(supp => supp.Address)</td>
+                        <td>@Html.ValidationMessageFor(supp => supp.Address)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="right"><input type="submit" value="Submit"></td>
+                    </tr>
+                </table>
+             }
+        </div>
     </div>
 </body>
 </html>
