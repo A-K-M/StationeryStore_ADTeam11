@@ -418,6 +418,7 @@
     <Content Include="Views\StoreManager\UpdateSupplier.cshtml" />
     <Content Include="Views\StoreManager\editSupplier.cshtml" />
     <Content Include="Views\StoreManager\DeleteSupplier.cshtml" />
+    <Content Include="Views\StoreManager\CreateSupplierOld.cshtml" />
     <Content Include="Views\StoreManager\CreateSupplier.cshtml" />
   </ItemGroup>
   <ItemGroup>
