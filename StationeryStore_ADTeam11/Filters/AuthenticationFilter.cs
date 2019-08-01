@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Filters;
 using System.Web.Routing;
 
-namespace ADProjectTeam11.Filters
+namespace StationeryStore_ADTeam11.Filters
 {
     public class AuthenticationFilter : ActionFilterAttribute, IAuthorizationFilter
     {

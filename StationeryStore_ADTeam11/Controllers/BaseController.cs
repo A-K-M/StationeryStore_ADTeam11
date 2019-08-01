@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using StationeryStore_ADTeam11.Filters;
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.Models;
 
@@ -10,6 +11,7 @@ namespace StationeryStore_ADTeam11.Controllers
 {
     public class BaseController : Controller
     {
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult Login()
         {
@@ -18,6 +20,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
        public ActionResult Login(string username, string password)
         {
@@ -46,11 +49,21 @@ namespace StationeryStore_ADTeam11.Controllers
            // return View();
         }
 
+        [AuthenticationFilter]
         public ActionResult LogOut()
         {
             Session["username"] = null;
             Session["role"] = null;
             return RedirectToAction("Base", "Login");
+        }
+
+        [AuthenticationFilter]
+        public ActionResult RedirectBack()
+        {
+
+            string error = "You dont have permission to access this page.";
+            ViewData["error"] = error;
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
 

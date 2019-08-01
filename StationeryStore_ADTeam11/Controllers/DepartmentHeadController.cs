@@ -1,4 +1,4 @@
-﻿using ADProjectTeam11.Filters;
+﻿using StationeryStore_ADTeam11.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +9,14 @@ namespace StationeryStore_ADTeam11.Controllers
 {
     [LayoutFilter("_departmentHeadLayout")]
     [AuthenticationFilter]
+    
     public class DepartmentHeadController : Controller
     {
+        [RoleFilter("head")]
         public ActionResult HeadIndex()
         {
             return View();
         }
-      
+       
     }
 }

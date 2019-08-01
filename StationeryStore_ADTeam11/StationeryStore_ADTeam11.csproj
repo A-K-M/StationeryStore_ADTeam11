@@ -137,6 +137,7 @@
     <Compile Include="DAOs\SupplierDAO.cs" />
     <Compile Include="Filters\AuthenticationFilter.cs" />
     <Compile Include="Filters\LayoutFilter.cs" />
+    <Compile Include="Filters\RoleFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
