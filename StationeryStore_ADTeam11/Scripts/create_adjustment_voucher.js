@@ -52,12 +52,12 @@ function addVoucher() {
 //functions for data table manipulation
 function addItem() {
 
-    //if (isNaN(quantity.value) || quantity.value == '' || item.value == 0 || reason.value == '') {
+    if (isNaN($("#quantity").val()) || $("#quantity").val() == '' || $("#item").val() == 0 || $("#reason").val() == '') {
 
-    //    alert("Please input valid data!");
+        alert("Please input valid data!");
 
-    //    return false;
-    //}
+        return false;
+    }
 
     let row = `<tr>
                     <td><input type="hidden" class="item-id" value="${$('#item option:selected').val()}">${$('#item option:selected').text()}</td>
