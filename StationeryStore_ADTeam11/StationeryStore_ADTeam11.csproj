@@ -420,7 +420,7 @@
     <Content Include="Views\StoreClerk\CreateAdjustmentVoucher.cshtml" />
     <Content Include="Views\DepartmentHead\Index.cshtml" />
     <Content Include="Views\StoreManager\UpdateSupplier.cshtml" />
-    <Content Include="Views\StoreManager\editSupplier.cshtml" />
+    <Content Include="Views\StoreManager\EditSupplierORI.cshtml" />
     <Content Include="Views\StoreManager\DeleteSupplier.cshtml" />
     <Content Include="Views\StoreManager\CreateSupplierOld.cshtml" />
     <Content Include="Views\StoreManager\CreateSupplier.cshtml" />
@@ -432,6 +432,8 @@
     <Content Include="Views\DepartmentHead\ReviewStationeryRequest.cshtml" />
     <Content Include="Views\DepartmentHead\ViewPendingRequestDetails.cshtml" />
     <Content Include="Views\DepartmentEmployee\ViewDelegationStatus.cshtml" />
+    <Content Include="Views\StoreManager\EditSupplierNew.cshtml" />
+    <Content Include="Views\StoreManager\EditSupplier.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

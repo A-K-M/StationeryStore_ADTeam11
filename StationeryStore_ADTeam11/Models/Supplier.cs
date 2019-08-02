@@ -33,7 +33,6 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "GST Registration No")]
-        [Required(ErrorMessage = "GST Registration No is required")]
         public string GstNumber
         {
             get { return _gstNumber; }

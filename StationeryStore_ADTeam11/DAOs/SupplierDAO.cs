@@ -29,12 +29,21 @@ public class SupplierDAO : DAO
                 {
                     Id = (string)reader["ID"],
                     Name = (string)reader["Name"],
-                    GstNumber = (string)reader["GstNo"],
                     ContactName = (string)reader["ContactName"],
                     PhoneNo = (int)reader["PhoneNo"],
                     Fax = (int)reader["Fax"],
                     Address = (string)reader["Address"]
                 };
+
+                try
+                {
+                    supplier.GstNumber = (string)reader["GstNo"];
+                }
+                catch(Exception e)
+                {
+                    supplier.GstNumber = "Nil";
+                }
+
                 suppliers.Add(supplier);
             }
 
@@ -130,12 +139,20 @@ public class SupplierDAO : DAO
                 {
                     Id = (string)reader["ID"],
                     Name = (string)reader["Name"],
-                    GstNumber = (string)reader["GstNo"],
                     ContactName = (string)reader["ContactName"],
                     PhoneNo = (int)reader["PhoneNo"],
                     Fax = (int)reader["Fax"],
                     Address = (string)reader["Address"]
                 };
+            }
+
+            try
+            {
+                supplier.GstNumber = (string)reader["GstNo"];
+            }
+            catch(Exception e)
+            {
+                supplier.GstNumber = "Nil";
             }
 
             conn.Close();

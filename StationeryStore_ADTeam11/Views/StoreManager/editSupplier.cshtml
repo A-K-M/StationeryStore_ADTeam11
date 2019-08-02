@@ -10,83 +10,92 @@
     var supplier = (Supplier)ViewData["supplier"];
 }
 
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
 <div class="container-fluid">
     <div class="row d-flex">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <h2>editSupplier</h2>
+                    @{
+                        using (Html.BeginForm("UpdateSupplier", "StoreManager", FormMethod.Post))
+                        {
 
-                    <table align="left">
-                        @{
-                            using (Html.BeginForm("UpdateSupplier", "StoreManager", FormMethod.Post))
-                            {
-                                <tr>
-                                    <td>
-                                        <p align="left">Supplier Code</p>
-                                    </td>
-                                    <td>
-                                        <p align="left">: @Html.TextBoxFor(supp => supp.Id, new { @readonly = "readonly", @Value = supplier.Id }) </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p align="left">Supplier Name</p>
-                                    </td>
-                                    <td>
-                                        <p align="left">: @Html.TextBoxFor(supp => supp.Name, new { @Value = supplier.Name }) </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p align="left">GST Registration no</p>
-                                    </td>
-                                    <td>
-                                        <p align="left">: @Html.TextBoxFor(supp => supp.GstNumber, new { @Value = supplier.GstNumber }) </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p align="left">Contact Name</p>
-                                    </td>
-                                    <td>
-                                        <p align="left">: @Html.TextBoxFor(supp => supp.ContactName, new { @Value = supplier.ContactName }) </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p align="left">Contact Number</p>
-                                    </td>
-                                    <td>
-                                        <p align="left">: @Html.TextBoxFor(supp => supp.PhoneNo, new { @Value = supplier.PhoneNo }) </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p align="left">Fax No</p>
-                                    </td>
-                                    <td>
-                                        <p align="left">: @Html.TextBoxFor(supp => supp.Fax, new { @Value = supplier.Fax }) </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p align="left">Address</p>
-                                    </td>
-                                    <td>
-                                        <p align="left">: @Html.TextBoxFor(supp => supp.Address, new { @Value = supplier.Address }) </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+                                <h4>Supplier</h4>
+                                <hr />
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(supp => supp.Id, new { @readonly = "readonly", @Value = supplier.Id })
+                                        @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(supp => supp.Name, new { @readonly = "readonly", @Value = supplier.Name })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.GstNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(supp => supp.GstNumber, new { @Value = supplier.GstNumber })
+                                        @Html.ValidationMessageFor(model => model.GstNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(supp => supp.ContactName, new { @Value = supplier.ContactName })
+                                        @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PhoneNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(supp => supp.PhoneNo, new { @Value = supplier.PhoneNo })
+                                        @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Fax, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(supp => supp.Fax, new { @Value = supplier.Fax })
+                                        @Html.ValidationMessageFor(model => model.Fax, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(supp => supp.Address, new { @Value = supplier.Address })
+                                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
                                         <a href="@Url.Content("~/StoreManager/Suppliers")" class="btn btn-danger btn-sm">Back</a>
                                         <a><input type="submit" value="Save" class="btn btn-success btn-sm"></a>
-                                    </td>
-                                </tr>
-                            }
+                                    </div>
+                                </div>
+                            </div>
                         }
-
-                    </table>
+                    }
                 </div>
             </div>
         </div>
