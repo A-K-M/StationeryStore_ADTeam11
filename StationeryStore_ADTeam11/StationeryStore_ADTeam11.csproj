@@ -132,8 +132,10 @@
     <Compile Include="DAOs\CategoryDAO.cs" />
     <Compile Include="DAOs\DAO.cs" />
     <Compile Include="DAOs\DatabaseConnection.cs" />
+    <Compile Include="DAOs\DelegationDAO.cs" />
     <Compile Include="DAOs\EmployeeDAO.cs" />
     <Compile Include="DAOs\ItemDAO.cs" />
+    <Compile Include="DAOs\RequestDAO.cs" />
     <Compile Include="DAOs\SupplierDAO.cs" />
     <Compile Include="Filters\AuthenticationFilter.cs" />
     <Compile Include="Filters\LayoutFilter.cs" />
@@ -159,6 +161,8 @@
     <Compile Include="Models\StockCard.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View_Models\DeligationStatus.cs" />
+    <Compile Include="View_Models\StationeryRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -425,6 +429,9 @@
     <Content Include="Views\StoreClerk\Index.cshtml" />
     <Content Include="Views\StoreManager\Index.cshtml" />
     <Content Include="Views\StoreSupervisor\Index.cshtml" />
+    <Content Include="Views\DepartmentHead\ReviewStationeryRequest.cshtml" />
+    <Content Include="Views\DepartmentHead\ViewPendingRequestDetails.cshtml" />
+    <Content Include="Views\DepartmentEmployee\ViewDelegationStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
