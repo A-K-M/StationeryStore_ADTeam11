@@ -6,6 +6,7 @@
     ViewBag.Title = "addSupplierStatus";
 
     var saved = (bool)ViewData["saved"];
+    var duplicateMsg = (string)ViewData["duplicateMsg"];
 }
 
 <div class="container-fluid">
@@ -18,11 +19,11 @@
                     @{
                         if (saved == true)
                         {
-                            <p>Supplier record successfully created</p>
+                            <p>Supplier record successfully created.</p>
                         }
                         else
                         {
-                            <p>Error, supplier record not saved</p>
+                            <p>Error, @duplicateMsg, supplier record not created.</p>
                         }
                     }
 

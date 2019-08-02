@@ -9,13 +9,18 @@ namespace StationeryStore_ADTeam11.Models
     {
         private int _id;
         private string _itemId;
-        private string _voucherId;
-
+        private int _voucherId;
+        private int _quantity;
+        private string _reason;
 
         public int Id { get; set; }
 
         public string ItemId { get; set; }
 
-        public string VoucherId { get; set; }
+        public int VoucherId { get; set; }
+
+        public int Quantity { get; set; }
+
+        public string Reason { get; set; }
     }
 }

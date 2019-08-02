@@ -44,6 +44,45 @@ public class SupplierDAO : DAO
         return suppliers;
     }
 
+    public static Supplier findSupplierbyId(string id)
+    {
+        Supplier supplier = new Supplier();
+
+        try
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT * FROM Supplier WHERE ID = '" + id + "'";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    supplier = new Supplier()
+                    {
+                        Id = (string)reader["ID"],
+                        Name = (string)reader["Name"],
+                        GstNumber = (string)reader["GstNo"],
+                        ContactName = (string)reader["ContactName"],
+                        PhoneNo = (int)reader["PhoneNo"],
+                        Fax = (int)reader["Fax"],
+                        Address = (string)reader["Address"]
+                    };
+                }
+
+                conn.Close();
+            }
+        }
+        catch (Exception e)
+        {
+            supplier.Id = null;
+        }
+
+        return supplier;
+    }
+
     public static bool addSupplier(Supplier supp)
     {
         bool saved = false;

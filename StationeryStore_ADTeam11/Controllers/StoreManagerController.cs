@@ -33,7 +33,18 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult AddSupplier(Supplier supplier)
         {
-            bool saved = SupplierDAO.addSupplier(supplier);
+            bool saved = false;
+            string duplicateMsg = "supplier ID already exist";
+
+            Supplier existingSupp = SupplierDAO.findSupplierbyId(supplier.Id);
+            if (supplier.Id != existingSupp.Id)
+            {
+                saved = SupplierDAO.addSupplier(supplier);
+            }
+            else
+            {
+                ViewData["duplicateMsg"] = duplicateMsg;
+            }
 
             ViewData["saved"] = saved;
             return View();

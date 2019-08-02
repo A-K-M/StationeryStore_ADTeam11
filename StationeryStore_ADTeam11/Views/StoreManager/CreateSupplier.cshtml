@@ -1,65 +1,81 @@
 ﻿@model StationeryStore_ADTeam11.Models.Supplier
 
 @{
-    ViewBag.Title = "CreateSupplier";
+    ViewBag.Title = "View";
     Layout = "~/Views/Shared/_storeManagerLayout.cshtml";
 }
-
 
 <div class="container-fluid">
     <div class="row d-flex">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h2>CreateSupplier</h2>
-                    @using (Html.BeginForm("AddSupplier", "StoreManager", FormMethod.Post))
+                    <h2>Add New Supplier</h2>
+
+                    @using (Html.BeginForm())
                     {
-                        <table align="left">
-                            <tr>
-                                <td>Supplier Code</td>
-                                <td>@Html.TextBoxFor(supp => supp.Id)</td>
-                                <td>@Html.ValidationMessageFor(supp => supp.Id)</td>
-                            </tr>
-                            <tr>
-                                <td>Supplier Name</td>
-                                <td>@Html.TextBoxFor(supp => supp.Name)</td>
-                                <td>@Html.ValidationMessageFor(supp => supp.Name)</td>
-                            </tr>
-                            <tr>
-                                <td>GST Registration No</td>
-                                <td>@Html.TextBoxFor(supp => supp.GstNumber)</td>
-                                <td>@Html.ValidationMessageFor(supp => supp.GstNumber)</td>
-                            </tr>
-                            <tr>
-                                <td>Contact Name</td>
-                                <td>@Html.TextBoxFor(supp => supp.ContactName)</td>
-                                <td>@Html.ValidationMessageFor(supp => supp.ContactName)</td>
-                            </tr>
-                            <tr>
-                                <td>Telephone No</td>
-                                <td>@Html.TextBoxFor(supp => supp.PhoneNo)</td>
-                                <td>@Html.ValidationMessageFor(supp => supp.PhoneNo)</td>
-                            </tr>
-                            <tr>
-                                <td>Fax No</td>
-                                <td>@Html.TextBoxFor(supp => supp.Fax)</td>
-                                <td>@Html.ValidationMessageFor(supp => supp.Fax)</td>
-                            </tr>
-                            <tr>
-                                <td>Address</td>
-                                <td>@Html.TextBoxFor(supp => supp.Address)</td>
-                                <td>@Html.ValidationMessageFor(supp => supp.Address)</td>
-                            </tr>
-                            <tr>
-                                <td>
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            <h4>Supplier</h4>
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.GstNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.GstNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.GstNumber, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PhoneNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Fax, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Fax, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Fax, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
                                     <a href="@Url.Content("~/StoreManager/Suppliers")" class="btn btn-danger btn-sm">Back</a>
-                                    <a><input type="submit" value="Submit" class="btn btn-success btn-sm"></a>
-                                </td>
-                            </tr>
-                        </table>
+                                    <input type="submit" value="Create" class="btn btn-success btn-sm" />
+                                </div>
+                            </div>
+                        </div>
                     }
-
-
 
                 </div>
             </div>

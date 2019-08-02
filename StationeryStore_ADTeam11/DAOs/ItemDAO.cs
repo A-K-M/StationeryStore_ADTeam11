@@ -31,7 +31,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 item = new Item()
                 {
-                    Id = Convert.ToInt32(data["ID"]),
+                    Id = data["ID"].ToString(),
                     CategoryId = Convert.ToInt32(data["CategoryID"]),
                     Description = data["Description"].ToString(),
                     ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
@@ -50,6 +50,7 @@ namespace StationeryStore_ADTeam11.DAOs
             }
 
             data.Close();
+            connection.Close();
 
             return items;
         }

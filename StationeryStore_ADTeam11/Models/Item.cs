@@ -8,7 +8,7 @@ namespace StationeryStore_ADTeam11.Models
     public class Item
     {
 
-        private int _id;
+        private string _id;
         private int _categoryId;
         private string _description;
         private int _thresholdValue;
@@ -22,7 +22,7 @@ namespace StationeryStore_ADTeam11.Models
         private string _thirdSupplier;
         private double _thirdPrice;
 
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int CategoryId { get; set; }
         public string Description { get; set; }
         public int ThresholdValue { get; set; }
