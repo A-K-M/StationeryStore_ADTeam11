@@ -52,17 +52,17 @@ namespace StationeryStore_ADTeam11.Controllers
             switch (employee.Role)
             {
                 case "Head":
-                    return RedirectToAction("HeadIndex", "DepartmentHead");
+                    return RedirectToAction("Index", "DepartmentHead");
                 case "Employee":
-                    return RedirectToAction("EmployeeIndex", "DepartmentEmployee");
+                    return RedirectToAction("Index", "DepartmentEmployee");
                 case "Representative":
-                    return RedirectToAction("RepIndex", "DepartmentRepresentative");
+                    return RedirectToAction("Index", "DepartmentRepresentative");
                 case "Manager":
-                    return RedirectToAction("ManagerIndex", "StoreManager");
+                    return RedirectToAction("Index", "StoreManager");
                 case "Supervisor":
-                    return RedirectToAction("SuperviosrIndex", "StoreSupervisor");
+                    return RedirectToAction("Index", "StoreSupervisor");
                 case "Clerk":
-                    return RedirectToAction("ClerkIndex", "StoreClerk");
+                    return RedirectToAction("Index", "StoreClerk");
                 default:
                     break;
             }
@@ -76,7 +76,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["sessionID"] = null;
             Session["username"] = null;
             Session["role"] = null;
-            return RedirectToAction("Base", "Login");
+            return RedirectToAction("Login", "Base");
         }
 
         [AuthenticationFilter]

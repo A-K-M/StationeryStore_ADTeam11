@@ -12,8 +12,8 @@ namespace StationeryStore_ADTeam11.Controllers
     
     public class DepartmentHeadController : Controller
     {
-        [RoleFilter("head")]
-        public ActionResult HeadIndex()
+        [RoleFilter("Head")]
+        public ActionResult Index()
         {
             return View();
         }

@@ -414,18 +414,20 @@
     <Content Include="Views\StoreManager\AddSupplier.cshtml" />
     <Content Include="Views\StoreManager\Suppliers.cshtml" />
     <Content Include="Views\StoreClerk\CreateAdjustmentVoucher.cshtml" />
-    <Content Include="Views\DepartmentHead\HeadIndex.cshtml" />
+    <Content Include="Views\DepartmentHead\Index.cshtml" />
     <Content Include="Views\StoreManager\UpdateSupplier.cshtml" />
     <Content Include="Views\StoreManager\editSupplier.cshtml" />
     <Content Include="Views\StoreManager\DeleteSupplier.cshtml" />
     <Content Include="Views\StoreManager\CreateSupplier.cshtml" />
+    <Content Include="Views\DepartmentEmployee\Index.cshtml" />
+    <Content Include="Views\DepartmentRepresentative\Index.cshtml" />
+    <Content Include="Views\StoreClerk\Index.cshtml" />
+    <Content Include="Views\StoreManager\Index.cshtml" />
+    <Content Include="Views\StoreSupervisor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\DepartmentEmployee\" />
-    <Folder Include="Views\DepartmentRepresentative\" />
-    <Folder Include="Views\StoreSupervisor\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

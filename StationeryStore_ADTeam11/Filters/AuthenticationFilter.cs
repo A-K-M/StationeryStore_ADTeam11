@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
@@ -12,18 +10,25 @@ namespace StationeryStore_ADTeam11.Filters
     {
         public void OnAuthorization(AuthorizationContext filterContext)
         {
-            string sessionId = HttpContext.Current.Session["sessionID"].ToString();
-            if (sessionId == null)
+            string sessionId = null;
+
+            try
             {
-                filterContext.Result = new RedirectToRouteResult(
-                    new RouteValueDictionary
-                    {
+                sessionId = HttpContext.Current.Session["sessionID"].ToString();
+            }
+            catch (Exception e)
+            {
+                if (sessionId == null)
+                {
+                    filterContext.Result = new RedirectToRouteResult(
+                        new RouteValueDictionary
+                        {
                         { "controller", "base" },
                         { "action", "Login" }
-                    }
-                );
+                        }
+                    );
+                }
             }
-
         }
 
         public void OnAuthenticationChallenge(AuthenticationChallengeContext filterContext)
@@ -41,5 +46,5 @@ namespace StationeryStore_ADTeam11.Filters
             }
         }
     }
-    
+
 }
