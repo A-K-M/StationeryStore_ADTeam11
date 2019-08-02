@@ -1,0 +1,97 @@
+﻿@using StationeryStore_ADTeam11.Models
+@{
+    ViewBag.Title = "ViewDelegationStatus";
+    var delegationList = (List<Delegation>)ViewData["delegation"];
+    DateTime today = (DateTime)ViewData["today"];
+}
+
+<h2>ViewDelegationStatus</h2>
+@section Scripts
+{
+    <script src="@Url.Content("~/Shared/create_adjustment_voucher.js")">
+
+    </script>
+}
+<body>
+
+    <!-- Statistics Section-->
+    <br>
+    <section class="statistics">
+        <div class="container-fluid">
+            <div class="row d-flex">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table  table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Employee Name</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        @:<tr>
+                                            {
+                                                var id = 0;
+                                                foreach (var del in delegationList)
+                                                {
+
+                                                    id = del.Id + id + 1;
+                                                <tr>
+
+                                                    <td>@id</td>
+                                                    <td>Esther</td>
+                                                    <td>@del.StartDate.ToString("dd/MM/yyyy")</td>
+                                                    <td>@del.EndDate.ToString("dd/MM/yyyy")</td>
+                                                    @{
+                                                        if (del.EndDate > today)
+                                                        {
+                                                            <td style="color:forestgreen">Ongoing</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td style="color:black">Completed</td>
+                                                        }
+                                                    }
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    </section>
+    <footer class="main-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <p>SA48 - 2019</p>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <p>
+                        Design by <a href="#" class="external">Team 11</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </div>
+    <!-- JavaScript files-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper.js/umd/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+    <script src="vendor/jquery.cookie/jquery.cookie.js"></script>
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="js/charts-home.js"></script>
+    <!-- Main File-->
+    <script src="js/front.js"></script>
+</body>

@@ -1,0 +1,54 @@
+﻿@using StationeryStore_ADTeam11.View_Models
+
+@{
+    ViewBag.Title = "ReviewStationeryRequest";
+    var reqlist = (List<StationeryRequest>)ViewData["reqlist"];
+}
+
+<h2>ReviewStationeryRequest</h2>
+
+<div class="card" style="height: 550px">
+    <div class="card-header">
+        <h4>Stationary Requests</h4>
+    </div>
+    <div class="card-body">
+        <table class="table  table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Employee Name</th>
+                    <th>Date</th>
+                    <th>Total Items</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    @:<tr>
+                    {
+                        foreach (var req in reqlist)
+                        {
+                      <tr>
+                          <th scope="row">1</th>
+                          <td>@req.EmpName</td>
+                          <td>@req.Date</td>
+                          <td>11</td>
+                          @{
+                              if (req.Status == "Pending")
+                              {
+                                  <td>@Html.ActionLink(req.Status, "ViewPendingRequestDetails", "DepartmentHead", new { reqid = req.RequestId}, null)</td>
+                              }
+                              else
+                              {
+                                  <td>@req.Status</td>
+                              }
+                            }
+
+                      </tr>
+                        }
+                    }
+                }
+                </tbody>
+            </table>
+    </div>
+</div>
