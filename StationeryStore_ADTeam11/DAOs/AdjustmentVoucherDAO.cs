@@ -10,6 +10,39 @@ namespace StationeryStore_ADTeam11.DAOs
 {
     public class AdjustmentVoucherDAO : DatabaseConnection
     {
+        public List<AdjustmentVoucher> GetAll()
+        {
+            List<AdjustmentVoucher> vouchers = new List<AdjustmentVoucher>();
+
+            AdjustmentVoucher adjustmentVoucher = null;
+
+            string sql = "SELECT * FROM AdjustmentVoucher";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                adjustmentVoucher = new AdjustmentVoucher()
+                {
+                    Id = Convert.ToInt32(data["VoucherID"]),
+                    EmployeeId = Convert.ToInt32(data["EmployeeID"]),
+                    Status = data["Status"].ToString(),
+                    Date = Convert.ToDateTime(data["Date"])
+                };
+
+                vouchers.Add(adjustmentVoucher);
+            }
+
+            data.Close();
+            connection.Close();
+
+            return vouchers;
+        }
+
         public int Add(int employeeId)
         {
             DateTime now = DateTime.Now;

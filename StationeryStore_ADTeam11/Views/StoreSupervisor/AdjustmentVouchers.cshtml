@@ -1,0 +1,45 @@
+﻿@using StationeryStore_ADTeam11.Models;
+@{
+    var adjustmentVouchers = (List<AdjustmentVoucher>)ViewData["AdjustmentVouchers"];
+}
+
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/store_supervisor.js")"></script>
+}
+
+@{
+    ViewBag.Title = "AdjustmentVouchers";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>Adjustment Vouchers</h4>
+    </div>
+    <div class="card-body">
+        <table class="table  table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Voucher</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="vouchers">
+                @foreach (var voucher in adjustmentVouchers)
+                {
+                    <tr>
+                        <td>@voucher.EmployeeId</td>
+                        <td>Stock Adjustment  @voucher.Id</td>
+                        <td>@voucher.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@voucher.Status</td>
+                        <td><a href="#" class="btn btn-outline-info">View</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

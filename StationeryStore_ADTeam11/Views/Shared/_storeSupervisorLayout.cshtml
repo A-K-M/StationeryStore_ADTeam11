@@ -107,10 +107,11 @@
                 </div>
             </nav>
         </header>
+        <section class="statistics">
+            @RenderBody()
+        </section>
     </div>
-    <section class="statistics">
-        @RenderBody()
-    </section>
+
     <script src="~/Statics/vendor/jquery/jquery.min.js"></script>
     <script src="~/Statics/vendor/popper.js/umd/popper.min.js"></script>
     <script src="~/Statics/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -120,5 +121,7 @@
     <script src="~/Statics/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/Statics/js/charts-home.js"></script>
+
+    @RenderSection("Scripts", false)
 </body>
 </html>

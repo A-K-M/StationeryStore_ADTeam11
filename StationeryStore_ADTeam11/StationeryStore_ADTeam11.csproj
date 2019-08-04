@@ -176,7 +176,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\create_adjustment_voucher.js" />
+    <Content Include="Scripts\store_clerk.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -187,6 +187,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\store_supervisor.js" />
     <Content Include="Statics\css\custom.css" />
     <Content Include="Statics\css\fa-all.css" />
     <Content Include="Statics\css\fontastic.css" />
@@ -434,6 +435,7 @@
     <Content Include="Views\DepartmentEmployee\ViewDelegationStatus.cshtml" />
     <Content Include="Views\StoreManager\EditSupplierNew.cshtml" />
     <Content Include="Views\StoreManager\EditSupplier.cshtml" />
+    <Content Include="Views\StoreSupervisor\AdjustmentVouchers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
