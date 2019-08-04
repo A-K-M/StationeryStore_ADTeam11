@@ -49,7 +49,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "Phone No")]
-        [Required, MaxLength(15, ErrorMessage = "Phone no maximum length is 15 numbers")]
+        [Required, Range(10000000, 999999999999999, ErrorMessage = "Phone no length is between 8 to 15 digits")]
         public int PhoneNo
         {
             get { return _phoneNo; }
@@ -57,7 +57,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "Fax No")]
-        [Required, MaxLength(15, ErrorMessage = "Fax no maximum length is 15 numbers")]
+        [Required, Range(10000000, 999999999999999, ErrorMessage = "Fax no length is between 8 to 15 digits")]
         public int Fax
         {
             get { return _fax; }
@@ -65,7 +65,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "Address")]
-        [Required, StringLength(255, ErrorMessage = "Contact Name maximum length is 255 characters")]
+        [Required, StringLength(255, ErrorMessage = "Address maximum length is 255 characters")]
         public string Address
         {
             get { return _address; }
