@@ -21,9 +21,16 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
 
-            ViewData["AdjustmentVouchers"] = adjustmentVoucherDAO.GetAll();
+            ViewData["AdjustmentVouchers"] = adjustmentVoucherDAO.GetByStatus("Pending");
 
             return View();
+        }
+
+        public JsonResult FilterAdjustmentVouchers(string id) //Since we are using default route the parameter name must be id instead of status unless we wanna modify routes
+        {
+            AdjustmentVoucherDAO adjustment = new AdjustmentVoucherDAO();
+
+            return Json(adjustment.GetByStatus(id), JsonRequestBehavior.AllowGet);
         }
     }
 }

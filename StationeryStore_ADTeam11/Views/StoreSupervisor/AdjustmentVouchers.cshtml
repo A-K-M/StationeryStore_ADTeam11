@@ -18,7 +18,16 @@
         <h4>Adjustment Vouchers</h4>
     </div>
     <div class="card-body">
-        <table class="table  table-hover table-striped">
+
+        <div class="form-group">
+            <label for="status">Filter By Status</label>
+            <select class="form-control col-sm-3" id="status" onchange="filterVouchers(this.value)">
+                <option value="Pending" selected>Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+        </div>
+        <table id="voucher-table" class="table table-hover table-striped">
             <thead>
                 <tr>
                     <th>Employee</th>

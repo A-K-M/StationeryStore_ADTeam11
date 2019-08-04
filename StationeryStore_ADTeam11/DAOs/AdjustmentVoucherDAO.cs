@@ -10,15 +10,18 @@ namespace StationeryStore_ADTeam11.DAOs
 {
     public class AdjustmentVoucherDAO : DatabaseConnection
     {
-        public List<AdjustmentVoucher> GetAll()
+        public List<AdjustmentVoucher> GetByStatus(string status)
         {
             List<AdjustmentVoucher> vouchers = new List<AdjustmentVoucher>();
 
             AdjustmentVoucher adjustmentVoucher = null;
 
-            string sql = "SELECT * FROM AdjustmentVoucher";
+            string sql = "SELECT * FROM AdjustmentVoucher WHERE Status = @value;";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
+
+            cmd.Parameters.Add("@value", SqlDbType.VarChar);
+            cmd.Parameters["@value"].Value = status;
 
             connection.Open();
 
