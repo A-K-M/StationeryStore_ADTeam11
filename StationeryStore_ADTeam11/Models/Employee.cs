@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using StationeryStore_ADTeam11.MobileModels;
 
 namespace StationeryStore_ADTeam11.Models
 {
@@ -22,6 +24,8 @@ namespace StationeryStore_ADTeam11.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
+
+       
     }
 
 
