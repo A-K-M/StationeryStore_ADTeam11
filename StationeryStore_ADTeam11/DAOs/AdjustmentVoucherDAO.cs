@@ -122,7 +122,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             VoucherItemVM voucherItems = null;
 
-            string sql = "SELECT iav.VoucherID, iav.Qty, iav.Reason, i.Description FROM ItemAdjVoucher iav, Item i WHERE VoucherID = @Id AND i.ID = iav.ItemID";
+            string sql = "SELECT av.Status, iav.VoucherID, iav.Qty, iav.Reason, i.Description FROM ItemAdjVoucher iav, Item i, AdjustmentVoucher av WHERE iav.VoucherID = @Id AND i.ID = iav.ItemID AND av.VoucherID = iav.VoucherID";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
@@ -137,6 +137,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 voucherItems = new VoucherItemVM() {
 
+                    Status = data["Status"].ToString(),
                     ItemDescription = data["Description"].ToString(),
                     Quantity = Convert.ToInt32(data["Qty"]),
                     Reason = data["Reason"].ToString()

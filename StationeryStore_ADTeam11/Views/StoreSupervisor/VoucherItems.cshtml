@@ -4,6 +4,8 @@
 }
 @{
     var adjustmentDetail = (List<VoucherItemVM>)ViewData["VoucherItems"];
+
+    string status = "";
  }
 
 <div class="container-fluid">
@@ -15,7 +17,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <Label class="col-12">Date : 2019/07/15</Label>
+                        
                         <div class="col-12">
                             <table class="table  table-hover table-striped">
                                 <thead>
@@ -28,6 +30,7 @@
                                 <tbody>
                                     @foreach (var item in adjustmentDetail)
                                     {
+                                        status = item.Status;
                                         <tr>
                                             <td>@item.ItemDescription</td>
                                             <td>@item.Quantity</td>
@@ -39,15 +42,18 @@
                         </div>
                         <div class="col-6"></div>
                         <div class="col-6">
-                            <div class="row">
-                                <div class="col-6"></div>
-                                <div class="col-3">
-                                    <button class="btn btn-outline-danger">Reject</button>
+                            @if (status != "Pending")
+                            {
+                                <div class="row">
+                                    <div class="col-6"></div>
+                                    <div class="col-3">
+                                        <button class="btn btn-outline-danger">Reject</button>
+                                    </div>
+                                    <div class="col-3">
+                                        <button class="btn btn-outline-success">Approve</button>
+                                    </div>
                                 </div>
-                                <div class="col-3">
-                                    <button class="btn btn-outline-success">Approve</button>
-                                </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
