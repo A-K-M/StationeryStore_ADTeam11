@@ -136,6 +136,7 @@
     <Compile Include="DAOs\EmployeeDAO.cs" />
     <Compile Include="DAOs\ItemDAO.cs" />
     <Compile Include="DAOs\RequestDAO.cs" />
+    <Compile Include="DAOs\StockCardDAO.cs" />
     <Compile Include="DAOs\SupplierDAO.cs" />
     <Compile Include="Filters\AuthenticationFilter.cs" />
     <Compile Include="Filters\LayoutFilter.cs" />
@@ -437,6 +438,7 @@
     <Content Include="Views\StoreManager\EditSupplier.cshtml" />
     <Content Include="Views\StoreSupervisor\AdjustmentVouchers.cshtml" />
     <Content Include="Views\StoreManager\SupplierList.cshtml" />
+    <Content Include="Views\StoreClerk\ViewStockCard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
