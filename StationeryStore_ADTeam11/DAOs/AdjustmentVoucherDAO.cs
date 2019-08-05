@@ -1,4 +1,6 @@
-﻿using StationeryStore_ADTeam11.Models;
+﻿
+using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.View_Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,13 +12,18 @@ namespace StationeryStore_ADTeam11.DAOs
 {
     public class AdjustmentVoucherDAO : DatabaseConnection
     {
-        public List<AdjustmentVoucher> GetByStatus(string status)
+        public List<AdjustmentVoucherViewModel> GetByStatus(string status)
         {
-            List<AdjustmentVoucher> vouchers = new List<AdjustmentVoucher>();
+            List<AdjustmentVoucherViewModel> vouchers = new List<AdjustmentVoucherViewModel>();
 
-            AdjustmentVoucher adjustmentVoucher = null;
+            AdjustmentVoucherViewModel adjustmentVoucher = null;
 
-            string sql = "SELECT * FROM AdjustmentVoucher WHERE Status = @value;";
+            string sql = "SELECT e.Name, av.VoucherID, av.Date, av.Status, SUM(iav.Qty) as TotalQuantity" +
+                          "  FROM Employee e, AdjustmentVoucher av, ItemAdjVoucher iav" +
+                          " WHERE av.Status = @value" +
+                          "  AND av.EmployeeID = e.ID" + 
+                          " AND av.VoucherID = iav.VoucherID" +
+                          " GROUP BY e.Name, av.VoucherID, av.Date, av.Status";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
@@ -29,12 +36,12 @@ namespace StationeryStore_ADTeam11.DAOs
 
             while (data.Read())
             {
-                adjustmentVoucher = new AdjustmentVoucher()
-                {
+                adjustmentVoucher = new AdjustmentVoucherViewModel() {
+                    Name = data["Name"].ToString(),
                     Id = Convert.ToInt32(data["VoucherID"]),
-                    EmployeeId = Convert.ToInt32(data["EmployeeID"]),
+                    Date = Convert.ToDateTime(data["Date"]),
                     Status = data["Status"].ToString(),
-                    Date = Convert.ToDateTime(data["Date"])
+                    TotalQuantity = Convert.ToInt32(data["TotalQuantity"])
                 };
 
                 vouchers.Add(adjustmentVoucher);

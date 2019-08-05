@@ -48,9 +48,10 @@ function filterVouchers(status) {
                 issuedDate = convertDate(new Date(parseInt(item.Date.substr(6))));
 
                 tableData += `<tr>
-                                    <td>${item.EmployeeId}</td>
+                                    <td>${item.Name}</td>
                                     <td>Stock Adjustment ${item.Id}</td>
                                     <td>${issuedDate}</td>
+                                    <td>${item.TotalQuantity}</td>
                                     <td>${item.Status}</td>
                                     <td><a href="#" class="btn btn-outline-info">View</a></td>
                                 </tr>`;
