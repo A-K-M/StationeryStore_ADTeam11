@@ -137,6 +137,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 voucherItems = new VoucherItemVM() {
 
+                    VoucherID = Convert.ToInt32(data["VoucherID"]),
                     Status = data["Status"].ToString(),
                     ItemDescription = data["Description"].ToString(),
                     Quantity = Convert.ToInt32(data["Qty"]),
@@ -150,6 +151,25 @@ namespace StationeryStore_ADTeam11.DAOs
             connection.Close();
 
             return itemList;
+        }
+
+        public void ReviewAdjustmentVoucher(int id, string status)
+        {
+            string sql = "UPDATE AdjustmentVoucher SET Status = @status WHERE VoucherID = @id";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            cmd.Parameters.Add("@status", SqlDbType.VarChar);
+            cmd.Parameters["@status"].Value = status;
+
+            cmd.Parameters.Add("@id", SqlDbType.Int);
+            cmd.Parameters["@id"].Value = id;
+
+            connection.Open();
+
+            cmd.ExecuteNonQuery();
+
+            connection.Close();
         }
     }
 }

@@ -6,6 +6,7 @@
     var adjustmentDetail = (List<VoucherItemVM>)ViewData["VoucherItems"];
 
     string status = "";
+    int voucherId = 0;
  }
 
 <div class="container-fluid">
@@ -31,6 +32,7 @@
                                     @foreach (var item in adjustmentDetail)
                                     {
                                         status = item.Status;
+                                        voucherId = item.VoucherID;
                                         <tr>
                                             <td>@item.ItemDescription</td>
                                             <td>@item.Quantity</td>
@@ -42,16 +44,16 @@
                         </div>
                         <div class="col-6"></div>
                         <div class="col-6">
-                            @if (status != "Pending")
+                            @if (status == "Pending")
                             {
                                 <div class="row">
                                     <div class="col-6"></div>
                                     <div class="col-3">
-                                        <button class="btn btn-outline-danger">Reject</button>
+                                        <a href="/StoreSupervisor/RejectAdjustmentVoucher/@voucherId" class="btn btn-outline-danger">Reject</a>
                                     </div>
                                     <div class="col-3">
-                                        <button class="btn btn-outline-success">Approve</button>
-                                    </div>
+                                        <a href="/StoreSupervisor/ApproveAdjustmentVoucher/@voucherId" class="btn btn-outline-success">Approve</a>
+                                    </div>  
                                 </div>
                             }
                         </div>

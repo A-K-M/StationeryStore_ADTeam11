@@ -41,5 +41,23 @@ namespace StationeryStore_ADTeam11.Controllers
 
             return View();
         }
+
+        public ActionResult ApproveAdjustmentVoucher(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Approved");
+
+            return RedirectToAction("StoreSupervisor", "AdjustmentVouchers");
+        }
+
+        public ActionResult RejectAdjustmentVoucher(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Rejected");
+
+            return RedirectToAction("AdjustmentVouchers");
+        }
     }
 }
