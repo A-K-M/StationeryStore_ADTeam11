@@ -1,0 +1,98 @@
+﻿@model StationeryStore_ADTeam11.Models.Supplier
+@using StationeryStore_ADTeam11.Models
+
+
+@{
+    Layout = "~/Views/Shared/_storeManagerLayout.cshtml";
+
+    ViewBag.Title = "editSupplier";
+
+    var supplier = (Supplier)ViewData["supplier"];
+}
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2>editSupplier</h2>
+
+                    <table align="left">
+                        @{
+                            using (Html.BeginForm("UpdateSupplier", "StoreManager", FormMethod.Post))
+                            {
+                                <tr>
+                                    <td>
+                                        <p align="left">Supplier Code</p>
+                                    </td>
+                                    <td>
+                                        <p align="left">: @Html.TextBoxFor(supp => supp.Id, new { @readonly = "readonly", @Value = supplier.Id }) </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p align="left">Supplier Name</p>
+                                    </td>
+                                    <td>
+                                        <p align="left">: @Html.TextBoxFor(supp => supp.Name, new { @Value = supplier.Name }) </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p align="left">GST Registration no</p>
+                                    </td>
+                                    <td>
+                                        <p align="left">: @Html.TextBoxFor(supp => supp.GstNumber, new { @Value = supplier.GstNumber }) </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p align="left">Contact Name</p>
+                                    </td>
+                                    <td>
+                                        <p align="left">: @Html.TextBoxFor(supp => supp.ContactName, new { @Value = supplier.ContactName }) </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p align="left">Contact Number</p>
+                                    </td>
+                                    <td>
+                                        <p align="left">: @Html.TextBoxFor(supp => supp.PhoneNo, new { @Value = supplier.PhoneNo }) </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p align="left">Fax No</p>
+                                    </td>
+                                    <td>
+                                        <p align="left">: @Html.TextBoxFor(supp => supp.Fax, new { @Value = supplier.Fax }) </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p align="left">Address</p>
+                                    </td>
+                                    <td>
+                                        <p align="left">: @Html.TextBoxFor(supp => supp.Address, new { @Value = supplier.Address }) </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Content("~/StoreManager/Suppliers")" class="btn btn-danger btn-sm">Back</a>
+                                        <a><input type="submit" value="Save" class="btn btn-success btn-sm"></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

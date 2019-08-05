@@ -1,0 +1,58 @@
+﻿@using StationeryStore_ADTeam11.View_Models;
+@{
+    ViewBag.Title = "Adjustment Detail";
+}
+@{
+    var adjustmentDetail = (List<VoucherItemVM>)ViewData["VoucherItems"];
+ }
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Adjustment Detail</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <Label class="col-12">Date : 2019/07/15</Label>
+                        <div class="col-12">
+                            <table class="table  table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Item Description</th>
+                                        <th>Quantity</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in adjustmentDetail)
+                                    {
+                                        <tr>
+                                            <td>@item.ItemDescription</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.Reason</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-6"></div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-6"></div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-danger">Reject</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-success">Approve</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

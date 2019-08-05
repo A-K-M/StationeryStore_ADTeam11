@@ -13,14 +13,15 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h2>DeleteSupplier</h2>
                     @{
                         if (deleted)
                         {
+                            <h2>Supplier Deleted!</h2>
                             <p>Supplier record for supplier code @supplierId successfully deleted.</p>
                         }
                         else
                         {
+                            <h2>Failed to delete supplier</h2>
                             <p>Supplier record for supplier code @supplierId not deleted</p>
                         }
                     }

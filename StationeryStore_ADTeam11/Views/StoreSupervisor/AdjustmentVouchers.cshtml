@@ -1,0 +1,56 @@
+﻿@using StationeryStore_ADTeam11.View_Models;
+@{
+    var adjustmentVouchers = (List<AdjustmentVoucherViewModel>)ViewData["AdjustmentVouchers"];
+}
+
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/store_supervisor.js")"></script>
+}
+
+@{
+    ViewBag.Title = "AdjustmentVouchers";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>Adjustment Vouchers</h4>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group">
+            <label for="status">Filter By Status</label>
+            <select class="form-control col-sm-3" id="status" onchange="filterVouchers(this.value)">
+                <option value="Pending" selected>Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+        </div>
+        <table id="voucher-table" class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Voucher</th>
+                    <th>Date</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="vouchers">
+                @foreach (var voucher in adjustmentVouchers)
+                {
+                    <tr>
+                        <td>@voucher.Name</td>
+                        <td>Stock Adjustment  @voucher.Id</td>
+                        <td>@voucher.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@voucher.TotalQuantity</td>
+                        <td>@voucher.Status</td>
+                        <td><a href="/StoreSupervisor/VoucherItems/@voucher.Id" class="btn btn-outline-info">View</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

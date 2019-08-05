@@ -192,8 +192,10 @@
     <Compile Include="Models\StockCard.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View_Models\AdjustmentVoucherViewModel.cs" />
     <Compile Include="View_Models\DeligationStatus.cs" />
     <Compile Include="View_Models\StationeryRequest.cs" />
+    <Compile Include="View_Models\VoucherItemVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -207,7 +209,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\create_adjustment_voucher.js" />
+    <Content Include="Scripts\store_clerk.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -218,6 +220,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\store_supervisor.js" />
     <Content Include="Statics\css\custom.css" />
     <Content Include="Statics\css\fa-all.css" />
     <Content Include="Statics\css\fontastic.css" />
@@ -451,7 +454,7 @@
     <Content Include="Views\StoreClerk\CreateAdjustmentVoucher.cshtml" />
     <Content Include="Views\DepartmentHead\Index.cshtml" />
     <Content Include="Views\StoreManager\UpdateSupplier.cshtml" />
-    <Content Include="Views\StoreManager\editSupplier.cshtml" />
+    <Content Include="Views\StoreManager\EditSupplierORI.cshtml" />
     <Content Include="Views\StoreManager\DeleteSupplier.cshtml" />
     <Content Include="Views\StoreManager\CreateSupplierOld.cshtml" />
     <Content Include="Views\StoreManager\CreateSupplier.cshtml" />
@@ -463,6 +466,11 @@
     <Content Include="Views\DepartmentHead\ReviewStationeryRequest.cshtml" />
     <Content Include="Views\DepartmentHead\ViewPendingRequestDetails.cshtml" />
     <Content Include="Views\DepartmentEmployee\ViewDelegationStatus.cshtml" />
+    <Content Include="Views\StoreManager\EditSupplierNew.cshtml" />
+    <Content Include="Views\StoreManager\EditSupplier.cshtml" />
+    <Content Include="Views\StoreSupervisor\AdjustmentVouchers.cshtml" />
+    <Content Include="Views\StoreManager\SupplierList.cshtml" />
+    <Content Include="Views\StoreSupervisor\VoucherItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

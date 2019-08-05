@@ -1,4 +1,6 @@
-﻿using StationeryStore_ADTeam11.Models;
+﻿
+using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.View_Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +12,47 @@ namespace StationeryStore_ADTeam11.DAOs
 {
     public class AdjustmentVoucherDAO : DatabaseConnection
     {
+        public List<AdjustmentVoucherViewModel> GetByStatus(string status)
+        {
+            List<AdjustmentVoucherViewModel> vouchers = new List<AdjustmentVoucherViewModel>();
+
+            AdjustmentVoucherViewModel adjustmentVoucher = null;
+
+            string sql = "SELECT e.Name, av.VoucherID, av.Date, av.Status, SUM(iav.Qty) as TotalQuantity" +
+                          "  FROM Employee e, AdjustmentVoucher av, ItemAdjVoucher iav" +
+                          " WHERE av.Status = @value" +
+                          "  AND av.EmployeeID = e.ID" + 
+                          " AND av.VoucherID = iav.VoucherID" +
+                          " GROUP BY e.Name, av.VoucherID, av.Date, av.Status";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            cmd.Parameters.Add("@value", SqlDbType.VarChar);
+            cmd.Parameters["@value"].Value = status;
+
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                adjustmentVoucher = new AdjustmentVoucherViewModel() {
+                    Name = data["Name"].ToString(),
+                    Id = Convert.ToInt32(data["VoucherID"]),
+                    Date = Convert.ToDateTime(data["Date"]),
+                    Status = data["Status"].ToString(),
+                    TotalQuantity = Convert.ToInt32(data["TotalQuantity"])
+                };
+
+                vouchers.Add(adjustmentVoucher);
+            }
+
+            data.Close();
+            connection.Close();
+
+            return vouchers;
+        }
+
         public int Add(int employeeId)
         {
             DateTime now = DateTime.Now;
@@ -70,6 +113,41 @@ namespace StationeryStore_ADTeam11.DAOs
             cmd.ExecuteNonQuery();
 
             connection.Close();
+        }
+
+        public List<VoucherItemVM> GetVoucherItems(int id)
+        {
+            List<VoucherItemVM> itemList = new List<VoucherItemVM>();
+
+            VoucherItemVM voucherItems = null;
+
+            string sql = "SELECT iav.VoucherID, iav.Qty, iav.Reason, i.Description FROM ItemAdjVoucher iav, Item i WHERE VoucherID = @Id AND i.ID = iav.ItemID";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            connection.Open();
+
+            cmd.Parameters.Add("@Id", SqlDbType.Int);
+            cmd.Parameters["@Id"].Value = id;
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                voucherItems = new VoucherItemVM() {
+
+                    ItemDescription = data["Description"].ToString(),
+                    Quantity = Convert.ToInt32(data["Qty"]),
+                    Reason = data["Reason"].ToString()
+                };
+
+                itemList.Add(voucherItems);
+            }
+
+            data.Close();
+            connection.Close();
+
+            return itemList;
         }
     }
 }

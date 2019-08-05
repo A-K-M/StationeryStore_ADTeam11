@@ -14,25 +14,36 @@ namespace StationeryStore_ADTeam11.Controllers
         // GET: StoreManager
         public ActionResult Index()
         {
+            //Session Objects will have to be edited when including session objects later
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
             return View();
         }
 
         public ActionResult Suppliers()
         {
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
             List<Supplier> suppliers = SupplierDAO.getAllSuppliers();
 
             ViewData["Suppliers"] = suppliers;
             return View();
         }
 
-        public ActionResult CreateSupplier(Supplier supplier)
+        public ActionResult CreateSupplier()
         {
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
 
             return View();
         }
 
         public ActionResult AddSupplier(Supplier supplier)
         {
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
             bool saved = false;
             string duplicateMsg = "supplier ID already exist";
 
@@ -52,6 +63,9 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult EditSupplier(Supplier supp)
         {
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
             Supplier supplier = SupplierDAO.editSupplier(supp.Id);
 
             ViewData["supplier"] = supplier;
@@ -60,6 +74,9 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult UpdateSupplier(Supplier supp)
         {
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
             bool updated = SupplierDAO.updateSupplier(supp);
 
             ViewData["updated"] = updated;
@@ -69,6 +86,9 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult DeleteSupplier(string id)
         {
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
             bool deleted = SupplierDAO.deleteSupplier(id);
 
             ViewData["deleted"] = deleted;

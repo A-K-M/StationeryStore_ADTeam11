@@ -63,5 +63,17 @@ namespace StationeryStore_ADTeam11.Controllers
                 return Json("Something went wrong! Please try again later.", JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult ViewStockCard()
+        {
+            Session["Username"] = "Clerk User";
+            Session["Role"] = "Clerk";
+
+            List<StockCard> stockCards = StockCardDAO.getAllStockCards();
+
+
+            ViewData["stockCards"] = stockCards;
+            return View();
+        }
     }
 }
