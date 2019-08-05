@@ -114,5 +114,40 @@ namespace StationeryStore_ADTeam11.DAOs
 
             connection.Close();
         }
+
+        public List<VoucherItemVM> GetVoucherItems(int id)
+        {
+            List<VoucherItemVM> itemList = new List<VoucherItemVM>();
+
+            VoucherItemVM voucherItems = null;
+
+            string sql = "SELECT iav.VoucherID, iav.Qty, iav.Reason, i.Description FROM ItemAdjVoucher iav, Item i WHERE VoucherID = @Id AND i.ID = iav.ItemID";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            connection.Open();
+
+            cmd.Parameters.Add("@Id", SqlDbType.Int);
+            cmd.Parameters["@Id"].Value = id;
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                voucherItems = new VoucherItemVM() {
+
+                    ItemDescription = data["Description"].ToString(),
+                    Quantity = Convert.ToInt32(data["Qty"]),
+                    Reason = data["Reason"].ToString()
+                };
+
+                itemList.Add(voucherItems);
+            }
+
+            data.Close();
+            connection.Close();
+
+            return itemList;
+        }
     }
 }

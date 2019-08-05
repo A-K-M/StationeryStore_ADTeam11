@@ -164,6 +164,7 @@
     <Compile Include="View_Models\AdjustmentVoucherViewModel.cs" />
     <Compile Include="View_Models\DeligationStatus.cs" />
     <Compile Include="View_Models\StationeryRequest.cs" />
+    <Compile Include="View_Models\VoucherItemVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -438,6 +439,7 @@
     <Content Include="Views\StoreManager\EditSupplier.cshtml" />
     <Content Include="Views\StoreSupervisor\AdjustmentVouchers.cshtml" />
     <Content Include="Views\StoreManager\SupplierList.cshtml" />
+    <Content Include="Views\StoreSupervisor\VoucherItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

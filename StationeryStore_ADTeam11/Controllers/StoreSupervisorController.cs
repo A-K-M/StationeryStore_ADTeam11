@@ -32,5 +32,14 @@ namespace StationeryStore_ADTeam11.Controllers
 
             return Json(adjustment.GetByStatus(id), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult VoucherItems(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            ViewData["VoucherItems"] = adjustmentVoucherDAO.GetVoucherItems(id);
+
+            return View();
+        }
     }
 }
