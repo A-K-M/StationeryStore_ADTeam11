@@ -439,6 +439,7 @@
     <Content Include="Views\StoreManager\EditSupplier.cshtml" />
     <Content Include="Views\StoreSupervisor\AdjustmentVouchers.cshtml" />
     <Content Include="Views\StoreManager\SupplierList.cshtml" />
+    <Content Include="Views\StoreClerk\ViewStockCard - old.cshtml" />
     <Content Include="Views\StoreClerk\ViewStockCard.cshtml" />
   </ItemGroup>
   <ItemGroup>
