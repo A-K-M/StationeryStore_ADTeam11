@@ -437,6 +437,7 @@
     <Content Include="Views\StoreManager\EditSupplierNew.cshtml" />
     <Content Include="Views\StoreManager\EditSupplier.cshtml" />
     <Content Include="Views\StoreSupervisor\AdjustmentVouchers.cshtml" />
+    <Content Include="Views\StoreManager\SupplierList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

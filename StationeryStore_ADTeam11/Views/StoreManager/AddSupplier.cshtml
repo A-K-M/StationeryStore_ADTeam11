@@ -14,15 +14,16 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h2>Add Supplier</h2>
 
                     @{
                         if (saved == true)
                         {
+                            <h2>Supplier Added!</h2>
                             <p>Supplier record successfully created.</p>
                         }
                         else
                         {
+                            <h2>Supplier Not Added!</h2>
                             <p>Error, @duplicateMsg, supplier record not created.</p>
                         }
                     }

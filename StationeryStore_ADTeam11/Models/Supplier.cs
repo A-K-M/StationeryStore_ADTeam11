@@ -17,7 +17,7 @@ namespace StationeryStore_ADTeam11.Models
         private string _address;
 
         [Display(Name = "Supplier Code")]
-        [Required(ErrorMessage = "Supplier Code is required")]
+        [Required, StringLength(4, ErrorMessage="Supplier Code maximum length is 4 characters")]
         public string Id
         {
             get { return _id; }
@@ -25,7 +25,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "Supplier Name")]
-        [Required(ErrorMessage = "Supplier Name is required")]
+        [Required, StringLength(100, ErrorMessage = "Supplier Name maximum length is 100 characters")]
         public string Name
         {
             get { return _name; }
@@ -33,6 +33,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "GST Registration No")]
+        [StringLength(12, ErrorMessage = "GST Registration No maximum length is 12 characters")]
         public string GstNumber
         {
             get { return _gstNumber; }
@@ -40,7 +41,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "Contact Name")]
-        [Required(ErrorMessage = "Contact name is required")]
+        [Required, StringLength(25, ErrorMessage = "Contact Name maximum length is 25 characters")]
         public string ContactName
         {
             get { return _contactName; }
@@ -48,7 +49,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "Phone No")]
-        [Required(ErrorMessage = "Phone No is required")]
+        [Required, Range(10000000, 999999999999999, ErrorMessage = "Phone no length is between 8 to 15 digits")]
         public int PhoneNo
         {
             get { return _phoneNo; }
@@ -56,7 +57,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "Fax No")]
-        [Required(ErrorMessage = "Fax No is required")]
+        [Required, Range(10000000, 999999999999999, ErrorMessage = "Fax no length is between 8 to 15 digits")]
         public int Fax
         {
             get { return _fax; }
@@ -64,7 +65,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "Address")]
-        [Required(ErrorMessage = "Address is required")]
+        [Required, StringLength(255, ErrorMessage = "Address maximum length is 255 characters")]
         public string Address
         {
             get { return _address; }

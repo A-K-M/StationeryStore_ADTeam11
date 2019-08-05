@@ -96,6 +96,8 @@ public class SupplierDAO : DAO
     {
         bool saved = false;
 
+        supp.Id = supp.Id.ToUpper();
+
         try
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
