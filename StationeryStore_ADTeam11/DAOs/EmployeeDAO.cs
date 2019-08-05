@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
 
 namespace StationeryStore_ADTeam11.DAOs
@@ -35,8 +36,22 @@ namespace StationeryStore_ADTeam11.DAOs
             return employee;
 
         }
-        
-            
+        public List<MEmployee> GetEmployeeByDepartment(string deptId)
+        {
+            List<MEmployee> mEmployees = new List<MEmployee>();
+            SqlConnection conn = connection;
+            conn.Open();
+            string sql = @"select id,DeptID,Name,Email from employee where DeptID = '" + deptId + "'";
+            SqlCommand command = new SqlCommand(sql, conn);
+            SqlDataReader reader = command.ExecuteReader();
+            mEmployees = new MEmployee().mapToList(reader);
+            reader.Close();
+            conn.Close();
+            return mEmployees;
+
+        }
+
+
 
     }
 }

@@ -19,11 +19,12 @@ namespace StationeryStore_ADTeam11.DAOs
             AdjustmentVoucherViewModel adjustmentVoucher = null;
 
             string sql = "SELECT e.Name, av.VoucherID, av.Date, av.Status, SUM(iav.Qty) as TotalQuantity" +
-                          "  FROM Employee e, AdjustmentVoucher av, ItemAdjVoucher iav" +
+                          "  FROM Employee e, AdjustmentVoucher av, ItemAdjVoucher iav, Item i" +
                           " WHERE av.Status = @value" +
                           "  AND av.EmployeeID = e.ID" + 
                           " AND av.VoucherID = iav.VoucherID" +
-                          " GROUP BY e.Name, av.VoucherID, av.Date, av.Status";
+                          " GROUP BY e.Name, av.VoucherID, av.Date, av.Status" +
+                          " HAVING AVG(i.FirstPrice + i.SecondPrice + i.ThirdPrice) < 250";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
@@ -107,6 +108,62 @@ namespace StationeryStore_ADTeam11.DAOs
             string sql = "DELETE FROM AdjustmentVoucher WHERE VoucherID=@voucherId";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
+
+            connection.Open();
+
+            cmd.ExecuteNonQuery();
+
+            connection.Close();
+        }
+
+        public List<VoucherItemVM> GetVoucherItems(int id)
+        {
+            List<VoucherItemVM> itemList = new List<VoucherItemVM>();
+
+            VoucherItemVM voucherItems = null;
+
+            string sql = "SELECT av.Status, iav.VoucherID, iav.Qty, iav.Reason, i.Description FROM ItemAdjVoucher iav, Item i, AdjustmentVoucher av WHERE iav.VoucherID = @Id AND i.ID = iav.ItemID AND av.VoucherID = iav.VoucherID";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            connection.Open();
+
+            cmd.Parameters.Add("@Id", SqlDbType.Int);
+            cmd.Parameters["@Id"].Value = id;
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                voucherItems = new VoucherItemVM() {
+
+                    VoucherID = Convert.ToInt32(data["VoucherID"]),
+                    Status = data["Status"].ToString(),
+                    ItemDescription = data["Description"].ToString(),
+                    Quantity = Convert.ToInt32(data["Qty"]),
+                    Reason = data["Reason"].ToString()
+                };
+
+                itemList.Add(voucherItems);
+            }
+
+            data.Close();
+            connection.Close();
+
+            return itemList;
+        }
+
+        public void ReviewAdjustmentVoucher(int id, string status)
+        {
+            string sql = "UPDATE AdjustmentVoucher SET Status = @status WHERE VoucherID = @id";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            cmd.Parameters.Add("@status", SqlDbType.VarChar);
+            cmd.Parameters["@status"].Value = status;
+
+            cmd.Parameters.Add("@id", SqlDbType.Int);
+            cmd.Parameters["@id"].Value = id;
 
             connection.Open();
 

@@ -53,7 +53,7 @@ function filterVouchers(status) {
                                     <td>${issuedDate}</td>
                                     <td>${item.TotalQuantity}</td>
                                     <td>${item.Status}</td>
-                                    <td><a href="#" class="btn btn-outline-info">View</a></td>
+                                    <td><a href="/StoreSupervisor/VoucherItems/${item.Id}" class="btn btn-outline-info">View</a></td>
                                 </tr>`;
             });
 

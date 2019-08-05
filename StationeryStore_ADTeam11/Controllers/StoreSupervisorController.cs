@@ -32,5 +32,32 @@ namespace StationeryStore_ADTeam11.Controllers
 
             return Json(adjustment.GetByStatus(id), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult VoucherItems(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            ViewData["VoucherItems"] = adjustmentVoucherDAO.GetVoucherItems(id);
+
+            return View();
+        }
+
+        public ActionResult ApproveAdjustmentVoucher(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Approved");
+
+            return RedirectToAction("StoreSupervisor", "AdjustmentVouchers");
+        }
+
+        public ActionResult RejectAdjustmentVoucher(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Rejected");
+
+            return RedirectToAction("AdjustmentVouchers");
+        }
     }
 }
