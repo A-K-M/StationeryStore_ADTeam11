@@ -162,6 +162,7 @@
     <Compile Include="Models\StockCard.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View_Models\AdjustmentVoucherViewModel.cs" />
     <Compile Include="View_Models\DeligationStatus.cs" />
     <Compile Include="View_Models\StationeryRequest.cs" />
   </ItemGroup>

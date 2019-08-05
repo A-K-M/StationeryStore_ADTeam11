@@ -1,6 +1,6 @@
-﻿@using StationeryStore_ADTeam11.Models;
+﻿@using StationeryStore_ADTeam11.View_Models;
 @{
-    var adjustmentVouchers = (List<AdjustmentVoucher>)ViewData["AdjustmentVouchers"];
+    var adjustmentVouchers = (List<AdjustmentVoucherViewModel>)ViewData["AdjustmentVouchers"];
 }
 
 @section Scripts
@@ -33,6 +33,7 @@
                     <th>Employee</th>
                     <th>Voucher</th>
                     <th>Date</th>
+                    <th>Quantity</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -41,9 +42,10 @@
                 @foreach (var voucher in adjustmentVouchers)
                 {
                     <tr>
-                        <td>@voucher.EmployeeId</td>
+                        <td>@voucher.Name</td>
                         <td>Stock Adjustment  @voucher.Id</td>
                         <td>@voucher.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@voucher.TotalQuantity</td>
                         <td>@voucher.Status</td>
                         <td><a href="#" class="btn btn-outline-info">View</a></td>
                     </tr>
