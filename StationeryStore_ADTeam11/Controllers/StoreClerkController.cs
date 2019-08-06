@@ -76,29 +76,34 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
-        public JsonResult GetSearchingData(string SearchBy, string SearchValue)
+        public JsonResult GetItemStockCard(string SearchBy, string SearchValue)
         {
-            List<StockCard> stockCards = new List<StockCard>();
+            List<Object> itemStockCard = new List<Object>();
             Item item = new Item();
+            List<StockCard> stockCards = new List<StockCard>();
+            ItemDAO itemDAO = new ItemDAO();
+
+            string Id = SearchValue;
 
             if (SearchBy == "ID")
             { 
                 try
                 {
-                    string Id = Convert.ToString(SearchValue);
+                    item = itemDAO.GetItemById(Id);
                     stockCards = StockCardDAO.GetStockCardsbyId(Id);
-                    item = ItemDAO
+                    itemStockCard.Add(item);
+                    itemStockCard.Add(stockCards);
                 }
                 catch (FormatException)
                 {
                     Console.WriteLine("{0} is not an Id", SearchValue);
                 }
-                return Json(stockCards, JsonRequestBehavior.AllowGet);
+                return Json(itemStockCard, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 //stockCards = StockCardDAO.GetStockCardsbyId(Id)
-                return Json(stockCards, JsonRequestBehavior.AllowGet);
+                return Json(itemStockCard, JsonRequestBehavior.AllowGet);
             }
 
         }

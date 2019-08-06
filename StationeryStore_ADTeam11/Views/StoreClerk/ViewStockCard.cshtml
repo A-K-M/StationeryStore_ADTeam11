@@ -7,8 +7,6 @@
     @*var Model = (List<StockCard>)ViewData["stockCards"]; *@
 }
 
-
-
 <div class="container-fluid">
     <div class="row d-flex">
         <div class="col-12">
@@ -16,21 +14,43 @@
 
             <div class="card">
                 <div class="card-body">
-                    <h2>View Stock Card</h2>
-                    <b> Search By: </b>
-                    
-                    <select id="SearchBy">
-                        <option value="ID">ID</option>
-                    </select><br/><br/>
-                    
-                    @Html.TextBox("Search")<input type="submit" id="SearchBtn" value="Search" />
+                        <h2>View Stock Card</h2>
+                        <b> Search By: </b>
 
+                        <select id="SearchBy">
+                            <option value="ID">ID</option>
+                        </select>
+                        <div class="col-12">
+                            @Html.TextBox("Search")<input type="submit" id="SearchBtn" value="View" class="btn btn-success" />
+                        </div>
                 </div>
             </div>
 
-
             <div class="card">
                 <div class="card-body">
+                    <table class="table table-borderless">
+                        <tbody id="ItemDetails">
+                            <tr>
+                                <td>
+                                    <p class="text-body">Item Code - </p>
+                                    <br/>
+                                    <p class="text-body">Description - </p>
+                                    <br/>
+                                    <p class="text-body">Bin - </p> 
+                                    <br/>
+                                    <p class="text-body">UOM - </p> 
+                                </td>
+                                <td>
+                                    <p class="text-body">1st Supplier - </p> 
+                                    <br/>
+                                    <p class="text-body">2nd Supplier - </p>
+                                    <br/>
+                                    <p class="text-body">3rd Supplier - </p>
+                                    <br/><br/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -52,7 +72,7 @@
                             </tr>
                         </thead>
 
-                        <tbody id="DataSearching">
+                        <tbody id="ItemStockCard">
                             @if (Model != null)
                             {
                                 foreach (var stockCard in Model)
@@ -103,11 +123,12 @@
         $("#SearchBtn").click(function () {
             var SearchBy = $("#SearchBy").val();
             var SearchValue = $("#Search").val();
-            var SetData = $("#DataSearching");
+            var SetData1 = $("#ItemDetails");
+            var SetData = $("#ItemStockCard");
             SetData.html("");
             $.ajax({
                 type: "post",
-                url: "/StoreClerk/GetSearchingData?SearchBy=" + SearchBy + "&SearchValue=" + SearchValue,
+                url: "/StoreClerk/GetItemStockCard?SearchBy=" + SearchBy + "&SearchValue=" + SearchValue,
                 contentType: "html",
                 success: function (result) {
 
@@ -117,8 +138,13 @@
                     }
                     else {
 
-                        $.each(result, function (index, value) {
-                            var Data = "<tr>" +
+                        var ItemData = result[0].Qty;
+
+                        SetData1.append(ItemData);
+
+
+                        $.each(result[1], function (index, value) {
+                            var StockCardData = "<tr>" +
                                 "<td>" + value.ItemId + "</td>" +
                                 "<td>" + value.Date + "</td>" +
                                 "<td>" + value.Qty + "</td>" +
@@ -126,7 +152,7 @@
                                 "<td>" + value.RefType + "</td>" +
                                 "<tr>";
 
-                            SetData.append(Data);
+                            SetData.append(StockCardData);
                         });
                     }
                 }

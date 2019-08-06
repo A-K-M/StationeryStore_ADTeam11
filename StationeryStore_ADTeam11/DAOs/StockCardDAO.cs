@@ -75,7 +75,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 conn.Close();
             }
 
-            stockCards = stockCards.OrderByDescending(x => x.Date).ToList();
+            stockCards = stockCards.OrderByDescending(x => x.Id).ToList();
 
             return stockCards;
         }
