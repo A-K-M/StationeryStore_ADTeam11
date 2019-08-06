@@ -25,7 +25,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            List<Supplier> suppliers = SupplierDAO.getAllSuppliers();
+            List<Supplier> suppliers = SupplierDAO.GetAllSuppliers();
 
             ViewData["Suppliers"] = suppliers;
             return View();
@@ -47,10 +47,10 @@ namespace StationeryStore_ADTeam11.Controllers
             bool saved = false;
             string duplicateMsg = "supplier ID already exist";
 
-            Supplier existingSupp = SupplierDAO.findSupplierbyId(supplier.Id);
+            Supplier existingSupp = SupplierDAO.FindSupplierbyId(supplier.Id);
             if (supplier.Id != existingSupp.Id)
             {
-                saved = SupplierDAO.addSupplier(supplier);
+                saved = SupplierDAO.AddSupplier(supplier);
             }
             else
             {
@@ -66,7 +66,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            Supplier supplier = SupplierDAO.editSupplier(supp.Id);
+            Supplier supplier = SupplierDAO.EditSupplier(supp.Id);
 
             ViewData["supplier"] = supplier;
             return View();
@@ -77,7 +77,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            bool updated = SupplierDAO.updateSupplier(supp);
+            bool updated = SupplierDAO.UpdateSupplier(supp);
 
             ViewData["updated"] = updated;
             ViewData["supplier"] = supp;
@@ -89,7 +89,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            bool deleted = SupplierDAO.deleteSupplier(id);
+            bool deleted = SupplierDAO.DeleteSupplier(id);
 
             ViewData["deleted"] = deleted;
             ViewData["id"] =id;

@@ -69,7 +69,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "Clerk User";
             Session["Role"] = "Clerk";
 
-            List<StockCard> stockCards = StockCardDAO.getAllStockCards();
+            List<StockCard> stockCards = StockCardDAO.GetAllStockCards();
 
 
             ViewData["stockCards"] = stockCards;
@@ -79,13 +79,15 @@ namespace StationeryStore_ADTeam11.Controllers
         public JsonResult GetSearchingData(string SearchBy, string SearchValue)
         {
             List<StockCard> stockCards = new List<StockCard>();
+            Item item = new Item();
 
             if (SearchBy == "ID")
             { 
                 try
                 {
                     string Id = Convert.ToString(SearchValue);
-                    stockCards = StockCardDAO.getStockCardsbyId(Id);
+                    stockCards = StockCardDAO.GetStockCardsbyId(Id);
+                    item = ItemDAO
                 }
                 catch (FormatException)
                 {
@@ -95,7 +97,7 @@ namespace StationeryStore_ADTeam11.Controllers
             }
             else
             {
-                //stockCards = StockCardDAO.getStockCardsbyId(Id)
+                //stockCards = StockCardDAO.GetStockCardsbyId(Id)
                 return Json(stockCards, JsonRequestBehavior.AllowGet);
             }
 

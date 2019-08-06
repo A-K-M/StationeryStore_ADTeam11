@@ -11,7 +11,7 @@ namespace StationeryStore_ADTeam11.DAOs
     public class StockCardDAO : DAO
     {
 
-        public static List<StockCard> getAllStockCards()
+        public static List<StockCard> GetAllStockCards()
         {
             List<StockCard> stockCards = new List<StockCard>();
 
@@ -46,7 +46,7 @@ namespace StationeryStore_ADTeam11.DAOs
         }
 
 
-        public static List<StockCard> getStockCardsbyId(string Id)
+        public static List<StockCard> GetStockCardsbyId(string Id)
         {
             List<StockCard> stockCards = new List<StockCard>();
 
