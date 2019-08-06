@@ -17,12 +17,9 @@
 
             <div class="card">
                 <div class="card-body">
-                    <input type="text" id="suppFilter" onkeyup="myFunction()" placeholder="Search.." title="Search for Supplier">
+                    <input type="text" id="suppFilter" onkeyup="myFunction()" placeholder="Search for supplier by details" title="Search for Supplier" class="col-12">
                 </div>
-            </div>
 
-
-            <div class="card">
                 <div class="card-body">
                     <a>
                         <h3>Supplier List <a href="@Url.Content("~/StoreManager/CreateSupplier")" class="btn btn-success btn-sm pull-right">New </a></h3>
@@ -52,24 +49,24 @@
                                             <br>: @supplier.Fax
                                             <br>: @supplier.Address
                                         </td>
-                                        <td align="center">
+                                        <td align="center" valign="bottom">
                                             <a>
                                                 @using (Html.BeginForm("EditSupplier", "StoreManager", FormMethod.Post))
                                                 {
                                                     @Html.HiddenFor(supp => supp.Id, new { @Value = supplier.Id })
-                                                    <input type="submit" value="Edit" class="btn btn-warning btn-sm">
+                                                    <input type="submit" value="Edit" class="btn btn-warning btn-sm" style='width:70px'>
                                                 }
                                             </a>
                                             <a>
                                                 @using (Html.BeginForm("DeleteSupplier", "StoreManager", FormMethod.Post))
                                                 {
                                                     @Html.HiddenFor(supp => supp.Id, new { @readonly = "readonly", @Value = supplier.Id })
-                                                    <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+                                                    <input type="submit" value="Delete" class="btn btn-danger btn-sm" style='width:70px'>
                                                 }
                                             </a>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    @*<tr>
                                         <td>
                                             <a>
                                                 @using (Html.BeginForm("EditSupplier", "StoreManager", FormMethod.Post))
@@ -88,8 +85,7 @@
                                         </td>
                                         <td>
                                         </td>
-                                    </tr>
-
+                                    </tr>*@
                             }
                         }
 
@@ -108,7 +104,7 @@ function myFunction() {
   table = document.getElementById("supplierList");
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
+    td = tr[i].getElementsByTagName("td")[1];
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -120,3 +116,4 @@ function myFunction() {
   }
 }
 </script>
+
