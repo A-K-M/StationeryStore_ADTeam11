@@ -24,12 +24,10 @@
                             @Html.TextBox("Search")<input type="submit" id="SearchBtn" value="View" class="btn btn-success" />
                         </div>
                 </div>
-            </div>
 
-            <div class="card">
                 <div class="card-body">
                     <table class="table table-borderless">
-                        <tbody id="ItemDetails">
+                        <thead id="ItemDetails">
                             <tr>
                                 <td>
                                     <p class="text-body">Item Code - </p>
@@ -49,7 +47,7 @@
                                     <br/><br/>
                                 </td>
                             </tr>
-                        </tbody>
+                        </thead>
                     </table>
                     <table class="table table-bordered">
                         <thead>
@@ -138,9 +136,9 @@
                     }
                     else {
 
-                        var ItemData = result[0].Qty;
+                        var ItemData = result[0].BinNo;
 
-                        SetData1.append(ItemData);
+                        SetData.add(ItemData);
 
 
                         $.each(result[1], function (index, value) {
