@@ -1,36 +1,4 @@
-﻿/*function loadItems(CategoryID) {
-
-    $.ajax({
-        url: "/StoreClerk/GetItemByCategory/" + CategoryID,
-        type: "GET",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-
-            clearOption();
-
-            $.each(result, function (key, item) {
-                $("#item").append("<option value='" + item.Id + "'>" + item.Description +"</option >");
-            });
-        },
-        error: function (errormessage) {
-            alert(errormessage.responseText);
-        }
-    });
-}*/
-
-/**
- * 
- *                     <tr>
-                        <td>@voucher.EmployeeId</td>
-                        <td>Stock Adjustment  @voucher.Id</td>
-                        <td>@voucher.Date.ToString("dd/MM/yyyy")</td>
-                        <td>@voucher.Status</td>
-                        <td><a href="#" class="btn btn-outline-info">View</a></td>
-                    </tr>
- */
-
-function filterVouchers(status) {
+﻿function filterVouchers(status) {
     $.ajax({
         url: "/StoreSupervisor/FilterAdjustmentVouchers/" + status,
         type: "GET",

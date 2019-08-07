@@ -21,10 +21,11 @@ namespace StationeryStore_ADTeam11.DAOs
             string sql = "SELECT e.Name, av.VoucherID, av.Date, av.Status, SUM(iav.Qty) as TotalQuantity" +
                           "  FROM Employee e, AdjustmentVoucher av, ItemAdjVoucher iav, Item i" +
                           " WHERE av.Status = @value" +
-                          "  AND av.EmployeeID = e.ID" + 
+                          "  AND av.EmployeeID = e.ID" +
                           " AND av.VoucherID = iav.VoucherID" +
-                          " GROUP BY e.Name, av.VoucherID, av.Date, av.Status" +
-                          " HAVING AVG(i.FirstPrice + i.SecondPrice + i.ThirdPrice) < 250";
+                          " AND i.ID = iav.ItemID" +
+                          " GROUP BY e.Name, av.VoucherID, av.Date, av.Status";
+                         // " HAVING AVG(i.FirstPrice + i.SecondPrice + i.ThirdPrice) < 250";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
