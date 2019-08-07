@@ -48,7 +48,7 @@ namespace StationeryStore_ADTeam11.Controllers
 
             adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Approved");
 
-            return RedirectToAction("StoreSupervisor", "AdjustmentVouchers");
+            return RedirectToAction("AdjustmentVouchers");
         }
 
         public ActionResult RejectAdjustmentVoucher(int id)
