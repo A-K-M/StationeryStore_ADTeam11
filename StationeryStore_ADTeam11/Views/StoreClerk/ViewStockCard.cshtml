@@ -117,7 +117,7 @@
                         DisplayCard.style.display = 'none';
                         DetailsDiv.style.display = 'none';
                         ItemData.html(null);
-                        NoData = "<div class=\"text-danger\">No Matching Data</div>";
+                        NoData = "<div class=\"text-danger\">No Matching Item Code: " + Id + "</div>";
                         NoResultsMsg.html(NoData);
                     }
                     else if (result[0] != null && result[1].length == 0) {
