@@ -92,9 +92,9 @@
 
 
 
-
-
+<script src="~/Scripts/moment-with-locales.js"></script>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
 <script>
     $(document).ready(function () {
         $("#SearchBtn").click(function () {
@@ -172,7 +172,7 @@
                         $.each(result[1], function (index, value) {
                             StockCardData = "<tr>" +
                                 "<th scope=\"row\">" + value.Id + "</th>" +
-                                "<td>" + new Date(parseInt(value.Date.substr(6))) + "</td>" +
+                                "<td>" + moment(value.Date).format("DD/MM/YYYY") + "</td>" +
                                 "<td>" + value.RefType + "</td>" +
                                 "<td>" + value.Qty + "</td>" +
                                 "<td>" + value.Balance + "</td>" +
