@@ -60,22 +60,33 @@ namespace StationeryStore_ADTeam11.DAOs
 
                 while (reader.Read())
                 {
-                    StockCard stockCard = new StockCard()
+                    StockCard stockCard;
+                    try
                     {
-                        Id = (int)reader["Id"],
-                        ItemId = (string)reader["ItemID"],
-                        Date = (DateTime)reader["DateTime"],
-                        Qty = (int)reader["Qty"],
-                        Balance = (int)reader["Balance"],
-                        RefType = (string)reader["Reftype"]
-                    };
-                    stockCards.Add(stockCard);
+                        stockCard = new StockCard()
+                        {
+                            Id = (int)reader["Id"],
+                            ItemId = (string)reader["ItemID"],
+                            Date = (DateTime)reader["DateTime"],
+                            Qty = (int)reader["Qty"],
+                            Balance = (int)reader["Balance"],
+                            RefType = (string)reader["Reftype"]
+                        };
+                        stockCards.Add(stockCard);
+                    }
+                    catch
+                    {
+                        stockCards = null;
+                    }
                 }
 
                 conn.Close();
             }
 
-            stockCards = stockCards.OrderByDescending(x => x.Id).ToList();
+            if (stockCards != null)
+            {
+                stockCards = stockCards.OrderByDescending(x => x.Id).ToList();
+            }
 
             return stockCards;
         }

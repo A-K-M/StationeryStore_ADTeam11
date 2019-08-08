@@ -7,151 +7,180 @@
     @*var Model = (List<StockCard>)ViewData["stockCards"]; *@
 }
 
+
 <div class="container-fluid">
     <div class="row d-flex">
+
         <div class="col-12">
-
-
             <div class="card">
-                <div class="card-body">
-                        <h2>View Stock Card</h2>
-                        <b> Search By: </b>
-
-                        <select id="SearchBy">
-                            <option value="ID">ID</option>
-                        </select>
-                        <div class="col-12">
-                            @Html.TextBox("Search")<input type="submit" id="SearchBtn" value="View" class="btn btn-success" />
-                        </div>
+                <div class="card-header d-flex align-items-center">
+                    <h4>Stock Card</h4>
                 </div>
-
                 <div class="card-body">
-                    <table class="table table-borderless">
-                        <thead id="ItemDetails">
-                            <tr>
-                                <td>
-                                    <p class="text-body">Item Code - </p>
-                                    <br/>
-                                    <p class="text-body">Description - </p>
-                                    <br/>
-                                    <p class="text-body">Bin - </p> 
-                                    <br/>
-                                    <p class="text-body">UOM - </p> 
-                                </td>
-                                <td>
-                                    <p class="text-body">1st Supplier - </p> 
-                                    <br/>
-                                    <p class="text-body">2nd Supplier - </p>
-                                    <br/>
-                                    <p class="text-body">3rd Supplier - </p>
-                                    <br/><br/>
-                                </td>
-                            </tr>
-                        </thead>
-                    </table>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.ItemId)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Date)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Qty)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Balance)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.RefType)
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="ItemStockCard">
-                            @if (Model != null)
-                            {
-                                foreach (var stockCard in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @stockCard.ItemId
-                                        </td>
-                                        <td>
-                                            @stockCard.Date
-                                        </td>
-                                        <td>
-                                            @stockCard.Qty
-                                        </td>
-                                        <td>
-                                            @stockCard.Balance
-                                        </td>
-                                        <td>
-                                            @stockCard.RefType
-                                        </td>
-                                        @*<td>
-                                                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                                                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                                                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-                                          </td>*@
-                                    </tr>
-                                }
-                            }
-                            else
-                            {
-                                <tr style="color:red"><td colspan="5">No Results to Display</td></tr>
-                            }
-                        </tbody>
-
-                    </table>
+                    <div class="row">
+                        <div class="col-11">
+                            <input class="form-control form-group" id="ItemId" name="ItemId" placeholder="Item Code" type="text">
+                        </div>
+                        <div class="col-1">
+                            <input type="submit" id="SearchBtn" value="View" class="btn btn-success form-group">
+                        </div>
+                        <br />
+                        <div class="col-12" id="NoResultsMsg">
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
+    </div>
+</div>
 
+<br>
+
+<div class="container-fluid" id="DisplayCard" style="display:none">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row" id="DetailsDiv" style="display:none">
+                        <div id="ItemDetails">
+                            <div class="col-6">
+                                <label class="col-12">Item Code -  </label>
+                                <label class="col-12">Description - </label>
+                                <label class="col-12">Item Code -      UOM - </label>
+                            </div>
+                            <div class="col-6">
+                                <label class="col-12">1st Supplier - </label>
+                                <label class="col-12">2nd Supplier - </label>
+                                <label class="col-12">3rd Supplier - </label>
+                            </div>
+                        </div>
+
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Date)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Qty)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Balance)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.RefType)
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="ItemStockCard">
+                               
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+
+
 
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
     $(document).ready(function () {
         $("#SearchBtn").click(function () {
-            var SearchBy = $("#SearchBy").val();
-            var SearchValue = $("#Search").val();
-            var SetData1 = $("#ItemDetails");
+            var Id = $("#ItemId").val();
             var SetData = $("#ItemStockCard");
+            var ItemData = $("#ItemDetails");
+            var DisplayCard = document.getElementById("DisplayCard");
+            var DetailsDiv = document.getElementById("DetailsDiv");
+            var NoResultsMsg = $("#NoResultsMsg");
+            var StockCardData, div, Item, NoData;
+            div = document.getElementById("ItemDetails");
             SetData.html("");
             $.ajax({
                 type: "post",
-                url: "/StoreClerk/GetItemStockCard?SearchBy=" + SearchBy + "&SearchValue=" + SearchValue,
+                url: "/StoreClerk/GetItemStockCard?id=" + Id,
                 contentType: "html",
                 success: function (result) {
 
-                    if (result.length == 0) {
-
-                        SetData.append('<tr style="color:red"><td colspan="5">No Matching Data</td></tr>')
+                    if (result[0] == null) {
+                        DisplayCard.style.display = 'none';
+                        DetailsDiv.style.display = 'none';
+                        ItemData.html(null);
+                        NoData = "<div class=\"text-danger\">No Matching Data</div>";
+                        NoResultsMsg.html(NoData);
                     }
-                    else {
+                    else if (result[0] != null && result[1].length == 0) {
+                        DisplayCard.style.display = '';
+                        DetailsDiv.style.display = '';
+                        NoData = "<div> </div>";
+                        NoResultsMsg.html(NoData);
 
-                        var ItemData = result[0].BinNo;
+                        Item = result[0];
+                        ItemDetails =
+                            "<div class=\"row\">"
+                            + "<div class=\"col-6\">"
+                            + "<label class=\"col-12\">Item Code: &ensp;" + Item.Id + "</label>"
+                            + "<label class=\"col-12\">Description: &ensp;" + Item.Description + "</label>"
+                            + "<label class=\"col-12\">Bin: &ensp;#" + Item.BinNo + "&emsp;&emsp;&emsp; UOM: &ensp;" + Item.Uom + "</label>"
+                            + "</div>"
+                            + "<div class=\"col-6\">"
+                            + "<label class=\"col-12\">1st Supplier: &ensp;" + Item.FirstSupplier + "</label>"
+                            + "<label class=\"col-12\">2nd Supplier: &ensp;" + Item.SecondSupplier + "</label>"
+                            + "<label class=\"col-12\">3rd Supplier: &ensp;" + Item.ThirdSupplier + "</label>"
+                            + "</div>"
+                            + "</div>";
 
-                        SetData.add(ItemData);
+                        ItemData.html(ItemDetails);
 
+                        SetData.append('<tr style="color:red"><td colspan="5">No StockCard Records </td></tr>')
+                    }
+                    else
+                    {
+                        DisplayCard.style.display = '';
+                        DetailsDiv.style.display = '';
+                        NoData = "<div> </div>";
+                        NoResultsMsg.html(NoData);
+
+                        Item = result[0];
+                        ItemDetails =
+                            "<div class=\"row\">"
+                            + "<div class=\"col-6\">"
+                            + "<label class=\"col-12\">Item Code: &ensp;" + Item.Id + "</label>"
+                            + "<label class=\"col-12\">Description: &ensp;" + Item.Description + "</label>"
+                            + "<label class=\"col-12\">Bin: &ensp;#" + Item.BinNo + "&emsp;&emsp;&emsp; UOM: &ensp;" + Item.Uom + "</label>"
+                            + "</div>"
+                            + "<div class=\"col-6\">"
+                            + "<label class=\"col-12\">1st Supplier: &ensp;" + Item.FirstSupplier + "</label>"
+                            + "<label class=\"col-12\">2nd Supplier: &ensp;" + Item.SecondSupplier + "</label>"
+                            + "<label class=\"col-12\">3rd Supplier: &ensp;" + Item.ThirdSupplier + "</label>"
+                            + "</div>"
+                            + "</div>";
+
+                        ItemData.html(ItemDetails);
 
                         $.each(result[1], function (index, value) {
-                            var StockCardData = "<tr>" +
-                                "<td>" + value.ItemId + "</td>" +
-                                "<td>" + value.Date + "</td>" +
+                            StockCardData = "<tr>" +
+                                "<th scope=\"row\">" + value.Id + "</th>" +
+                                "<td>" + new Date(parseInt(value.Date.substr(6))) + "</td>" +
+                                "<td>" + value.RefType + "</td>" +
                                 "<td>" + value.Qty + "</td>" +
                                 "<td>" + value.Balance + "</td>" +
-                                "<td>" + value.RefType + "</td>" +
                                 "<tr>";
 
                             SetData.append(StockCardData);
                         });
+
                     }
                 }
             })

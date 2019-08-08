@@ -475,6 +475,7 @@
     <Content Include="Views\StoreClerk\ViewStockCard.cshtml" />
     <Content Include="Views\StoreSupervisor\VoucherItems.cshtml" />
     <Content Include="Views\StoreManager\Suppliers.cshtml" />
+    <Content Include="Views\StoreClerk\ViewStockCard L.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
