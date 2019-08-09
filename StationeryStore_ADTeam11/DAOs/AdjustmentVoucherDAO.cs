@@ -266,7 +266,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     Status = data["Status"].ToString(),
                     ItemDescription = data["Description"].ToString(),
                     Quantity = Convert.ToInt32(data["Qty"]),
-                    Price = Convert.ToDouble(data["AVG"]),
+                    Price = Math.Round(Convert.ToDouble(data["AVG"])),
                     Reason = data["Reason"].ToString()
                 };
 
