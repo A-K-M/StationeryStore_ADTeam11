@@ -100,15 +100,19 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 connection.Open();
                 transaction = connection.BeginTransaction();
+
                 string sql = @"UPDATE Department SET DelegateID = 0 WHERE ID = @deptId";
                 SqlCommand cmd = new SqlCommand(sql, connection, transaction);
                 cmd.Parameters.AddWithValue("@deptId", deptId);
+
                 if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
                 sql = @"UPDATE Delegation SET EndDate = '" + DateTime.Today + "' where ID = @delegationId";
                 cmd = new SqlCommand(sql, connection, transaction);
                 cmd.Parameters.AddWithValue("@delegationId", delegationId);
+
                 if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
                 transaction.Commit();
             }
             catch (Exception e)

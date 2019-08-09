@@ -69,7 +69,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "Clerk User";
             Session["Role"] = "Clerk";
 
-            List<StockCard> stockCards = StockCardDAO.GetAllStockCards();
+            List<StockCard> stockCards = new StockCardDAO().GetAllStockCards();
 
 
             ViewData["stockCards"] = stockCards;
@@ -86,7 +86,7 @@ namespace StationeryStore_ADTeam11.Controllers
             try
             {
                 item = itemDAO.GetItemById(Id);
-                stockCards = StockCardDAO.GetStockCardsbyId(Id);
+                stockCards = new StockCardDAO().GetStockCardsbyId(Id);
                 itemStockCard.Add(item);
                 if (stockCards != null)
                 {

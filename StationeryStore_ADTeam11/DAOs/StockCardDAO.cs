@@ -8,19 +8,17 @@ using System.Linq;
 
 namespace StationeryStore_ADTeam11.DAOs
 {
-    public class StockCardDAO : DAO
+    public class StockCardDAO : DatabaseConnection
     {
 
-        public static List<StockCard> GetAllStockCards()
+        public  List<StockCard> GetAllStockCards()
         {
             List<StockCard> stockCards = new List<StockCard>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
+         
+                connection.Open();
 
                 string sql = @"SELECT * FROM Stockcard";
-                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlCommand cmd = new SqlCommand(sql, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -37,8 +35,8 @@ namespace StationeryStore_ADTeam11.DAOs
                     stockCards.Add(stockCard);
                 }
 
-                conn.Close();
-            }
+                connection.Close();
+            
 
             stockCards = stockCards.OrderByDescending(x => x.Date).ToList();
 
@@ -46,16 +44,13 @@ namespace StationeryStore_ADTeam11.DAOs
         }
 
 
-        public static List<StockCard> GetStockCardsbyId(string Id)
+        public List<StockCard> GetStockCardsbyId(string Id)
         {
             List<StockCard> stockCards = new List<StockCard>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
+                connection.Open();
 
                 string sql = @"SELECT * FROM Stockcard WHERE ItemId = '" + Id + "'";
-                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlCommand cmd = new SqlCommand(sql, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -79,9 +74,9 @@ namespace StationeryStore_ADTeam11.DAOs
                         stockCards = null;
                     }
                 }
-
-                conn.Close();
-            }
+                reader.Close();
+                connection.Close();
+            
 
             if (stockCards != null)
             {

@@ -152,6 +152,7 @@
     <Compile Include="Controllers\DepartmentHeadController.cs" />
     <Compile Include="Controllers\DepartmentRepresentativeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StoreClerkApiController.cs" />
     <Compile Include="Controllers\StoreClerkController.cs" />
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Controllers\StoreSupervisorController.cs" />
