@@ -44,13 +44,34 @@ namespace StationeryStore_ADTeam11.DAOs
             string sql = @"select id,DeptID,Name,Email from employee where DeptID = '" + deptId + "'";
             SqlCommand command = new SqlCommand(sql, conn);
             SqlDataReader reader = command.ExecuteReader();
-            mEmployees = new MEmployee().mapToList(reader);
+            mEmployees = MEmployee.MapToList(reader);
             reader.Close();
             conn.Close();
             return mEmployees;
 
-        }
 
+        }
+        public bool checkEmployeeExist(int empId, string deptId) {
+
+            try
+            {
+                connection.Open();
+                string sql = @"SELECT COUNT(*) FROM Employee WHERE ID = @empId AND DeptID = @deptId";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@empId", empId);
+                cmd.Parameters.AddWithValue("@deptId", deptId);
+                if ((int)cmd.ExecuteScalar() == 0) throw new Exception();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return true;
+        }
 
 
     }

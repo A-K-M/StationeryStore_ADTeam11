@@ -18,7 +18,7 @@ namespace StationeryStore_ADTeam11.MobileModels
         public string Name { get; set; }
         public string Email { get; set; }
 
-        public List<MEmployee> mapToList(SqlDataReader reader)
+        public static List<MEmployee> MapToList(SqlDataReader reader)
         {
             List<MEmployee> mEmployees = new List<MEmployee>();
 

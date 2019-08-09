@@ -145,6 +145,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DepartmentEmployeeController.cs" />
     <Compile Include="Controllers\DepartmentHeadApiController.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Controllers\StoreSupervisorController.cs" />
     <Compile Include="DAOs\AdjustmentVoucherDAO.cs" />
+    <Compile Include="DAOs\CollectionPointDAO.cs" />
     <Compile Include="DAOs\CategoryDAO.cs" />
     <Compile Include="DAOs\DAO.cs" />
     <Compile Include="DAOs\DatabaseConnection.cs" />
@@ -172,9 +174,13 @@
     </Compile>
     <Compile Include="MobileModels\Constant.cs" />
     <Compile Include="MobileModels\JsonParser.cs" />
+    <Compile Include="MobileModels\MCollectionAndRep.cs" />
     <Compile Include="MobileModels\MEmployee.cs" />
+    <Compile Include="MobileModels\MResponseList.cs" />
+    <Compile Include="MobileModels\MResponseObj.cs" />
     <Compile Include="MobileModels\MResponse.cs" />
-    <Compile Include="MobileModels\ResponseWithList.cs" />
+    <Compile Include="MobileModels\MResponseListAndObj.cs" />
+    <Compile Include="MobileModels\MStockCard.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CollectionPoint.cs" />
