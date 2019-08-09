@@ -49,7 +49,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "Phone No")]
-        [Required, Range(10000000, 999999999999999, ErrorMessage = "Phone no length is between 8 to 15 digits")]
+        [Required, Range(10000000, 999999999, ErrorMessage = "Phone no length is between 8 to 9 digits")]
         public int PhoneNo
         {
             get { return _phoneNo; }
@@ -57,7 +57,7 @@ namespace StationeryStore_ADTeam11.Models
         }
 
         [Display(Name = "Fax No")]
-        [Required, Range(10000000, 999999999999999, ErrorMessage = "Fax no length is between 8 to 15 digits")]
+        [Required, Range(10000000, 999999999, ErrorMessage = "Fax no length is between 8 to 9 digits")]
         public int Fax
         {
             get { return _fax; }

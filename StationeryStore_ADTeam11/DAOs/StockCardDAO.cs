@@ -11,7 +11,7 @@ namespace StationeryStore_ADTeam11.DAOs
     public class StockCardDAO : DAO
     {
 
-        public static List<StockCard> getAllStockCards()
+        public static List<StockCard> GetAllStockCards()
         {
             List<StockCard> stockCards = new List<StockCard>();
 
@@ -45,5 +45,50 @@ namespace StationeryStore_ADTeam11.DAOs
             return stockCards;
         }
 
+
+        public static List<StockCard> GetStockCardsbyId(string Id)
+        {
+            List<StockCard> stockCards = new List<StockCard>();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT * FROM Stockcard WHERE ItemId = '" + Id + "'";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    StockCard stockCard;
+                    try
+                    {
+                        stockCard = new StockCard()
+                        {
+                            Id = (int)reader["Id"],
+                            ItemId = (string)reader["ItemID"],
+                            Date = (DateTime)reader["DateTime"],
+                            Qty = (int)reader["Qty"],
+                            Balance = (int)reader["Balance"],
+                            RefType = (string)reader["Reftype"]
+                        };
+                        stockCards.Add(stockCard);
+                    }
+                    catch
+                    {
+                        stockCards = null;
+                    }
+                }
+
+                conn.Close();
+            }
+
+            if (stockCards != null)
+            {
+                stockCards = stockCards.OrderByDescending(x => x.Id).ToList();
+            }
+
+            return stockCards;
+        }
     }
 }

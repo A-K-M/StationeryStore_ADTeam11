@@ -11,7 +11,7 @@ using StationeryStore_ADTeam11.Models;
 /// </summary>
 public class SupplierDAO : DAO
 {
-    public static List<Supplier> getAllSuppliers()
+    public static List<Supplier> GetAllSuppliers()
     {
         List<Supplier> suppliers = new List<Supplier>();
 
@@ -53,7 +53,7 @@ public class SupplierDAO : DAO
         return suppliers;
     }
 
-    public static Supplier findSupplierbyId(string id)
+    public static Supplier FindSupplierbyId(string id)
     {
         Supplier supplier = new Supplier();
 
@@ -92,7 +92,7 @@ public class SupplierDAO : DAO
         return supplier;
     }
 
-    public static bool addSupplier(Supplier supp)
+    public static bool AddSupplier(Supplier supp)
     {
         bool saved = false;
 
@@ -123,7 +123,7 @@ public class SupplierDAO : DAO
         return saved;
     }
 
-    public static Supplier editSupplier(string suppId)
+    public static Supplier EditSupplier(string suppId)
     {
         Supplier supplier = new Supplier();
 
@@ -163,7 +163,7 @@ public class SupplierDAO : DAO
         return supplier;
     }
 
-    public static bool updateSupplier(Supplier updSupplier)
+    public static bool UpdateSupplier(Supplier updSupplier)
     {
         Supplier supplier = new Supplier();
         Supplier oriSupplier = new Supplier();
@@ -226,7 +226,7 @@ public class SupplierDAO : DAO
         return updated;
     }
 
-    public static bool deleteSupplier(string id)
+    public static bool DeleteSupplier(string id)
     {
         bool deleted = false;
 

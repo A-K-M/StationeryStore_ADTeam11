@@ -216,6 +216,10 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\store_clerk.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -227,6 +231,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\store_manager.js" />
     <Content Include="Scripts\store_supervisor.js" />
     <Content Include="Statics\css\custom.css" />
     <Content Include="Statics\css\fa-all.css" />
@@ -457,7 +462,7 @@
     <Content Include="Statics\webfonts\fa-solid-900.woff" />
     <Content Include="Statics\webfonts\fa-solid-900.woff2" />
     <Content Include="Views\StoreManager\AddSupplier.cshtml" />
-    <Content Include="Views\StoreManager\Suppliers.cshtml" />
+    <Content Include="Views\StoreManager\Suppliers unformatted.cshtml" />
     <Content Include="Views\StoreClerk\CreateAdjustmentVoucher.cshtml" />
     <Content Include="Views\DepartmentHead\Index.cshtml" />
     <Content Include="Views\StoreManager\UpdateSupplier.cshtml" />
@@ -477,7 +482,13 @@
     <Content Include="Views\StoreManager\EditSupplier.cshtml" />
     <Content Include="Views\StoreSupervisor\AdjustmentVouchers.cshtml" />
     <Content Include="Views\StoreManager\SupplierList.cshtml" />
+    <Content Include="Views\StoreClerk\ViewStockCard - old.cshtml" />
+    <Content Include="Views\StoreClerk\ViewStockCard.cshtml" />
     <Content Include="Views\StoreSupervisor\VoucherItems.cshtml" />
+    <Content Include="Views\StoreManager\Suppliers.cshtml" />
+    <Content Include="Views\StoreClerk\ViewStockCard L.cshtml" />
+    <Content Include="Views\StoreManager\AdjustmentVouchers.cshtml" />
+    <Content Include="Views\StoreManager\VoucherItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

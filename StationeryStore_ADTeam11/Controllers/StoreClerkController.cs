@@ -69,11 +69,37 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "Clerk User";
             Session["Role"] = "Clerk";
 
-            List<StockCard> stockCards = StockCardDAO.getAllStockCards();
+            List<StockCard> stockCards = StockCardDAO.GetAllStockCards();
 
 
             ViewData["stockCards"] = stockCards;
             return View();
+        }
+
+        public JsonResult GetItemStockCard(string Id)
+        {
+            List<Object> itemStockCard = new List<Object>();
+            Item item = new Item();
+            List<StockCard> stockCards = new List<StockCard>();
+            ItemDAO itemDAO = new ItemDAO();
+
+            try
+            {
+                item = itemDAO.GetItemById(Id);
+                stockCards = StockCardDAO.GetStockCardsbyId(Id);
+                itemStockCard.Add(item);
+                if (stockCards != null)
+                {
+                    itemStockCard.Add(stockCards);
+                }
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("{0} is not an Id", Id);
+            }
+            return Json(itemStockCard, JsonRequestBehavior.AllowGet);
+
+
         }
     }
 }

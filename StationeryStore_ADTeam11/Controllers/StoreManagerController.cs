@@ -5,6 +5,7 @@ using System.Web;
 using StationeryStore_ADTeam11.Filters;
 using System.Web.Mvc;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.DAOs;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
@@ -25,7 +26,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            List<Supplier> suppliers = SupplierDAO.getAllSuppliers();
+            List<Supplier> suppliers = SupplierDAO.GetAllSuppliers();
 
             ViewData["Suppliers"] = suppliers;
             return View();
@@ -47,10 +48,10 @@ namespace StationeryStore_ADTeam11.Controllers
             bool saved = false;
             string duplicateMsg = "supplier ID already exist";
 
-            Supplier existingSupp = SupplierDAO.findSupplierbyId(supplier.Id);
+            Supplier existingSupp = SupplierDAO.FindSupplierbyId(supplier.Id);
             if (supplier.Id != existingSupp.Id)
             {
-                saved = SupplierDAO.addSupplier(supplier);
+                saved = SupplierDAO.AddSupplier(supplier);
             }
             else
             {
@@ -66,7 +67,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            Supplier supplier = SupplierDAO.editSupplier(supp.Id);
+            Supplier supplier = SupplierDAO.EditSupplier(supp.Id);
 
             ViewData["supplier"] = supplier;
             return View();
@@ -77,7 +78,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            bool updated = SupplierDAO.updateSupplier(supp);
+            bool updated = SupplierDAO.UpdateSupplier(supp);
 
             ViewData["updated"] = updated;
             ViewData["supplier"] = supp;
@@ -89,11 +90,54 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            bool deleted = SupplierDAO.deleteSupplier(id);
+            bool deleted = SupplierDAO.DeleteSupplier(id);
 
             ViewData["deleted"] = deleted;
             ViewData["id"] =id;
             return View();
+        }
+
+        public ActionResult AdjustmentVouchers()
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            ViewData["AdjustmentVouchers"] = adjustmentVoucherDAO.GetByStatusForManager("Pending");
+
+            return View();
+        }
+
+        public JsonResult FilterAdjustmentVouchers(string id) //Since we are using default route the parameter name must be id instead of status unless we wanna modify routes
+        {
+            AdjustmentVoucherDAO adjustment = new AdjustmentVoucherDAO();
+
+            return Json(adjustment.GetByStatusForManager(id), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult VoucherItems(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            ViewData["VoucherItems"] = adjustmentVoucherDAO.GetVoucherItems(id);
+
+            return View();
+        }
+
+        public ActionResult ApproveAdjustmentVoucher(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Approved");
+
+            return RedirectToAction("AdjustmentVouchers");
+        }
+
+        public ActionResult RejectAdjustmentVoucher(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Rejected");
+
+            return RedirectToAction("AdjustmentVouchers");
         }
     }
 }

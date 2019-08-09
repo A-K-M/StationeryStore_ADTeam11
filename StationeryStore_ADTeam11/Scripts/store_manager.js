@@ -1,6 +1,6 @@
 ﻿function filterVouchers(status) {
     $.ajax({
-        url: "/StoreSupervisor/FilterAdjustmentVouchers/" + status,
+        url: "/StoreManager/FilterAdjustmentVouchers/" + status,
         type: "GET",
         contentType: "application/json;charset=utf-8",
         dataType: "json",
@@ -21,7 +21,7 @@
                                     <td>${issuedDate}</td>
                                     <td>${item.TotalQuantity}</td>
                                     <td>${item.Status}</td>
-                                    <td><a href="/StoreSupervisor/VoucherItems/${item.Id}" class="btn btn-outline-info">View</a></td>
+                                    <td><a href="/Storemanager/VoucherItems/${item.Id}" class="btn btn-outline-info">View</a></td>
                                 </tr>`;
             });
 
