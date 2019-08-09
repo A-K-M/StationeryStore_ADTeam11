@@ -1,10 +1,12 @@
 ﻿
+using Microsoft.Ajax.Utilities;
 using StationeryStore_ADTeam11.Models;
 using StationeryStore_ADTeam11.View_Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -14,18 +16,21 @@ namespace StationeryStore_ADTeam11.DAOs
     {
         public List<AdjustmentVoucherViewModel> GetByStatus(string status)
         {
-            List<AdjustmentVoucherViewModel> vouchers = new List<AdjustmentVoucherViewModel>();
 
-            AdjustmentVoucherViewModel adjustmentVoucher = null;
+            List<AdjustmentVoucher> voucherList = new List<AdjustmentVoucher>();
+            AdjustmentVoucher av = null;
 
-            string sql = "SELECT e.Name, av.VoucherID, av.Date, av.Status, SUM(iav.Qty) as TotalQuantity" +
-                          "  FROM Employee e, AdjustmentVoucher av, ItemAdjVoucher iav, Item i" +
-                          " WHERE av.Status = @value" +
-                          "  AND av.EmployeeID = e.ID" +
-                          " AND av.VoucherID = iav.VoucherID" +
-                          " AND i.ID = iav.ItemID" +
-                          " GROUP BY e.Name, av.VoucherID, av.Date, av.Status";
-                         // " HAVING AVG(i.FirstPrice + i.SecondPrice + i.ThirdPrice) < 250";
+            List<ItemAdjVoucher> itemVoucherList = new List<ItemAdjVoucher>();
+            ItemAdjVoucher iav = null;
+
+            List<Item> itemList = new List<Item>();
+            Item i = null;
+
+            string sql = "SELECT av.*, iav.ID AS [ItemAdjID], iav.ItemID, iav.VoucherID AS [ItemAdjVoucherID], iav.Qty, iav.Reason, i.* " +
+                          "FROM AdjustmentVoucher av, Item i, ItemAdjVoucher iav " +
+                          "WHERE av.VoucherID = iav.VoucherID " +
+                          "AND av.Status=@value " +
+                          "AND iav.ItemID = i.ID";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
@@ -38,21 +43,85 @@ namespace StationeryStore_ADTeam11.DAOs
 
             while (data.Read())
             {
-                adjustmentVoucher = new AdjustmentVoucherViewModel() {
-                    Name = data["Name"].ToString(),
+                av = new AdjustmentVoucher()
+                {
                     Id = Convert.ToInt32(data["VoucherID"]),
+                    EmployeeId = Convert.ToInt32(data["EmployeeID"]),
                     Date = Convert.ToDateTime(data["Date"]),
-                    Status = data["Status"].ToString(),
-                    TotalQuantity = Convert.ToInt32(data["TotalQuantity"])
+                    Status = data["Status"].ToString()
                 };
 
-                vouchers.Add(adjustmentVoucher);
+                iav = new ItemAdjVoucher()
+                {
+                    Id = Convert.ToInt32(data["ItemAdjVoucherID"]),
+                    ItemId = data["ItemID"].ToString(),
+                    VoucherId = Convert.ToInt32(data["ItemAdjVoucherID"]),
+                    Quantity = Convert.ToInt32(data["Qty"]),
+                    Reason = data["Reason"].ToString()
+                };
+
+                i = new Item()
+                {
+                    Id = data["ID"].ToString(),
+                    CategoryId = Convert.ToInt32(data["CategoryID"]),
+                    Description = data["Description"].ToString(),
+                    ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
+                    ReorderQty = Convert.ToInt32(data["ReorderQty"]),
+                    Uom = data["UOM"].ToString(),
+                    BinNo = data["BinNo"].ToString(),
+                    FirstSupplier = data["FirstSupplier"].ToString(),
+                    FirstPrice = Convert.ToDouble(data["FirstPrice"]),
+                    SecondSupplier = data["SecondSupplier"].ToString(),
+                    SecondPrice = Convert.ToDouble(data["SecondPrice"]),
+                    ThirdSupplier = data["ThirdSupplier"].ToString(),
+                    ThirdPrice = Convert.ToDouble(data["ThirdPrice"]),
+                };
+
+                voucherList.Add(av);
+                itemVoucherList.Add(iav);
+                itemList.Add(i);
             }
 
             data.Close();
             connection.Close();
 
-            return vouchers;
+            List<Item> itemsAbove250 = new List<Item>();
+
+            itemsAbove250 = itemList.Where(x => (x.FirstPrice + x.SecondPrice + x.ThirdPrice) / 3 >= 250).ToList();
+
+            List<int> voucherIdsForManager = (from voucherDetail in itemVoucherList
+                                            join items in itemsAbove250
+                                            on voucherDetail.ItemId equals items.Id
+                                            select voucherDetail.VoucherId).Distinct().ToList();
+
+            foreach (int id in voucherIdsForManager)
+            {
+                voucherList.RemoveAll(x => x.Id == id);
+            }
+
+            voucherList = voucherList.GroupBy(x => x.Id)
+                          .Select(y => y.First())
+                          .ToList();
+
+
+            List<AdjustmentVoucherViewModel> vouchersVMList = new List<AdjustmentVoucherViewModel>();
+            AdjustmentVoucherViewModel voucherVM = null;
+
+            foreach (AdjustmentVoucher voucher in voucherList)
+            {
+                voucherVM = new AdjustmentVoucherViewModel()
+                {
+                    Name = "Employee Name",
+                    Id = voucher.Id,
+                    Date = voucher.Date,
+                    Status = voucher.Status,
+                    TotalQuantity = 10
+                };
+
+                vouchersVMList.Add(voucherVM);
+            }
+
+            return vouchersVMList;
         }
 
         public int Add(int employeeId)
