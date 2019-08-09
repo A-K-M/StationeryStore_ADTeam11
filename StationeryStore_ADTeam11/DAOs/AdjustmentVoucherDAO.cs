@@ -85,11 +85,6 @@ namespace StationeryStore_ADTeam11.DAOs
                 {
                     Id = Convert.ToInt32(data["EmpId"]),
                     Name = data["EmpName"].ToString()
-                    //DepartmentId = "DEP1",
-                    //UserName = "USR1",
-                    //Password = "ABC",
-                    //Email = "ABCDE",
-                    //Role = "VVV"
                 };
 
                 voucherList.Add(av);
@@ -125,15 +120,11 @@ namespace StationeryStore_ADTeam11.DAOs
 
             foreach (AdjustmentVoucher voucher in voucherList)
             {
-                //var query = from emp in employeeList
-                //            where emp.Id == voucher.EmployeeId
-                //            select emp.Name;
-
-                Employee emp = employeeList.Find(x => x.Id == voucher.EmployeeId);
+                employee = employeeList.Find(x => x.Id == voucher.EmployeeId);
 
                 voucherVM = new AdjustmentVoucherViewModel()
                 {
-                    Name = emp.Name,
+                    Name = employee.Name,
                     Id = voucher.Id,
                     Date = voucher.Date,
                     Status = voucher.Status,
