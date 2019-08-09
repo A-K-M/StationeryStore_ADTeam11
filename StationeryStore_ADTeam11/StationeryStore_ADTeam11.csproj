@@ -225,6 +225,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\store_manager.js" />
     <Content Include="Scripts\store_supervisor.js" />
     <Content Include="Statics\css\custom.css" />
     <Content Include="Statics\css\fa-all.css" />
@@ -480,6 +481,8 @@
     <Content Include="Views\StoreSupervisor\VoucherItems.cshtml" />
     <Content Include="Views\StoreManager\Suppliers.cshtml" />
     <Content Include="Views\StoreClerk\ViewStockCard L.cshtml" />
+    <Content Include="Views\StoreManager\AdjustmentVouchers.cshtml" />
+    <Content Include="Views\StoreManager\VoucherItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

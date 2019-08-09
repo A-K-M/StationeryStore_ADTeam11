@@ -138,6 +138,47 @@ namespace StationeryStore_ADTeam11.DAOs
             return vouchersVMList;
         }
 
+        public List<AdjustmentVoucherViewModel> GetByStatusForManager(string status)
+        {
+            List<AdjustmentVoucherViewModel> voucherList = new List<AdjustmentVoucherViewModel>();
+            AdjustmentVoucherViewModel voucher = null;
+
+            string sql = "SELECT e.Name, av.VoucherID, av.Date, av.Status, SUM(iav.Qty) AS TotalQuantity " +
+                        "FROM Item i, AdjustmentVoucher av, ItemAdjVoucher iav, Employee e " +
+                        "WHERE i.ID = iav.ItemID " +
+                        "AND iav.VoucherID = av.VoucherID " +
+                        "AND e.ID = av.EmployeeID " +
+                        "AND av.Status = @value " +
+                        "AND(i.FirstPrice + i.SecondPrice + i.ThirdPrice) / 3 >= 250 " +
+                        " GROUP BY e.Name, av.VoucherID, av.Date, av.Status ";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            connection.Open();
+            cmd.Parameters.Add("@value", SqlDbType.VarChar);
+            cmd.Parameters["@value"].Value = status;
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                voucher = new AdjustmentVoucherViewModel()
+                {
+                    Name = data["Name"].ToString(),
+                    Id = Convert.ToInt32(data["VoucherID"]),
+                    Date = Convert.ToDateTime(data["Date"]),
+                    Status = data["Status"].ToString(),
+                    TotalQuantity = Convert.ToInt32(data["TotalQuantity"])
+                };
+
+                voucherList.Add(voucher);
+            }
+            data.Close();
+            connection.Close();
+
+            return voucherList;
+        }
+
         public int Add(int employeeId)
         {
             DateTime now = DateTime.Now;
