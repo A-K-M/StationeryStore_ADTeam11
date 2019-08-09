@@ -26,10 +26,14 @@ namespace StationeryStore_ADTeam11.DAOs
             List<Item> itemList = new List<Item>();
             Item i = null;
 
-            string sql = "SELECT av.*, iav.ID AS [ItemAdjID], iav.ItemID, iav.VoucherID AS [ItemAdjVoucherID], iav.Qty, iav.Reason, i.* " +
-                          "FROM AdjustmentVoucher av, Item i, ItemAdjVoucher iav " +
+            List<Employee> employeeList = new List<Employee>();
+            Employee employee = null;
+
+            string sql = "SELECT av.*, iav.ID AS [ItemAdjID], iav.ItemID, iav.VoucherID AS [ItemAdjVoucherID], iav.Qty, iav.Reason, i.*, e.ID AS [EmpId], e.Name AS [EmpName] " +
+                          "FROM AdjustmentVoucher av, Item i, ItemAdjVoucher iav, Employee e " +
                           "WHERE av.VoucherID = iav.VoucherID " +
                           "AND av.Status=@value " +
+                          "AND e.ID = av.EmployeeID " +
                           "AND iav.ItemID = i.ID";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
@@ -77,9 +81,21 @@ namespace StationeryStore_ADTeam11.DAOs
                     ThirdPrice = Convert.ToDouble(data["ThirdPrice"]),
                 };
 
+                employee = new Employee()
+                {
+                    Id = Convert.ToInt32(data["EmpId"]),
+                    Name = data["EmpName"].ToString()
+                    //DepartmentId = "DEP1",
+                    //UserName = "USR1",
+                    //Password = "ABC",
+                    //Email = "ABCDE",
+                    //Role = "VVV"
+                };
+
                 voucherList.Add(av);
                 itemVoucherList.Add(iav);
                 itemList.Add(i);
+                employeeList.Add(employee);
             }
 
             data.Close();
@@ -109,13 +125,20 @@ namespace StationeryStore_ADTeam11.DAOs
 
             foreach (AdjustmentVoucher voucher in voucherList)
             {
+                //var query = from emp in employeeList
+                //            where emp.Id == voucher.EmployeeId
+                //            select emp.Name;
+
+                Employee emp = employeeList.Find(x => x.Id == voucher.EmployeeId);
+
                 voucherVM = new AdjustmentVoucherViewModel()
                 {
-                    Name = "Employee Name",
+                    Name = emp.Name,
                     Id = voucher.Id,
                     Date = voucher.Date,
                     Status = voucher.Status,
-                    TotalQuantity = 10
+                    TotalQuantity = itemVoucherList.Where(x => x.VoucherId == voucher.Id)
+                                    .Sum(y => y.Quantity)                                    
                 };
 
                 vouchersVMList.Add(voucherVM);
