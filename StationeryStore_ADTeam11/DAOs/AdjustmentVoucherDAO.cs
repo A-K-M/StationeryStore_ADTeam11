@@ -247,7 +247,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             VoucherItemVM voucherItems = null;
 
-            string sql = "SELECT av.Status, iav.VoucherID, iav.Qty, iav.Reason, i.Description FROM ItemAdjVoucher iav, Item i, AdjustmentVoucher av WHERE iav.VoucherID = @Id AND i.ID = iav.ItemID AND av.VoucherID = iav.VoucherID";
+            string sql = "SELECT av.Status, iav.VoucherID, iav.Qty, iav.Reason, i.Description, (i.FirstPrice + i.SecondPrice + i.ThirdPrice) / 3 AS [AVG]  FROM ItemAdjVoucher iav, Item i, AdjustmentVoucher av WHERE iav.VoucherID = @Id AND i.ID = iav.ItemID AND av.VoucherID = iav.VoucherID";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
@@ -266,6 +266,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     Status = data["Status"].ToString(),
                     ItemDescription = data["Description"].ToString(),
                     Quantity = Convert.ToInt32(data["Qty"]),
+                    Price = Convert.ToDouble(data["AVG"]),
                     Reason = data["Reason"].ToString()
                 };
 
