@@ -5,7 +5,7 @@ using System.Web;
 
 namespace StationeryStore_ADTeam11.View_Models
 {
-    public class AdjustmentVoucherViewModel
+    public class AdjustmentVoucherVM
     {
         private string _name;
         private int _id;

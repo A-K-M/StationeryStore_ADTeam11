@@ -15,7 +15,7 @@ namespace StationeryStore_ADTeam11.DAOs
 {
     public class AdjustmentVoucherDAO : DatabaseConnection
     {
-        public List<AdjustmentVoucherViewModel> GetByStatus(string status)
+        public List<AdjustmentVoucherVM> GetByStatus(string status)
         {
 
             List<AdjustmentVoucher> voucherList = new List<AdjustmentVoucher>();
@@ -116,14 +116,14 @@ namespace StationeryStore_ADTeam11.DAOs
                           .Select(y => y.First())
                           .ToList();
 
-            List<AdjustmentVoucherViewModel> vouchersVMList = new List<AdjustmentVoucherViewModel>();
-            AdjustmentVoucherViewModel voucherVM = null;
+            List<AdjustmentVoucherVM> vouchersVMList = new List<AdjustmentVoucherVM>();
+            AdjustmentVoucherVM voucherVM = null;
 
             foreach (AdjustmentVoucher voucher in voucherList)
             {
                 employee = employeeList.Find(x => x.Id == voucher.EmployeeId);
 
-                voucherVM = new AdjustmentVoucherViewModel()
+                voucherVM = new AdjustmentVoucherVM()
                 {
                     Name = employee.Name,
                     Id = voucher.Id,
@@ -139,10 +139,10 @@ namespace StationeryStore_ADTeam11.DAOs
             return vouchersVMList;
         }
 
-        public List<AdjustmentVoucherViewModel> GetByStatusForManager(string status)
+        public List<AdjustmentVoucherVM> GetByStatusForManager(string status)
         {
-            List<AdjustmentVoucherViewModel> voucherList = new List<AdjustmentVoucherViewModel>();
-            AdjustmentVoucherViewModel voucher = null;
+            List<AdjustmentVoucherVM> voucherList = new List<AdjustmentVoucherVM>();
+            AdjustmentVoucherVM voucher = null;
 
             string sql = "SELECT e.Name, av.VoucherID, av.Date, av.Status, SUM(iav.Qty) AS TotalQuantity " +
                         "FROM Item i, AdjustmentVoucher av, ItemAdjVoucher iav, Employee e " +
@@ -163,7 +163,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             while (data.Read())
             {
-                voucher = new AdjustmentVoucherViewModel()
+                voucher = new AdjustmentVoucherVM()
                 {
                     Name = data["Name"].ToString(),
                     Id = Convert.ToInt32(data["VoucherID"]),

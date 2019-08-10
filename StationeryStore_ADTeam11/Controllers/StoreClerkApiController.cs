@@ -22,7 +22,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return new MResponseListAndObj<StockCard, Item>()
             {
                 Success = true,
-                ResList = new StockCardDAO().GetStockCardsbyId(itemCode),
+                ResList = new StockCardDAO().GetStockCardsByItemId(itemCode),
                 ResObj = item
             };
         }

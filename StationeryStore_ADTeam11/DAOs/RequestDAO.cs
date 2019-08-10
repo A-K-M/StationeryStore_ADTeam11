@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -64,7 +65,44 @@ namespace StationeryStore_ADTeam11.DAOs
             connection.Open();
             SqlDataReader reader = cmd.ExecuteReader();
             connection.Close();
+        }
 
+        public List<RequisitionVM> GetRequistionListByEmpId(int empId)
+        {
+            List<RequisitionVM> requisitionList = new List<RequisitionVM>();
+            RequisitionVM requisition = null;
+
+            string sql = "SELECT r.ID, r.[DateTime], r.[Status], SUM(ir.NeededQty) AS Quantity " +
+                        "FROM Request r, ItemRequest ir " +
+                        "WHERE r.ID = ir.RequestID " +
+                        "AND r.EmployeeID = @value " +
+                        "GROUP BY r.ID, r.[DateTime], r.[Status]";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            cmd.Parameters.Add("@value", SqlDbType.Int);
+            cmd.Parameters["@value"].Value = empId;
+
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                requisition = new RequisitionVM()
+                {
+                    Id = data["ID"].ToString(),
+                    Date = Convert.ToDateTime(data["DateTime"]),
+                    Status = data["Status"].ToString(),
+                    Quantity = Convert.ToInt32(data["Quantity"])
+                };
+
+                requisitionList.Add(requisition);
+            }
+            data.Close();
+            connection.Close();
+
+            return requisitionList;
         }
     }
 }
