@@ -30,7 +30,20 @@
                             <tr>
                                 <td>@requisition.Date.ToString("dd/MM/yyyy")</td>
                                 <td>@requisition.Quantity</td>
-                                <td>@requisition.Status</td>
+                                <td>
+                                    @if (requisition.Status == "Pending")
+                                    {
+                                       @: <text style="color:blue">@requisition.Status</text>
+                                    }
+                                    else if (requisition.Status == "Approved")
+                                    {
+                                        @:<text style="color:green">@requisition.Status</text>
+                                    }
+                                    else
+                                    {
+                                        @: <text style="color:red">@requisition.Status</text>
+                                    }
+                                </td>
                                 <td>
                                     <a href="#" class="btn btn-outline-info">View</a>
                                 </td>
