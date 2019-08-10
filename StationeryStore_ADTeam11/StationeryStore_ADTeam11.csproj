@@ -157,6 +157,7 @@
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Controllers\StoreSupervisorController.cs" />
     <Compile Include="DAOs\AdjustmentVoucherDAO.cs" />
+    <Compile Include="DAOs\BaseController.cs" />
     <Compile Include="DAOs\CollectionPointDAO.cs" />
     <Compile Include="DAOs\CategoryDAO.cs" />
     <Compile Include="DAOs\DAO.cs" />
@@ -175,6 +176,8 @@
     </Compile>
     <Compile Include="MobileModels\Constant.cs" />
     <Compile Include="MobileModels\JsonParser.cs" />
+    <Compile Include="MobileModels\MAdjustmentItem.cs" />
+    <Compile Include="MobileModels\MAdjVoucher.cs" />
     <Compile Include="MobileModels\MCollectionAndRep.cs" />
     <Compile Include="MobileModels\MEmployee.cs" />
     <Compile Include="MobileModels\MResponseList.cs" />

@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Ajax.Utilities;
+using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
 using StationeryStore_ADTeam11.View_Models;
 using System;
@@ -101,19 +102,19 @@ namespace StationeryStore_ADTeam11.DAOs
             itemsAbove250 = itemList.Where(x => (x.FirstPrice + x.SecondPrice + x.ThirdPrice) / 3 >= 250).ToList();
 
             List<int> voucherIdsForManager = (from voucherDetail in itemVoucherList
-                                            join items in itemsAbove250
-                                            on voucherDetail.ItemId equals items.Id
-                                            select voucherDetail.VoucherId).Distinct().ToList();
+                                              join items in itemsAbove250
+                                              on voucherDetail.ItemId equals items.Id
+                                              select voucherDetail.VoucherId).Distinct().ToList();
 
             foreach (int id in voucherIdsForManager)
             {
                 voucherList.RemoveAll(x => x.Id == id);
             }
 
+
             voucherList = voucherList.GroupBy(x => x.Id)
                           .Select(y => y.First())
                           .ToList();
-
 
             List<AdjustmentVoucherViewModel> vouchersVMList = new List<AdjustmentVoucherViewModel>();
             AdjustmentVoucherViewModel voucherVM = null;
@@ -129,7 +130,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     Date = voucher.Date,
                     Status = voucher.Status,
                     TotalQuantity = itemVoucherList.Where(x => x.VoucherId == voucher.Id)
-                                    .Sum(y => y.Quantity)                                    
+                                    .Sum(y => y.Quantity)
                 };
 
                 vouchersVMList.Add(voucherVM);
@@ -260,7 +261,8 @@ namespace StationeryStore_ADTeam11.DAOs
 
             while (data.Read())
             {
-                voucherItems = new VoucherItemVM() {
+                voucherItems = new VoucherItemVM()
+                {
 
                     VoucherID = Convert.ToInt32(data["VoucherID"]),
                     Status = data["Status"].ToString(),
@@ -296,6 +298,29 @@ namespace StationeryStore_ADTeam11.DAOs
             cmd.ExecuteNonQuery();
 
             connection.Close();
+        }
+
+        public List<MAdjVoucher> GetAdjVoucherByClerk(int clerkId)
+        {
+            try
+            {
+                connection.Open();
+                string sql = @"SELECT";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+
+            return null;
         }
     }
 }

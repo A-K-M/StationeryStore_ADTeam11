@@ -27,7 +27,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             SqlDataReader data = cmd.ExecuteReader();
 
-            while (data.Read())
+            if (data.Read())
             {
                 item = new Item()
                 {
@@ -65,7 +65,7 @@ namespace StationeryStore_ADTeam11.DAOs
             SqlCommand cmd = new SqlCommand(sql, connection);
             SqlDataReader data = cmd.ExecuteReader();
 
-            while (data.Read())
+            if (data.Read())
             {
                 try
                 {
@@ -91,10 +91,11 @@ namespace StationeryStore_ADTeam11.DAOs
                     item = null;
                 }
             }
-
+            data.Close();
             connection.Close();
 
             return item;
         }
+
     }
 }

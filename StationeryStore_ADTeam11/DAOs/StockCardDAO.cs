@@ -28,13 +28,13 @@ namespace StationeryStore_ADTeam11.DAOs
                         Id = (int)reader["Id"],
                         ItemId = (string)reader["ItemID"],
                         Date = (DateTime)reader["DateTime"],
-                        Qty = (int)reader["Qty"],
+                        Qty = (string)reader["Qty"],
                         Balance = (int)reader["Balance"],
                         RefType = (string)reader["Reftype"]
                     };
                     stockCards.Add(stockCard);
                 }
-
+                reader.Close();
                 connection.Close();
             
 
@@ -63,7 +63,7 @@ namespace StationeryStore_ADTeam11.DAOs
                             Id = (int)reader["Id"],
                             ItemId = (string)reader["ItemID"],
                             Date = (DateTime)reader["DateTime"],
-                            Qty = (int)reader["Qty"],
+                            Qty = (string)reader["Qty"],
                             Balance = (int)reader["Balance"],
                             RefType = (string)reader["Reftype"]
                         };
@@ -85,5 +85,6 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return stockCards;
         }
+
     }
 }
