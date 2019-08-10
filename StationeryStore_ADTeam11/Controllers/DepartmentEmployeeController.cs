@@ -35,6 +35,9 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult RequisitionList()
         {
+            RequestDAO request = new RequestDAO();
+
+            ViewData["Requisitions"] = request.GetRequistionListByEmpId(11233);
             return View();
         }
     }
