@@ -28,13 +28,13 @@ namespace StationeryStore_ADTeam11.DAOs
                         Id = (int)reader["Id"],
                         ItemId = (string)reader["ItemID"],
                         Date = (DateTime)reader["DateTime"],
-                        Qty = (string)reader["Qty"],
+                        Qty = (int)reader["Qty"],
                         Balance = (int)reader["Balance"],
                         RefType = (string)reader["Reftype"]
                     };
                     stockCards.Add(stockCard);
                 }
-                reader.Close();
+
                 connection.Close();
             
 
@@ -44,38 +44,38 @@ namespace StationeryStore_ADTeam11.DAOs
         }
 
 
-        public List<StockCard> GetStockCardsbyId(string Id)
+        public List<StockCard> GetStockCardsByItemId(string Id)
         {
             List<StockCard> stockCards = new List<StockCard>();
-                connection.Open();
+            connection.Open();
 
-                string sql = @"SELECT * FROM Stockcard WHERE ItemId = '" + Id + "'";
-                SqlCommand cmd = new SqlCommand(sql, connection);
-                SqlDataReader reader = cmd.ExecuteReader();
+            string sql = @"SELECT * FROM Stockcard WHERE ItemId = '" + Id + "'";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            SqlDataReader reader = cmd.ExecuteReader();
 
-                while (reader.Read())
+            while (reader.Read())
+            {
+                StockCard stockCard;
+                try
                 {
-                    StockCard stockCard;
-                    try
+                    stockCard = new StockCard()
                     {
-                        stockCard = new StockCard()
-                        {
-                            Id = (int)reader["Id"],
-                            ItemId = (string)reader["ItemID"],
-                            Date = (DateTime)reader["DateTime"],
-                            Qty = (string)reader["Qty"],
-                            Balance = (int)reader["Balance"],
-                            RefType = (string)reader["Reftype"]
-                        };
-                        stockCards.Add(stockCard);
-                    }
-                    catch
-                    {
-                        stockCards = null;
-                    }
+                        Id = (int)reader["Id"],
+                        ItemId = (string)reader["ItemID"],
+                        Date = (DateTime)reader["DateTime"],
+                        Qty = (int)reader["Qty"],
+                        Balance = (int)reader["Balance"],
+                        RefType = (string)reader["Reftype"]
+                    };
+                    stockCards.Add(stockCard);
                 }
-                reader.Close();
-                connection.Close();
+                catch
+                {
+                    stockCards = null;
+                }
+            }
+            reader.Close();
+            connection.Close();
             
 
             if (stockCards != null)
@@ -85,6 +85,5 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return stockCards;
         }
-
     }
 }

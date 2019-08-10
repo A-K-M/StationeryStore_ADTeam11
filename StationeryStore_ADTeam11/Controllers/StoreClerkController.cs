@@ -86,7 +86,7 @@ namespace StationeryStore_ADTeam11.Controllers
             try
             {
                 item = itemDAO.GetItemById(Id);
-                stockCards = new StockCardDAO().GetStockCardsbyId(Id);
+                stockCards = new StockCardDAO().GetStockCardsByItemId(Id);
                 itemStockCard.Add(item);
                 if (stockCards != null)
                 {

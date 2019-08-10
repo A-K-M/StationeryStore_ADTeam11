@@ -23,10 +23,11 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult Suppliers()
         {
+           
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            List<Supplier> suppliers = SupplierDAO.GetAllSuppliers();
+            List<Supplier> suppliers = new SupplierDAO().GetAllSuppliers();
 
             ViewData["Suppliers"] = suppliers;
             return View();
@@ -42,16 +43,17 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult AddSupplier(Supplier supplier)
         {
+            SupplierDAO suppDAO = new SupplierDAO();
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
             bool saved = false;
             string duplicateMsg = "supplier ID already exist";
 
-            Supplier existingSupp = SupplierDAO.FindSupplierbyId(supplier.Id);
+            Supplier existingSupp = suppDAO.FindSupplierbyId(supplier.Id);
             if (supplier.Id != existingSupp.Id)
             {
-                saved = SupplierDAO.AddSupplier(supplier);
+                saved = suppDAO.AddSupplier(supplier);
             }
             else
             {
@@ -64,10 +66,11 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult EditSupplier(Supplier supp)
         {
+            SupplierDAO suppDAO = new SupplierDAO();
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            Supplier supplier = SupplierDAO.EditSupplier(supp.Id);
+            Supplier supplier = suppDAO.EditSupplier(supp.Id);
 
             ViewData["supplier"] = supplier;
             return View();
@@ -75,10 +78,11 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult UpdateSupplier(Supplier supp)
         {
+            SupplierDAO suppDAO = new SupplierDAO();
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            bool updated = SupplierDAO.UpdateSupplier(supp);
+            bool updated = suppDAO.UpdateSupplier(supp);
 
             ViewData["updated"] = updated;
             ViewData["supplier"] = supp;
@@ -87,10 +91,11 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult DeleteSupplier(string id)
         {
+            SupplierDAO suppDAO = new SupplierDAO();
             Session["Username"] = "User";
             Session["Role"] = "Role";
 
-            bool deleted = SupplierDAO.DeleteSupplier(id);
+            bool deleted = suppDAO.DeleteSupplier(id);
 
             ViewData["deleted"] = deleted;
             ViewData["id"] =id;
