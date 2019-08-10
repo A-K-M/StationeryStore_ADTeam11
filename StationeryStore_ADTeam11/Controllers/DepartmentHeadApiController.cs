@@ -27,9 +27,9 @@ namespace StationeryStore_ADTeam11.Controllers
 
         [Route("delegates/{deptId}")]
         [HttpGet]
-        public ResponseListAndObj<Delegation> getDelegates(string deptId) {
+        public MResponseList<Delegation> getDelegates(string deptId) {
             DelegationDAO delegationDAO = new DelegationDAO();
-            ResponseListAndObj<Delegation> respone = new ResponseListAndObj<Delegation>()
+            MResponseList<Delegation> respone = new MResponseList<Delegation>()
             {
                 ResList = delegationDAO.GetDelegations(),
                 Success = true

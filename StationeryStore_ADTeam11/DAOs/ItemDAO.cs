@@ -1,4 +1,5 @@
-﻿using StationeryStore_ADTeam11.Models;
+﻿using StationeryStore_ADTeam11.MobileModels;
+using StationeryStore_ADTeam11.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -96,6 +97,43 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return item;
         }
+
+        public List<MItemSpinner> GetAllItems()
+        {
+            List<MItemSpinner> itemList = new List<MItemSpinner>();
+            SqlDataReader reader = null;
+            try
+            {
+                connection.Open();
+                string sql = "SELECT ID,CategoryID,Description FROM Item ORDER BY CategoryID ASC";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+
+                reader = cmd.ExecuteReader();
+                MItemSpinner item = null;
+                while (reader.Read()) {
+                    item = new MItemSpinner()
+                    {
+                        Id = reader["ID"].ToString(),
+                        CategoryId = (int)reader["CategoryID"],
+                        Description = reader["Description"].ToString()
+                    };
+
+                    itemList.Add(item);
+                }
+               
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
+            return itemList;
+        }
+
 
     }
 }

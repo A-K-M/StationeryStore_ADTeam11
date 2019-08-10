@@ -15,7 +15,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             Category category = null;
 
-            string sql = "SELECT * FROM Category";
+            string sql = "SELECT * FROM Category ORDER BY ID ASC";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
@@ -27,7 +27,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 category = new Category()
                 {
-                    Id = data["ID"].ToString(),
+                    Id = (int)data["ID"],
                     Name = data["Name"].ToString()
                 };
 

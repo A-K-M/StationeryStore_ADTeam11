@@ -28,13 +28,13 @@ namespace StationeryStore_ADTeam11.DAOs
                         Id = (int)reader["Id"],
                         ItemId = (string)reader["ItemID"],
                         Date = (DateTime)reader["DateTime"],
-                        Qty = (int)reader["Qty"],
+                        Qty = (string)reader["Qty"],
                         Balance = (int)reader["Balance"],
                         RefType = (string)reader["Reftype"]
                     };
                     stockCards.Add(stockCard);
                 }
-
+                reader.Close();
                 connection.Close();
             
 
@@ -53,29 +53,29 @@ namespace StationeryStore_ADTeam11.DAOs
             SqlCommand cmd = new SqlCommand(sql, connection);
             SqlDataReader reader = cmd.ExecuteReader();
 
-            while (reader.Read())
-            {
-                StockCard stockCard;
-                try
+                while (reader.Read())
                 {
-                    stockCard = new StockCard()
+                    StockCard stockCard;
+                    try
                     {
-                        Id = (int)reader["Id"],
-                        ItemId = (string)reader["ItemID"],
-                        Date = (DateTime)reader["DateTime"],
-                        Qty = (int)reader["Qty"],
-                        Balance = (int)reader["Balance"],
-                        RefType = (string)reader["Reftype"]
-                    };
-                    stockCards.Add(stockCard);
+                        stockCard = new StockCard()
+                        {
+                            Id = (int)reader["Id"],
+                            ItemId = (string)reader["ItemID"],
+                            Date = (DateTime)reader["DateTime"],
+                            Qty = (string)reader["Qty"],
+                            Balance = (int)reader["Balance"],
+                            RefType = (string)reader["Reftype"]
+                        };
+                        stockCards.Add(stockCard);
+                    }
+                    catch
+                    {
+                        stockCards = null;
+                    }
                 }
-                catch
-                {
-                    stockCards = null;
-                }
-            }
-            reader.Close();
-            connection.Close();
+                reader.Close();
+                connection.Close();
             
 
             if (stockCards != null)
@@ -85,5 +85,6 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return stockCards;
         }
+
     }
 }

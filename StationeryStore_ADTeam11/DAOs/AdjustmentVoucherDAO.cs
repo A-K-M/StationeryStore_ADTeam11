@@ -186,7 +186,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             string sqlFormattedDate = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
-            string status = "Pending";
+            string status = Constant.STATUS_PENDING;
 
             string sql = "INSERT INTO AdjustmentVoucher (EmployeeID, Date, Status) OUTPUT INSERTED.VoucherID VALUES (@employeeId, @date, @status)";
 
@@ -280,6 +280,49 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return itemList;
         }
+        public List<MAdjustmentItem> GetAdjVoucherItems(int voucherID)
+        {
+            List<MAdjustmentItem> itemList = new List<MAdjustmentItem>();
+            SqlDataReader data = null;
+
+            MAdjustmentItem voucherItems = null;
+            try
+            {
+
+                string sql = "SELECT iav.ItemID, iav.Qty, iav.Reason, i.Description" +
+                             " FROM ItemAdjVoucher iav, Item i " +
+                            "WHERE iav.VoucherID = @Id AND i.ID = iav.ItemID";
+                connection.Open();
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@Id", voucherID);
+
+                data = cmd.ExecuteReader();
+
+                while (data.Read())
+                {
+                    voucherItems = new MAdjustmentItem()
+                    {
+                        ItemId = data["ItemID"].ToString(),
+                        Description = data["Description"].ToString(),
+                        Quantity = Convert.ToInt32(data["Qty"]),
+                        Reason = data["Reason"].ToString()
+                    };
+
+                    itemList.Add(voucherItems);
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally {
+                if(data != null) data.Close();
+                connection.Close();
+            }
+            
+
+            return itemList;
+        }
 
         public void ReviewAdjustmentVoucher(int id, string status)
         {
@@ -300,15 +343,36 @@ namespace StationeryStore_ADTeam11.DAOs
             connection.Close();
         }
 
-        public List<MAdjVoucher> GetAdjVoucherByClerk(int clerkId)
+        public List<AdjustmentVoucherViewModel> GetAdjVoucherByClerk(int clerkId)
         {
+            List<AdjustmentVoucherViewModel> voucherList = new List<AdjustmentVoucherViewModel>();
+            SqlDataReader reader = null;
             try
             {
                 connection.Open();
-                string sql = @"SELECT";
-                SqlCommand cmd = new SqlCommand(sql, connection);
 
-                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+                string sql = " SELECT av.Date,av.Status,av.VoucherID,SUM(iav.Qty) TotalQuantity " +
+                             " FROM AdjustmentVoucher av, ItemAdjVoucher iav "+
+                             " WHERE av.VoucherID = iav.VoucherID "+
+                             " AND av.EmployeeID = @clerkId "+
+                             " GROUP BY av.VoucherID,av.Date,av.Status ";
+
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@clerkId", clerkId);
+                AdjustmentVoucherViewModel adjVM = null;
+                reader = cmd.ExecuteReader();
+
+                while (reader.Read()) {
+                    adjVM = new AdjustmentVoucherViewModel()
+                    {
+                        Id = (int)reader["VoucherID"],
+                        Date = (DateTime)reader["Date"],
+                        Status = reader["Status"].ToString(),
+                        TotalQuantity = (int)reader["TotalQuantity"]
+                    };
+                    voucherList.Add(adjVM);
+                }
+
             }
             catch (Exception e)
             {
@@ -316,11 +380,60 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             finally
             {
+                if (reader != null) reader.Close();
                 connection.Close();
             }
 
+            voucherList = voucherList.OrderByDescending(x => x.Id).ToList();
 
-            return null;
+            return voucherList;
+        }
+
+        public bool CreateAdjVoucher(int clerkId,List<MAdjustmentItem> adjItems) {
+            SqlTransaction transaction = null;
+            try
+            {
+                connection.Open();
+                transaction = connection.BeginTransaction();
+                string sql = "INSERT INTO AdjustmentVoucher (EmployeeID, Date, Status) OUTPUT INSERTED.VoucherID VALUES (@employeeId, @date, @status)";
+
+                SqlCommand cmd = new SqlCommand(sql, connection,transaction);
+                cmd.Parameters.AddWithValue("@employeeId",clerkId);
+                cmd.Parameters.AddWithValue("@date", DateTime.Today);
+                cmd.Parameters.AddWithValue("@status",Constant.STATUS_PENDING);
+                int voucherID = Convert.ToInt32(cmd.ExecuteScalar());
+                 
+                sql = "";
+                string sqlStockCard = "",temp="";
+                foreach (var item in adjItems)
+                {
+                    sql += $"INSERT INTO ItemAdjVoucher (ItemID, VoucherID, Qty, Reason) VALUES ('{item.ItemId}', {voucherID}, {item.Quantity}, '{item.Reason}'); \n";
+                    temp = $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
+                           $" VALUES ('{item.ItemId}','{DateTime.Today}','{item.Quantity}'," +
+                           $"(SELECT TOP 1 Balance FROM Stockcard ORDER BY ID DESC)+{item.Quantity}" +
+                           $",'ADJ-{voucherID}'); \n";
+                    sqlStockCard += temp;
+                }
+
+               cmd = new SqlCommand(sql, connection,transaction);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                cmd = new SqlCommand(sqlStockCard, connection, transaction);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
+
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return true;
         }
     }
 }

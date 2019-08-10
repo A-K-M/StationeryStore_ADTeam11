@@ -5,9 +5,17 @@ using System.Web;
 
 namespace StationeryStore_ADTeam11.MobileModels
 {
-    public class ResponseListAndObj<T> : MResponse
+    public class MResponseList<T> : MResponse
     {
         private List<T> _resList;
-        public List<T> ResList { get; set; }
+        public List<T> ResList {
+            get {
+                return _resList;
+            }
+            set {
+                _resList = value;
+                Success = (_resList != null);
+            }
+        }
     }
 }

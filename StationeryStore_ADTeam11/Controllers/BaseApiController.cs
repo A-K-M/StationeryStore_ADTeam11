@@ -15,10 +15,10 @@ namespace StationeryStore_ADTeam11.Controllers
     {
         [Route("employees/{deptId}")]
         [HttpGet]
-        public ResponseListAndObj<MEmployee> GetEmployees(string deptId)
+        public MResponse GetEmployees(string deptId)
         {
             EmployeeDAO empDao = new EmployeeDAO();
-            ResponseListAndObj<MEmployee> response = new ResponseListAndObj<MEmployee>()
+            MResponseList<MEmployee> response = new MResponseList<MEmployee>()
             {
                 ResList = empDao.GetEmployeeByDepartment(deptId),
                 Success = true
@@ -28,15 +28,30 @@ namespace StationeryStore_ADTeam11.Controllers
 
         [Route("collectionpoints")]
         [HttpGet]
-        public ResponseListAndObj<CollectionPoint> GetCollectionPoints()
+        public MResponse GetCollectionPoints()
         {
             CollectionPointDAO dao = new CollectionPointDAO();
-            ResponseListAndObj<CollectionPoint> response = new ResponseListAndObj<CollectionPoint>()
+            MResponseList<CollectionPoint> response = new MResponseList<CollectionPoint>()
             {
                 ResList = dao.GetCollectionPoints(),
                 Success = true
             };
             return response;
+        }
+
+        [Route("categories")]
+        [HttpGet]
+        public MResponse GetCategories() {
+            CategoryDAO dao = new CategoryDAO();
+            return new MResponseList<Category>() { ResList = dao.GetAll() };
+        }
+
+        [Route("items")]
+        [HttpGet]
+        public MResponse GetItems()
+        {
+            ItemDAO dao = new ItemDAO();
+            return new MResponseList<MItemSpinner>() { ResList = dao.GetAllItems() };
         }
 
     }
