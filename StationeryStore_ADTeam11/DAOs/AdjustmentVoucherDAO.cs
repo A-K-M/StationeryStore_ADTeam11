@@ -101,58 +101,11 @@ namespace StationeryStore_ADTeam11.DAOs
 
             itemsAbove250 = itemList.Where(x => (x.FirstPrice + x.SecondPrice + x.ThirdPrice) / 3 >= 250).ToList();
 
-
-            //List<AdjustmentVoucherVM> result = VoucherItemPriceHelper(voucherList, itemVoucherList, itemsAbove250, employeeList);
-
-            //return result;
-
             List<AdjustmentVoucherVM> vouchersVMList = new List<AdjustmentVoucherVM>();
             AdjustmentVoucherVM voucherVM = null;
             
             List<int> voucherIdsForManager = (from voucherDetail in itemVoucherList
                                               join items in itemsAbove250
-                                              on voucherDetail.ItemId equals items.Id
-                                              select voucherDetail.VoucherId).Distinct().ToList();
-
-            foreach (int id in voucherIdsForManager)
-            {
-                voucherList.RemoveAll(x => x.Id == id);
-            }
-
-            voucherList = voucherList.GroupBy(x => x.Id)
-              .Select(y => y.First())
-              .ToList();
-
-            foreach (AdjustmentVoucher voucher in voucherList)
-            {
-                employee = employeeList.Find(x => x.Id == voucher.EmployeeId);
-
-                voucherVM = new AdjustmentVoucherVM()
-                {
-                    Name = employee.Name,
-                    Id = voucher.Id,
-                    Date = voucher.Date,
-                    Status = voucher.Status,
-                    TotalQuantity = itemVoucherList.Where(x => x.VoucherId == voucher.Id)
-                                    .Sum(y => y.Quantity)
-                };
-
-                vouchersVMList.Add(voucherVM);
-            }
-
-            return vouchersVMList;
-        }
-
-        public List<AdjustmentVoucherVM> VoucherItemPriceHelper(List<AdjustmentVoucher> voucherList, List<ItemAdjVoucher> itemVoucherList,
-            List<Item> itemList, List<Employee> employeeList)
-        {
-            List<AdjustmentVoucherVM> vouchersVMList = new List<AdjustmentVoucherVM>();
-            AdjustmentVoucherVM voucherVM = null;
-
-            Employee employee = null;
-
-            List<int> voucherIdsForManager = (from voucherDetail in itemVoucherList
-                                              join items in itemList
                                               on voucherDetail.ItemId equals items.Id
                                               select voucherDetail.VoucherId).Distinct().ToList();
 
