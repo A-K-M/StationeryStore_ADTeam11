@@ -332,7 +332,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     sql += $"INSERT INTO ItemAdjVoucher (ItemID, VoucherID, Qty, Reason) VALUES ('{item.ItemId}', {voucherID}, {item.Quantity}, '{item.Reason}'); \n";
                     temp = $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
                            $" VALUES ('{item.ItemId}','{sqlFormattedDate}','{item.Quantity}'," +
-                           $"(SELECT TOP 1 Balance FROM Stockcard ORDER BY ID DESC)+{item.Quantity}" +
+                           $"(SELECT TOP 1 Balance FROM Stockcard WHERE ItemID='{item.ItemId}' ORDER BY ID DESC)+{item.Quantity}" +
                            $",'ADJ-{voucherID}'); \n";
                     sqlStockCard += temp;
                 }
@@ -358,26 +358,6 @@ namespace StationeryStore_ADTeam11.DAOs
             }
 
             return true;      
-        }
-
-        public int AddVoucherItems(List<ItemAdjVoucher> itemVouchers, int voucherId)
-        {
-            string sql = "";
-
-            foreach (var item in itemVouchers)
-            {
-                sql += $"INSERT INTO ItemAdjVoucher (ItemID, VoucherID, Qty, Reason) VALUES ('{item.ItemId}', {voucherId}, {item.Quantity}, '{item.Reason}'); \n";
-            }
-
-            SqlCommand cmd = new SqlCommand(sql, connection);
-
-            connection.Open();
-
-            int result = cmd.ExecuteNonQuery();
-
-            connection.Close();
-
-            return result;
         }
 
         public void DeleteAdjustmentVoucher(int id)
@@ -431,6 +411,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return itemList;
         }
+
         public List<MAdjustmentItem> GetAdjVoucherItems(int voucherID)
         {
             List<MAdjustmentItem> itemList = new List<MAdjustmentItem>();
@@ -561,7 +542,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     sql += $"INSERT INTO ItemAdjVoucher (ItemID, VoucherID, Qty, Reason) VALUES ('{item.ItemId}', {voucherID}, {item.Quantity}, '{item.Reason}'); \n";
                     temp = $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
                            $" VALUES ('{item.ItemId}','{DateTime.Today}','{item.Quantity}'," +
-                           $"(SELECT TOP 1 Balance FROM Stockcard ORDER BY ID DESC)+{item.Quantity}" +
+                           $"(SELECT TOP 1 Balance FROM Stockcard WHERE ItemID='{item.ItemId}' ORDER BY ID DESC)+{item.Quantity}" +
                            $",'ADJ-{voucherID}'); \n";
                     sqlStockCard += temp;
                 }

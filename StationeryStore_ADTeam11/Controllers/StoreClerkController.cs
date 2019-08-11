@@ -56,23 +56,6 @@ namespace StationeryStore_ADTeam11.Controllers
             {
                 return Json("Something went wrong! Please try again later.", JsonRequestBehavior.AllowGet);
             }
-
-            //AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
-
-            //int insertedId = adjustmentVoucherDAO.Add(11233);
-
-            //int result = adjustmentVoucherDAO.AddVoucherItems(itemData, insertedId);
-
-            //if (result > 0)
-            //{
-            //    return Json("Successfully Added", JsonRequestBehavior.AllowGet);
-            //}
-            //else
-            //{
-            //    adjustmentVoucherDAO.DeleteAdjustmentVoucher(insertedId);
-
-            //    return Json("Something went wrong! Please try again later.", JsonRequestBehavior.AllowGet);
-            //}
         }
 
         public ActionResult ViewStockCard()
