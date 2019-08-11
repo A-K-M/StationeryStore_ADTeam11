@@ -180,6 +180,7 @@
     <Compile Include="MobileModels\MCollectionAndRep.cs" />
     <Compile Include="MobileModels\MEmployee.cs" />
     <Compile Include="MobileModels\MItemSpinner.cs" />
+    <Compile Include="MobileModels\MRequestItem.cs" />
     <Compile Include="MobileModels\MResponseList.cs" />
     <Compile Include="MobileModels\MResponseObj.cs" />
     <Compile Include="MobileModels\MResponse.cs" />

@@ -41,9 +41,10 @@ namespace StationeryStore_ADTeam11.DAOs
             List<MEmployee> mEmployees = new List<MEmployee>();
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"select id,DeptID,Name,Email from employee where DeptID = '" + deptId + "'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
+            string sql = @"SELECT id,DeptID,Name,Email FROM employee where DeptID = @deptId";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@deptId", deptId);
+            SqlDataReader reader = cmd.ExecuteReader();
             mEmployees = MEmployee.MapToList(reader);
             reader.Close();
             conn.Close();

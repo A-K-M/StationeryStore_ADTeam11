@@ -2,6 +2,7 @@
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.View_Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,31 @@ namespace StationeryStore_ADTeam11.Controllers
             return response;
         }
 
+        [Route("requests")]
+        [HttpGet]
+        public MResponse GetRequestHistory()
+        {
+            RequestDAO dao = new RequestDAO();
+            return new MResponseList<RequisitionVM>() { ResList = dao.GetReqListByDepartment("COMM") };
+        }
+
+        [Route("requests/{reqId}/detail")]
+        [HttpGet]
+        public MResponse GetRequestDetail(string reqId)
+        {
+            RequestDAO dao = new RequestDAO();
+            return new MResponseList<MRequestItem>() { ResList = dao.GetRequestItems("COMM/111/100") };
+        }
+
+        [Route("requests/{reqId}")]
+        [HttpPatch]
+        public MResponse UpdateReqStatus(string reqId, RequisitionVM status)
+        {
+            bool success = new RequestDAO().UpdateStatus(status.Status, "COMM/111/100");
+            MResponse response = new MResponse(success);
+
+            return response;
+        }
 
     }
 }
