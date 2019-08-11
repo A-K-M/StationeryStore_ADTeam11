@@ -30,8 +30,8 @@ namespace StationeryStore_ADTeam11.Controllers
         [Route("{clerkId}/adjustmentvoucher")]
         [HttpGet]
         public MResponse getAdjVoucherList(int clerkId) {
-            List<AdjustmentVoucherViewModel> voucherList = new AdjustmentVoucherDAO().GetAdjVoucherByClerk(clerkId);
-            return new MResponseList<AdjustmentVoucherViewModel>() { ResList = voucherList };
+            List<AdjustmentVoucherVM> voucherList = new AdjustmentVoucherDAO().GetAdjVoucherByClerk(clerkId);
+            return new MResponseList<AdjustmentVoucherVM>() { ResList = voucherList };
         }
 
         [Route("adjustmentvoucher/{voucherId}")]

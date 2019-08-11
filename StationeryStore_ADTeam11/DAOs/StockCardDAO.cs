@@ -28,7 +28,7 @@ namespace StationeryStore_ADTeam11.DAOs
                         Id = (int)reader["Id"],
                         ItemId = (string)reader["ItemID"],
                         Date = (DateTime)reader["DateTime"],
-                        Qty = (string)reader["Qty"],
+                        Qty = (int)reader["Qty"],
                         Balance = (int)reader["Balance"],
                         RefType = (string)reader["Reftype"]
                     };
@@ -63,7 +63,7 @@ namespace StationeryStore_ADTeam11.DAOs
                             Id = (int)reader["Id"],
                             ItemId = (string)reader["ItemID"],
                             Date = (DateTime)reader["DateTime"],
-                            Qty = (string)reader["Qty"],
+                            Qty = (int)reader["Qty"],
                             Balance = (int)reader["Balance"],
                             RefType = (string)reader["Reftype"]
                         };

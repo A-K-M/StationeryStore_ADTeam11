@@ -137,7 +137,7 @@ namespace StationeryStore_ADTeam11.DAOs
             }
 
             return vouchersVMList;
-        }
+        }        
 
         public List<AdjustmentVoucherVM> GetByStatusForManager(string status)
         {
@@ -343,9 +343,9 @@ namespace StationeryStore_ADTeam11.DAOs
             connection.Close();
         }
 
-        public List<AdjustmentVoucherViewModel> GetAdjVoucherByClerk(int clerkId)
+        public List<AdjustmentVoucherVM> GetAdjVoucherByClerk(int clerkId)
         {
-            List<AdjustmentVoucherViewModel> voucherList = new List<AdjustmentVoucherViewModel>();
+            List<AdjustmentVoucherVM> voucherList = new List<AdjustmentVoucherVM>();
             SqlDataReader reader = null;
             try
             {
@@ -359,11 +359,11 @@ namespace StationeryStore_ADTeam11.DAOs
 
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@clerkId", clerkId);
-                AdjustmentVoucherViewModel adjVM = null;
+                AdjustmentVoucherVM adjVM = null;
                 reader = cmd.ExecuteReader();
 
                 while (reader.Read()) {
-                    adjVM = new AdjustmentVoucherViewModel()
+                    adjVM = new AdjustmentVoucherVM()
                     {
                         Id = (int)reader["VoucherID"],
                         Date = (DateTime)reader["Date"],
