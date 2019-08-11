@@ -292,7 +292,7 @@ namespace StationeryStore_ADTeam11.DAOs
             //return voucherList;
         }
 
-        public int Add(int employeeId)
+        public bool Add(int employeeId, List<ItemAdjVoucher> itemAdjVouchers)
         {
             DateTime now = DateTime.Now;
 
@@ -300,25 +300,64 @@ namespace StationeryStore_ADTeam11.DAOs
 
             string status = Constant.STATUS_PENDING;
 
-            string sql = "INSERT INTO AdjustmentVoucher (EmployeeID, Date, Status) OUTPUT INSERTED.VoucherID VALUES (@employeeId, @date, @status)";
+            SqlTransaction transaction = null;
 
-            SqlCommand cmd = new SqlCommand(sql, connection);
+            try
+            {
+                connection.Open();
+                transaction = connection.BeginTransaction();
 
-            connection.Open();
+                string sql = "INSERT INTO AdjustmentVoucher (EmployeeID, Date, Status) OUTPUT INSERTED.VoucherID VALUES (@employeeId, @date, @status)";
 
-            cmd.Parameters.Add("@employeeId", SqlDbType.Int);
-            cmd.Parameters.Add("@date", SqlDbType.Date);
-            cmd.Parameters.Add("@status", SqlDbType.VarChar);
+                SqlCommand cmd = new SqlCommand(sql, connection, transaction);
 
-            cmd.Parameters["@employeeId"].Value = employeeId;
-            cmd.Parameters["@date"].Value = sqlFormattedDate;
-            cmd.Parameters["@status"].Value = status;
+                cmd.Parameters.Add("@employeeId", SqlDbType.Int);
+                cmd.Parameters.Add("@date", SqlDbType.Date);
+                cmd.Parameters.Add("@status", SqlDbType.VarChar);
 
-            int result = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.Parameters["@employeeId"].Value = employeeId;
+                cmd.Parameters["@date"].Value = sqlFormattedDate;
+                cmd.Parameters["@status"].Value = status;
 
-            connection.Close();
+                int voucherID = Convert.ToInt32(cmd.ExecuteScalar());
 
-            return result;
+
+                // NEW LINES FROM HERE
+
+                sql = "";
+                string sqlStockCard = "", temp = "";
+
+                foreach (var item in itemAdjVouchers)
+                {
+                    sql += $"INSERT INTO ItemAdjVoucher (ItemID, VoucherID, Qty, Reason) VALUES ('{item.ItemId}', {voucherID}, {item.Quantity}, '{item.Reason}'); \n";
+                    temp = $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
+                           $" VALUES ('{item.ItemId}','{sqlFormattedDate}','{item.Quantity}'," +
+                           $"(SELECT TOP 1 Balance FROM Stockcard ORDER BY ID DESC)+{item.Quantity}" +
+                           $",'ADJ-{voucherID}'); \n";
+                    sqlStockCard += temp;
+                }
+
+                cmd = new SqlCommand(sql, connection, transaction);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                cmd = new SqlCommand(sqlStockCard, connection, transaction);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
+
+                //NEW LINES END HERE     
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return true;      
         }
 
         public int AddVoucherItems(List<ItemAdjVoucher> itemVouchers, int voucherId)
