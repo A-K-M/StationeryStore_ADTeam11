@@ -379,7 +379,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             VoucherItemVM voucherItems = null;
 
-            string sql = "SELECT av.Status, iav.VoucherID, iav.Qty, iav.Reason, i.Description, (i.FirstPrice + i.SecondPrice + i.ThirdPrice) / 3 AS [AVG]  FROM ItemAdjVoucher iav, Item i, AdjustmentVoucher av WHERE iav.VoucherID = @Id AND i.ID = iav.ItemID AND av.VoucherID = iav.VoucherID";
+            string sql = "SELECT av.Status, iav.VoucherID, iav.Qty, iav.Reason, i.Description, iav.ItemID, (i.FirstPrice + i.SecondPrice + i.ThirdPrice) / 3 AS [AVG]  FROM ItemAdjVoucher iav, Item i, AdjustmentVoucher av WHERE iav.VoucherID = @Id AND i.ID = iav.ItemID AND av.VoucherID = iav.VoucherID";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
@@ -396,6 +396,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 {
 
                     VoucherID = Convert.ToInt32(data["VoucherID"]),
+                    ItemID = data["ItemID"].ToString(),
                     Status = data["Status"].ToString(),
                     ItemDescription = data["Description"].ToString(),
                     Quantity = Convert.ToInt32(data["Qty"]),
@@ -456,23 +457,79 @@ namespace StationeryStore_ADTeam11.DAOs
             return itemList;
         }
 
-        public void ReviewAdjustmentVoucher(int id, string status)
+        public bool ReviewAdjustmentVoucher(int id, string status, List<VoucherItemVM> voucherItems)
         {
-            string sql = "UPDATE AdjustmentVoucher SET Status = @status WHERE VoucherID = @id";
+            SqlTransaction transaction = null;
+            try
+            {
+                string sql = "UPDATE AdjustmentVoucher SET Status = @status WHERE VoucherID = @id";
 
-            SqlCommand cmd = new SqlCommand(sql, connection);
+                if (status == "Approved")
+                {
+                    SqlCommand cmd = new SqlCommand(sql, connection);
 
-            cmd.Parameters.Add("@status", SqlDbType.VarChar);
-            cmd.Parameters["@status"].Value = status;
+                    cmd.Parameters.Add("@status", SqlDbType.VarChar);
+                    cmd.Parameters["@status"].Value = status;
 
-            cmd.Parameters.Add("@id", SqlDbType.Int);
-            cmd.Parameters["@id"].Value = id;
+                    cmd.Parameters.Add("@id", SqlDbType.Int);
+                    cmd.Parameters["@id"].Value = id;
 
-            connection.Open();
+                    connection.Open();
 
-            cmd.ExecuteNonQuery();
+                    if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
-            connection.Close();
+                    //connection.Close();
+
+                    return true;
+                }
+                else if (status == "Rejected")
+                {
+                    connection.Open();
+                    transaction = connection.BeginTransaction();
+
+                    SqlCommand cmd = new SqlCommand(sql, connection, transaction);
+
+                    cmd.Parameters.Add("@status", SqlDbType.VarChar);
+                    cmd.Parameters["@status"].Value = status;
+
+                    cmd.Parameters.Add("@id", SqlDbType.Int);
+                    cmd.Parameters["@id"].Value = id;
+
+                    cmd.ExecuteNonQuery();
+
+                    string stockCardSql = "";
+
+                    foreach (var item in voucherItems)
+                    {
+                        stockCardSql += $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
+                           $" VALUES ('{item.ItemID}','{DateTime.Today}','{item.Quantity}'," +
+                           $"(SELECT TOP 1 Balance FROM Stockcard WHERE ItemID='{item.ItemID}' ORDER BY ID DESC)-({item.Quantity})" +
+                           $",'ADJ-{id}-Rejected'); \n";
+                    }
+
+                    cmd = new SqlCommand(stockCardSql, connection, transaction);
+
+                    cmd.ExecuteNonQuery();
+
+                    transaction.Commit();
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return true;
         }
 
         public List<AdjustmentVoucherVM> GetAdjVoucherByClerk(int clerkId)

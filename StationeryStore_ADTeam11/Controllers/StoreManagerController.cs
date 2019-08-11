@@ -131,7 +131,7 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
 
-            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Approved");
+            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Approved", adjustmentVoucherDAO.GetVoucherItems(id));
 
             return RedirectToAction("AdjustmentVouchers");
         }
@@ -140,7 +140,7 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
 
-            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Rejected");
+            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Rejected", adjustmentVoucherDAO.GetVoucherItems(id));
 
             return RedirectToAction("AdjustmentVouchers");
         }
