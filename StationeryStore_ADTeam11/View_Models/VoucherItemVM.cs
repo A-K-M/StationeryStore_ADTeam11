@@ -8,6 +8,7 @@ namespace StationeryStore_ADTeam11.View_Models
     public class VoucherItemVM
     {
         private int _voucherId;
+        private string _itemId;
         private string _status;
         private string _itemDescription;
         private int _quantity;
@@ -15,6 +16,8 @@ namespace StationeryStore_ADTeam11.View_Models
         private string _reason;
 
         public int VoucherID { get; set; }
+
+        public string ItemID { get; set; }
 
         public string Status { get; set; }
 

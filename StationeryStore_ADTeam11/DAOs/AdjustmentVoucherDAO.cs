@@ -101,6 +101,9 @@ namespace StationeryStore_ADTeam11.DAOs
 
             itemsAbove250 = itemList.Where(x => (x.FirstPrice + x.SecondPrice + x.ThirdPrice) / 3 >= 250).ToList();
 
+            List<AdjustmentVoucherVM> vouchersVMList = new List<AdjustmentVoucherVM>();
+            AdjustmentVoucherVM voucherVM = null;
+            
             List<int> voucherIdsForManager = (from voucherDetail in itemVoucherList
                                               join items in itemsAbove250
                                               on voucherDetail.ItemId equals items.Id
@@ -111,6 +114,118 @@ namespace StationeryStore_ADTeam11.DAOs
                 voucherList.RemoveAll(x => x.Id == id);
             }
 
+            voucherList = voucherList.GroupBy(x => x.Id)
+              .Select(y => y.First())
+              .ToList();
+
+            foreach (AdjustmentVoucher voucher in voucherList)
+            {
+                employee = employeeList.Find(x => x.Id == voucher.EmployeeId);
+
+                voucherVM = new AdjustmentVoucherVM()
+                {
+                    Name = employee.Name,
+                    Id = voucher.Id,
+                    Date = voucher.Date,
+                    Status = voucher.Status,
+                    TotalQuantity = itemVoucherList.Where(x => x.VoucherId == voucher.Id)
+                                    .Sum(y => y.Quantity)
+                };
+
+                vouchersVMList.Add(voucherVM);
+            }
+
+            return vouchersVMList;
+        }
+
+        public List<AdjustmentVoucherVM> GetByStatusForManager(string status)
+        {
+            List<AdjustmentVoucher> voucherList = new List<AdjustmentVoucher>();
+            AdjustmentVoucher av = null;
+
+            List<ItemAdjVoucher> itemVoucherList = new List<ItemAdjVoucher>();
+            ItemAdjVoucher iav = null;
+
+            List<Item> itemList = new List<Item>();
+            Item i = null;
+
+            List<Employee> employeeList = new List<Employee>();
+            Employee employee = null;
+
+            string sql = "SELECT av.*, iav.ID AS [ItemAdjID], iav.ItemID, iav.VoucherID AS [ItemAdjVoucherID], iav.Qty, iav.Reason, i.*, e.ID AS [EmpId], e.Name AS [EmpName] " +
+                          "FROM AdjustmentVoucher av, Item i, ItemAdjVoucher iav, Employee e " +
+                          "WHERE av.VoucherID = iav.VoucherID " +
+                          "AND av.Status=@value " +
+                          "AND e.ID = av.EmployeeID " +
+                          "AND iav.ItemID = i.ID";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            cmd.Parameters.Add("@value", SqlDbType.VarChar);
+            cmd.Parameters["@value"].Value = status;
+
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                av = new AdjustmentVoucher()
+                {
+                    Id = Convert.ToInt32(data["VoucherID"]),
+                    EmployeeId = Convert.ToInt32(data["EmployeeID"]),
+                    Date = Convert.ToDateTime(data["Date"]),
+                    Status = data["Status"].ToString()
+                };
+
+                iav = new ItemAdjVoucher()
+                {
+                    Id = Convert.ToInt32(data["ItemAdjVoucherID"]),
+                    ItemId = data["ItemID"].ToString(),
+                    VoucherId = Convert.ToInt32(data["ItemAdjVoucherID"]),
+                    Quantity = Convert.ToInt32(data["Qty"]),
+                    Reason = data["Reason"].ToString()
+                };
+
+                i = new Item()
+                {
+                    Id = data["ID"].ToString(),
+                    CategoryId = Convert.ToInt32(data["CategoryID"]),
+                    Description = data["Description"].ToString(),
+                    ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
+                    ReorderQty = Convert.ToInt32(data["ReorderQty"]),
+                    Uom = data["UOM"].ToString(),
+                    BinNo = data["BinNo"].ToString(),
+                    FirstSupplier = data["FirstSupplier"].ToString(),
+                    FirstPrice = Convert.ToDouble(data["FirstPrice"]),
+                    SecondSupplier = data["SecondSupplier"].ToString(),
+                    SecondPrice = Convert.ToDouble(data["SecondPrice"]),
+                    ThirdSupplier = data["ThirdSupplier"].ToString(),
+                    ThirdPrice = Convert.ToDouble(data["ThirdPrice"]),
+                };
+
+                employee = new Employee()
+                {
+                    Id = Convert.ToInt32(data["EmpId"]),
+                    Name = data["EmpName"].ToString()
+                };
+
+                voucherList.Add(av);
+                itemVoucherList.Add(iav);
+                itemList.Add(i);
+                employeeList.Add(employee);
+            }
+
+            data.Close();
+            connection.Close();
+
+            voucherList = (from vouchers in voucherList
+                          join voucherDetails in itemVoucherList
+                          on vouchers.Id equals voucherDetails.VoucherId
+                          join item in itemList
+                          on voucherDetails.ItemId equals item.Id
+                          where (item.FirstPrice + item.SecondPrice + item.ThirdPrice) / 3 > 250
+                          select vouchers).ToList();
 
             voucherList = voucherList.GroupBy(x => x.Id)
                           .Select(y => y.First())
@@ -137,50 +252,47 @@ namespace StationeryStore_ADTeam11.DAOs
             }
 
             return vouchersVMList;
+
+            //List<AdjustmentVoucherVM> voucherList = new List<AdjustmentVoucherVM>();
+            //AdjustmentVoucherVM voucher = null;
+
+            //string sql = "SELECT e.Name, av.VoucherID, av.Date, av.Status, SUM(iav.Qty) AS TotalQuantity " +
+            //            "FROM Item i, AdjustmentVoucher av, ItemAdjVoucher iav, Employee e " +
+            //            "WHERE i.ID = iav.ItemID " +
+            //            "AND iav.VoucherID = av.VoucherID " +
+            //            "AND e.ID = av.EmployeeID " +
+            //            "AND av.Status = @value " +
+            //            "AND(i.FirstPrice + i.SecondPrice + i.ThirdPrice) / 3 >= 250 " +
+            //            " GROUP BY e.Name, av.VoucherID, av.Date, av.Status ";
+
+            //SqlCommand cmd = new SqlCommand(sql, connection);
+
+            //connection.Open();
+            //cmd.Parameters.Add("@value", SqlDbType.VarChar);
+            //cmd.Parameters["@value"].Value = status;
+
+            //SqlDataReader data = cmd.ExecuteReader();
+
+            //while (data.Read())
+            //{
+            //    voucher = new AdjustmentVoucherVM()
+            //    {
+            //        Name = data["Name"].ToString(),
+            //        Id = Convert.ToInt32(data["VoucherID"]),
+            //        Date = Convert.ToDateTime(data["Date"]),
+            //        Status = data["Status"].ToString(),
+            //        TotalQuantity = Convert.ToInt32(data["TotalQuantity"])
+            //    };
+
+            //    voucherList.Add(voucher);
+            //}
+            //data.Close();
+            //connection.Close();
+
+            //return voucherList;
         }
 
-        public List<AdjustmentVoucherVM> GetByStatusForManager(string status)
-        {
-            List<AdjustmentVoucherVM> voucherList = new List<AdjustmentVoucherVM>();
-            AdjustmentVoucherVM voucher = null;
-
-            string sql = "SELECT e.Name, av.VoucherID, av.Date, av.Status, SUM(iav.Qty) AS TotalQuantity " +
-                        "FROM Item i, AdjustmentVoucher av, ItemAdjVoucher iav, Employee e " +
-                        "WHERE i.ID = iav.ItemID " +
-                        "AND iav.VoucherID = av.VoucherID " +
-                        "AND e.ID = av.EmployeeID " +
-                        "AND av.Status = @value " +
-                        "AND(i.FirstPrice + i.SecondPrice + i.ThirdPrice) / 3 >= 250 " +
-                        " GROUP BY e.Name, av.VoucherID, av.Date, av.Status ";
-
-            SqlCommand cmd = new SqlCommand(sql, connection);
-
-            connection.Open();
-            cmd.Parameters.Add("@value", SqlDbType.VarChar);
-            cmd.Parameters["@value"].Value = status;
-
-            SqlDataReader data = cmd.ExecuteReader();
-
-            while (data.Read())
-            {
-                voucher = new AdjustmentVoucherVM()
-                {
-                    Name = data["Name"].ToString(),
-                    Id = Convert.ToInt32(data["VoucherID"]),
-                    Date = Convert.ToDateTime(data["Date"]),
-                    Status = data["Status"].ToString(),
-                    TotalQuantity = Convert.ToInt32(data["TotalQuantity"])
-                };
-
-                voucherList.Add(voucher);
-            }
-            data.Close();
-            connection.Close();
-
-            return voucherList;
-        }
-
-        public int Add(int employeeId)
+        public bool Add(int employeeId, List<ItemAdjVoucher> itemAdjVouchers)
         {
             DateTime now = DateTime.Now;
 
@@ -188,45 +300,64 @@ namespace StationeryStore_ADTeam11.DAOs
 
             string status = Constant.STATUS_PENDING;
 
-            string sql = "INSERT INTO AdjustmentVoucher (EmployeeID, Date, Status) OUTPUT INSERTED.VoucherID VALUES (@employeeId, @date, @status)";
+            SqlTransaction transaction = null;
 
-            SqlCommand cmd = new SqlCommand(sql, connection);
-
-            connection.Open();
-
-            cmd.Parameters.Add("@employeeId", SqlDbType.Int);
-            cmd.Parameters.Add("@date", SqlDbType.Date);
-            cmd.Parameters.Add("@status", SqlDbType.VarChar);
-
-            cmd.Parameters["@employeeId"].Value = employeeId;
-            cmd.Parameters["@date"].Value = sqlFormattedDate;
-            cmd.Parameters["@status"].Value = status;
-
-            int result = Convert.ToInt32(cmd.ExecuteScalar());
-
-            connection.Close();
-
-            return result;
-        }
-
-        public int AddVoucherItems(List<ItemAdjVoucher> itemVouchers, int voucherId)
-        {
-            string sql = "";
-
-            foreach (var item in itemVouchers)
+            try
             {
-                sql += $"INSERT INTO ItemAdjVoucher (ItemID, VoucherID, Qty, Reason) VALUES ('{item.ItemId}', {voucherId}, {item.Quantity}, '{item.Reason}'); \n";
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                string sql = "INSERT INTO AdjustmentVoucher (EmployeeID, Date, Status) OUTPUT INSERTED.VoucherID VALUES (@employeeId, @date, @status)";
+
+                SqlCommand cmd = new SqlCommand(sql, connection, transaction);
+
+                cmd.Parameters.Add("@employeeId", SqlDbType.Int);
+                cmd.Parameters.Add("@date", SqlDbType.Date);
+                cmd.Parameters.Add("@status", SqlDbType.VarChar);
+
+                cmd.Parameters["@employeeId"].Value = employeeId;
+                cmd.Parameters["@date"].Value = sqlFormattedDate;
+                cmd.Parameters["@status"].Value = status;
+
+                int voucherID = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+                // NEW LINES FROM HERE
+
+                sql = "";
+                string sqlStockCard = "", temp = "";
+
+                foreach (var item in itemAdjVouchers)
+                {
+                    sql += $"INSERT INTO ItemAdjVoucher (ItemID, VoucherID, Qty, Reason) VALUES ('{item.ItemId}', {voucherID}, {item.Quantity}, '{item.Reason}'); \n";
+                    temp = $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
+                           $" VALUES ('{item.ItemId}','{sqlFormattedDate}','{item.Quantity}'," +
+                           $"(SELECT TOP 1 Balance FROM Stockcard WHERE ItemID='{item.ItemId}' ORDER BY ID DESC)+{item.Quantity}" +
+                           $",'ADJ-{voucherID}'); \n";
+                    sqlStockCard += temp;
+                }
+
+                cmd = new SqlCommand(sql, connection, transaction);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                cmd = new SqlCommand(sqlStockCard, connection, transaction);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
+
+                //NEW LINES END HERE     
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
             }
 
-            SqlCommand cmd = new SqlCommand(sql, connection);
-
-            connection.Open();
-
-            int result = cmd.ExecuteNonQuery();
-
-            connection.Close();
-
-            return result;
+            return true;      
         }
 
         public void DeleteAdjustmentVoucher(int id)
@@ -248,7 +379,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             VoucherItemVM voucherItems = null;
 
-            string sql = "SELECT av.Status, iav.VoucherID, iav.Qty, iav.Reason, i.Description, (i.FirstPrice + i.SecondPrice + i.ThirdPrice) / 3 AS [AVG]  FROM ItemAdjVoucher iav, Item i, AdjustmentVoucher av WHERE iav.VoucherID = @Id AND i.ID = iav.ItemID AND av.VoucherID = iav.VoucherID";
+            string sql = "SELECT av.Status, iav.VoucherID, iav.Qty, iav.Reason, i.Description, iav.ItemID, (i.FirstPrice + i.SecondPrice + i.ThirdPrice) / 3 AS [AVG]  FROM ItemAdjVoucher iav, Item i, AdjustmentVoucher av WHERE iav.VoucherID = @Id AND i.ID = iav.ItemID AND av.VoucherID = iav.VoucherID";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
@@ -265,6 +396,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 {
 
                     VoucherID = Convert.ToInt32(data["VoucherID"]),
+                    ItemID = data["ItemID"].ToString(),
                     Status = data["Status"].ToString(),
                     ItemDescription = data["Description"].ToString(),
                     Quantity = Convert.ToInt32(data["Qty"]),
@@ -280,6 +412,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return itemList;
         }
+
         public List<MAdjustmentItem> GetAdjVoucherItems(int voucherID)
         {
             List<MAdjustmentItem> itemList = new List<MAdjustmentItem>();
@@ -324,23 +457,79 @@ namespace StationeryStore_ADTeam11.DAOs
             return itemList;
         }
 
-        public void ReviewAdjustmentVoucher(int id, string status)
+        public bool ReviewAdjustmentVoucher(int id, string status, List<VoucherItemVM> voucherItems)
         {
-            string sql = "UPDATE AdjustmentVoucher SET Status = @status WHERE VoucherID = @id";
+            SqlTransaction transaction = null;
+            try
+            {
+                string sql = "UPDATE AdjustmentVoucher SET Status = @status WHERE VoucherID = @id";
 
-            SqlCommand cmd = new SqlCommand(sql, connection);
+                if (status == "Approved")
+                {
+                    SqlCommand cmd = new SqlCommand(sql, connection);
 
-            cmd.Parameters.Add("@status", SqlDbType.VarChar);
-            cmd.Parameters["@status"].Value = status;
+                    cmd.Parameters.Add("@status", SqlDbType.VarChar);
+                    cmd.Parameters["@status"].Value = status;
 
-            cmd.Parameters.Add("@id", SqlDbType.Int);
-            cmd.Parameters["@id"].Value = id;
+                    cmd.Parameters.Add("@id", SqlDbType.Int);
+                    cmd.Parameters["@id"].Value = id;
 
-            connection.Open();
+                    connection.Open();
 
-            cmd.ExecuteNonQuery();
+                    if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
-            connection.Close();
+                    //connection.Close();
+
+                    return true;
+                }
+                else if (status == "Rejected")
+                {
+                    connection.Open();
+                    transaction = connection.BeginTransaction();
+
+                    SqlCommand cmd = new SqlCommand(sql, connection, transaction);
+
+                    cmd.Parameters.Add("@status", SqlDbType.VarChar);
+                    cmd.Parameters["@status"].Value = status;
+
+                    cmd.Parameters.Add("@id", SqlDbType.Int);
+                    cmd.Parameters["@id"].Value = id;
+
+                    cmd.ExecuteNonQuery();
+
+                    string stockCardSql = "";
+
+                    foreach (var item in voucherItems)
+                    {
+                        stockCardSql += $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
+                           $" VALUES ('{item.ItemID}','{DateTime.Today}','{item.Quantity}'," +
+                           $"(SELECT TOP 1 Balance FROM Stockcard WHERE ItemID='{item.ItemID}' ORDER BY ID DESC)-({item.Quantity})" +
+                           $",'ADJ-{id}-Rejected'); \n";
+                    }
+
+                    cmd = new SqlCommand(stockCardSql, connection, transaction);
+
+                    cmd.ExecuteNonQuery();
+
+                    transaction.Commit();
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return true;
         }
 
         public List<AdjustmentVoucherVM> GetAdjVoucherByClerk(int clerkId)
@@ -410,7 +599,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     sql += $"INSERT INTO ItemAdjVoucher (ItemID, VoucherID, Qty, Reason) VALUES ('{item.ItemId}', {voucherID}, {item.Quantity}, '{item.Reason}'); \n";
                     temp = $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
                            $" VALUES ('{item.ItemId}','{DateTime.Today}','{item.Quantity}'," +
-                           $"(SELECT TOP 1 Balance FROM Stockcard ORDER BY ID DESC)+{item.Quantity}" +
+                           $"(SELECT TOP 1 Balance FROM Stockcard WHERE ItemID='{item.ItemId}' ORDER BY ID DESC)+{item.Quantity}" +
                            $",'ADJ-{voucherID}'); \n";
                     sqlStockCard += temp;
                 }

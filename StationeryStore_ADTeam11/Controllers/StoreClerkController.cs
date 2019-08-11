@@ -48,18 +48,12 @@ namespace StationeryStore_ADTeam11.Controllers
 
             AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
 
-            int insertedId = adjustmentVoucherDAO.Add(11233);
-
-            int result = adjustmentVoucherDAO.AddVoucherItems(itemData, insertedId);
-
-            if (result > 0)
+            if (adjustmentVoucherDAO.Add(11233, itemData))
             {
                 return Json("Successfully Added", JsonRequestBehavior.AllowGet);
             }
             else
             {
-                adjustmentVoucherDAO.DeleteAdjustmentVoucher(insertedId);
-
                 return Json("Something went wrong! Please try again later.", JsonRequestBehavior.AllowGet);
             }
         }
