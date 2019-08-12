@@ -112,7 +112,36 @@ namespace StationeryStore_ADTeam11.DAOs
             return requisitionList;
         }
 
-        public bool CancelRequest(string id, int empId)
+        public Request GetRequestById(string id)
+        {
+            string sql = "SELECT * FROM Request WHERE ID = @id";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@id", id);
+            //connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            Request request = null;
+
+            while (data.Read())
+            {
+                request = new Request()
+                {
+                    Id = data["ID"].ToString(),
+                    Status = data["Status"].ToString(),
+                    DateTime = Convert.ToDateTime(data["DateTime"]),
+                   // DisbursedDate = Convert.ToDateTime(data["DisbursedDate"])
+                };
+            }
+
+            data.Close();
+            //connection.Close();
+
+            return request;
+        }
+
+        public string CancelRequest(string id, int empId)
         {
             string sql = "SELECT EmployeeID FROM Request WHERE ID = @id";
 
@@ -134,7 +163,15 @@ namespace StationeryStore_ADTeam11.DAOs
             if (employeeId != empId)
             {
                 connection.Close();
-                return false;
+                return "unauthorized";
+            }
+
+            Request req = GetRequestById(id);
+
+            if (req.Status != "Pending")
+            {
+                connection.Close();
+                return "reviewed";
             }
 
             SqlTransaction transaction = null;
@@ -162,14 +199,14 @@ namespace StationeryStore_ADTeam11.DAOs
             catch (Exception e)
             {
                 transaction.Rollback();
-                return false;
+                return "failed";
             }
             finally
             {
                 connection.Close();
             }
 
-            return true;
+            return "success";
         }
 
 

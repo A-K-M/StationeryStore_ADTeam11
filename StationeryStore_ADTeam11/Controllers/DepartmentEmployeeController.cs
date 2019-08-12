@@ -45,12 +45,30 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             RequestDAO request = new RequestDAO();
 
-            if (request.CancelRequest(id, 11233) == false)
+            switch (request.CancelRequest(id, 11233))
             {
-                SetFlash(Enums.FlashMessageType.Error, "Something want wrong!");
-                return RedirectToAction("RequisitionList");
+                case ("success"):
+                    {
+                        SetFlash(Enums.FlashMessageType.Success, "Successfully Cancelled!");
+                        return RedirectToAction("RequisitionList");                        
+                    }
+                case ("failed"):
+                    {
+                        SetFlash(Enums.FlashMessageType.Error, "Something went wrong! Please try again later or contact your webmaster.");
+                        return RedirectToAction("RequisitionList");
+                    }
+                case ("unauthorized"):
+                    {
+                        SetFlash(Enums.FlashMessageType.Warning, "You cannot cancel requests which are not yours!");
+                        return RedirectToAction("RequisitionList");
+                    }
+                case ("reviewed"):
+                    {
+                        SetFlash(Enums.FlashMessageType.Warning, "You cannot cancel requests which are already reviewed!");
+                        return RedirectToAction("RequisitionList");
+                    }
             }
-            SetFlash(Enums.FlashMessageType.Success, "Successfully cancelled your request!");
+
             return RedirectToAction("RequisitionList");
         }
     }
