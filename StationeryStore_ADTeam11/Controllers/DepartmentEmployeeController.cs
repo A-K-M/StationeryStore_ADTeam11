@@ -45,15 +45,12 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             RequestDAO request = new RequestDAO();
 
-            //if (request.CancelRequest(id, 11233) == false)
-            //{
-            //    ViewBag.Javascript = "<script>alert('Something went wrong! Please try again later!')</script>";
-            //    return RedirectToAction("RequisitionList");
-            //}
-
-            //ViewBag.Javascript = "<script>alert('Your request has been cancelled successfully!')</script>";
-            //SetFlash(0, "Flash Message is here", "alert alert-danger");
-            SetFlash(Enums.FlashMessageType.Success, "Flash Message Here");
+            if (request.CancelRequest(id, 11233) == false)
+            {
+                SetFlash(Enums.FlashMessageType.Error, "Something want wrong!");
+                return RedirectToAction("RequisitionList");
+            }
+            SetFlash(Enums.FlashMessageType.Success, "Successfully cancelled your request!");
             return RedirectToAction("RequisitionList");
         }
     }
