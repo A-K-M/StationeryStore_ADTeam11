@@ -40,5 +40,19 @@ namespace StationeryStore_ADTeam11.Controllers
             ViewData["Requisitions"] = request.GetRequistionListByEmpId(11233);
             return View();
         }
+
+        public ActionResult CancelRequest(string id)
+        {
+            RequestDAO request = new RequestDAO();
+
+            //if (request.CancelRequest(id, 11233) == false)
+            //{
+            //    ViewBag.Javascript = "<script>alert('Something went wrong! Please try again later!')</script>";
+            //    return RedirectToAction("RequisitionList");
+            //}
+
+            //ViewBag.Javascript = "<script>alert('Your request has been cancelled successfully!')</script>";
+            return RedirectToAction("RequisitionList");
+        }
     }
 }

@@ -112,6 +112,66 @@ namespace StationeryStore_ADTeam11.DAOs
             return requisitionList;
         }
 
+        public bool CancelRequest(string id, int empId)
+        {
+            string sql = "SELECT EmployeeID FROM Request WHERE ID = @id";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@id", id);
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            int employeeId = 0;
+
+            while (data.Read())
+            {
+                employeeId = Convert.ToInt32(data["EmployeeID"]);
+            }
+
+            data.Close();
+
+            if (employeeId != empId)
+            {
+                connection.Close();
+                return false;
+            }
+
+            SqlTransaction transaction = null;
+            try
+            {
+                string cancelRequestSql = "";
+
+                transaction = connection.BeginTransaction();
+
+                sql = "DELETE FROM ItemRequest WHERE RequestID = @id";
+
+                cmd = new SqlCommand(sql, connection, transaction);
+                cmd.Parameters.AddWithValue("@id", id);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+
+                cancelRequestSql = "DELETE FROM Request WHERE ID = @id";
+
+                cmd = new SqlCommand(cancelRequestSql, connection, transaction);
+                cmd.Parameters.AddWithValue("@id", id);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return true;
+        }
+
 
         public List<RequisitionVM> GetReqListByDepartment(string deptId)
         {
