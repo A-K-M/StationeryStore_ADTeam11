@@ -1,0 +1,38 @@
+﻿@using StationeryStore_ADTeam11.Enums
+@{ 
+    string text = (string)TempData["FlashMessage.Text"];
+    string cssClass = null;
+
+    if (!string.IsNullOrEmpty(text))
+    {
+        FlashMessageType type = (FlashMessageType)TempData["FlashMessage.Type"];
+
+        switch (type)
+        {
+            case FlashMessageType.Success:
+                {
+                    cssClass = "alert alert-success";
+                    break;
+                }
+            case FlashMessageType.Warning:
+                {
+                    cssClass = "alert alert-warning";
+                    break;
+                }
+            case FlashMessageType.Error:
+                {
+                    cssClass = "alert alert-danger";
+                    break;
+                }
+        }
+    }
+    }
+
+    @if (!string.IsNullOrEmpty(text))
+    {
+    <div class="@cssClass">
+        <h3>
+            @text
+        </h3>
+    </div>
+}

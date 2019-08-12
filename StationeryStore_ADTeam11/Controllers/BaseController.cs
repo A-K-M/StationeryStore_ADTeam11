@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using StationeryStore_ADTeam11.Filters;
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.Enums;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
@@ -94,6 +95,10 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
-
+        public void SetFlash(FlashMessageType type, string text)
+        {
+            TempData["FlashMessage.Type"] = type;
+            TempData["FlashMessage.Text"] = text;
+        }
     }
 }

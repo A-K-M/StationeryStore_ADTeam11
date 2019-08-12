@@ -10,7 +10,7 @@ using StationeryStore_ADTeam11.Filters;
 namespace StationeryStore_ADTeam11.Controllers
 {
     [LayoutFilter("_deptartmentEmployeeLayout")]
-    public class DepartmentEmployeeController : Controller
+    public class DepartmentEmployeeController : BaseController
     {
         // GET: DepartmentEmployee
         public ActionResult Index()
@@ -52,6 +52,8 @@ namespace StationeryStore_ADTeam11.Controllers
             //}
 
             //ViewBag.Javascript = "<script>alert('Your request has been cancelled successfully!')</script>";
+            //SetFlash(0, "Flash Message is here", "alert alert-danger");
+            SetFlash(Enums.FlashMessageType.Success, "Flash Message Here");
             return RedirectToAction("RequisitionList");
         }
     }
