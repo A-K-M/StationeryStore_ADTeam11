@@ -12,7 +12,6 @@ namespace StationeryStore_ADTeam11.Models
         private string _employeeName;
         private DateTime _startDate;
         private DateTime _endDate;
-        private string _employeeName = "Hnin";
         private bool _status;
         private string _reason;
 
@@ -21,7 +20,6 @@ namespace StationeryStore_ADTeam11.Models
         public string EmployeeName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string EmployeeName { get; set; }
         public bool Status { get; set; }
         public string Reason { get; set; }
        

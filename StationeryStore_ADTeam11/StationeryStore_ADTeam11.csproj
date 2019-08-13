@@ -157,15 +157,17 @@
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Controllers\StoreSupervisorController.cs" />
     <Compile Include="DAOs\AdjustmentVoucherDAO.cs" />
+    <Compile Include="DAOs\CollectionPointDAO.cs" />
+    <Compile Include="DAOs\DepartmentDAO.cs" />
     <Compile Include="DAOs\DisbursementDAO.cs" />
-    <Compile Include="DAOs\CollectionPointDAO.cs" />
     <Compile Include="DAOs\CategoryDAO.cs" />
-    <Compile Include="DAOs\CollectionPointDAO.cs" />
     <Compile Include="DAOs\DAO.cs" />
     <Compile Include="DAOs\DatabaseConnection.cs" />
     <Compile Include="DAOs\DelegationDAO.cs" />
     <Compile Include="DAOs\EmployeeDAO.cs" />
     <Compile Include="DAOs\ItemDAO.cs" />
+    <Compile Include="DAOs\ItemRequestDAO.cs" />
+    <Compile Include="DAOs\OutstandingDAO.cs" />
     <Compile Include="DAOs\RequestDAO.cs" />
     <Compile Include="DAOs\RetrievalDAO.cs" />
     <Compile Include="DAOs\StockCardDAO.cs" />
@@ -211,6 +213,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View_Models\AdjustmentVoucherVM.cs" />
     <Compile Include="View_Models\DeligationStatus.cs" />
+    <Compile Include="View_Models\DepartmentDelegation.cs" />
+    <Compile Include="View_Models\RequestDetailViewModel.cs" />
+    <Compile Include="View_Models\RequestViewModel.cs" />
     <Compile Include="View_Models\RequisitionVM.cs" />
     <Compile Include="View_Models\RetrievalList.cs" />
     <Compile Include="View_Models\StationeryRequest.cs" />
@@ -513,7 +518,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\DepartmentEmployee\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -11,12 +11,12 @@ namespace StationeryStore_ADTeam11.DAOs
 {
     public class CollectionPointDAO : DatabaseConnection
     {
-        public List<CollectionPoint> GetCollectionPoints()
+        public List<CollectionPoint> GetMCollectionPoints()
         {
             CollectionPoint p = null;
 
             string sql = "SELECT * FROM CollectionPoint";
-            
+
             connection.Open();
 
             SqlCommand cmd = new SqlCommand(sql, connection);
@@ -68,7 +68,7 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             catch (Exception e)
             {
-                
+
                 return null;
             }
             finally
@@ -78,7 +78,8 @@ namespace StationeryStore_ADTeam11.DAOs
             return res;
 
         }
-        public bool UpdateCollectionPoint(int collectionPointId,string deptId) {
+        public bool UpdateCollectionPoint(int collectionPointId, string deptId)
+        {
             string sql = @"UPDATE Department SET CollectionPointID = @pointId WHERE ID = @deptId";
             try
             {
@@ -92,17 +93,18 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 return false;
             }
-            finally {
+            finally
+            {
                 connection.Close();
             }
 
             return true;
         }
 
-        public MResponse UpdateCollectionPointAndRep(int collectionPointId,int deptRepresentativeId, string deptId)
+        public MResponse UpdateCollectionPointAndRep(int collectionPointId, int deptRepresentativeId, string deptId)
         {
-            bool depResExist = new EmployeeDAO().checkEmployeeExist(deptRepresentativeId,deptId);
-            if (!depResExist) return new MResponse() {Success = false,Message="Employee doesn't exist." };
+            bool depResExist = new EmployeeDAO().checkEmployeeExist(deptRepresentativeId, deptId);
+            if (!depResExist) return new MResponse() { Success = false, Message = "Employee doesn't exist." };
 
             try
             {
@@ -116,7 +118,7 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             catch (Exception e)
             {
-                return new MResponse() { Success=false};
+                return new MResponse() { Success = false };
             }
             finally
             {
@@ -125,7 +127,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return new MResponse() { Success = true };
         }
-        
+
 
         //public async Task<List<CollectionPoint>> GetCollectionPointsTAsync()
         //{
@@ -191,20 +193,7 @@ namespace StationeryStore_ADTeam11.DAOs
         //   });
 
         //}
-    }
-}
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using StationeryStore_ADTeam11.Models;
-using System.Data.SqlClient;
-
-namespace StationeryStore_ADTeam11.DAOs
-{
-    public class CollectionPointDAO:DatabaseConnection
-    {
-        public List<CollectionPoint> GetCollectionPoints()
+        public List<CollectionPoint> GetCollectionPoints() //NZCK
         {
             List<CollectionPoint> collectionPoints = new List<CollectionPoint>();
             SqlConnection conn = connection;
@@ -227,12 +216,12 @@ namespace StationeryStore_ADTeam11.DAOs
             conn.Close();
             return collectionPoints;
         }
-        public CollectionPoint GetCollectionPointById(int Id)
+        public CollectionPoint GetCollectionPointById(int Id) //NZCK
         {
-            CollectionPoint collectionPoint= new CollectionPoint();
+            CollectionPoint collectionPoint = new CollectionPoint();
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"select * from CollectionPoint where ID='"+Id+"'";
+            string sql = @"select * from CollectionPoint where ID='" + Id + "'";
             SqlCommand command = new SqlCommand(sql, conn);
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
