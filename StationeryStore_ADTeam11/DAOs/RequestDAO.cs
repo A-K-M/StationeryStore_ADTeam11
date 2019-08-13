@@ -119,11 +119,12 @@ namespace StationeryStore_ADTeam11.DAOs
             List<RequisitionVM> requisitionList = new List<RequisitionVM>();
             RequisitionVM requisition = null;
 
-            string sql = @"SELECT r.ID, r.[DateTime], r.[Status], SUM(ir.NeededQty) AS Quantity " +
-                        "FROM Request r, ItemRequest ir " +
-                        "WHERE r.ID = ir.RequestID " +
-                        "AND r.EmployeeID = @value " +
-                        "GROUP BY r.ID, r.[DateTime], r.[Status]";
+            string sql = "SELECT r.ID, r.[DateTime], r.[Status], SUM(ir.NeededQty) AS Quantity, e.DeptID " +
+                          "FROM Request r, ItemRequest ir, Employee e " +
+                           "WHERE r.ID = ir.RequestID " +
+                            "AND r.EmployeeID = @value " +
+                            "AND r.EmployeeID = e.ID " +
+                            "GROUP BY r.ID, r.[DateTime], r.[Status], e.DeptID";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
@@ -138,10 +139,11 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 requisition = new RequisitionVM()
                 {
-                    Id = data["ID"].ToString(),
+                    Id = Convert.ToInt32(data["ID"]),
                     Date = Convert.ToDateTime(data["DateTime"]),
                     Status = data["Status"].ToString(),
-                    Quantity = Convert.ToInt32(data["Quantity"])
+                    Quantity = Convert.ToInt32(data["Quantity"]),
+                    DepartmentId = data["DeptID"].ToString()
                 };
 
                 requisitionList.Add(requisition);
@@ -270,11 +272,12 @@ namespace StationeryStore_ADTeam11.DAOs
                 {
                     req = new RequisitionVM()
                     {
-                        Id = reader["ID"].ToString(),
+                        Id = Convert.ToInt32(reader["ID"]),
                         EmployeeName = reader["UserName"].ToString(),
                         Date = (DateTime)reader["DateTime"],
                         Status = reader["Status"].ToString(),
-                        Quantity = (int)reader["Quantity"]
+                        Quantity = (int)reader["Quantity"],
+                        DepartmentId = reader["DeptID"].ToString()
                     };
                     reqList.Add(req);
                 }

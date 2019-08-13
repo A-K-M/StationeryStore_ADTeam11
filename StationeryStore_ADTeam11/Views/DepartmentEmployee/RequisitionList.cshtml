@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row d-flex">
         <div class="col-12">
-            <div class="card" style="height: 550px">
+            <div class="card">
                 <div class="card-header">
                     @Html.Partial("FlashMessage")
                     <h4>Your Requisition Histroy <a href="#" class="btn btn-outline-success pull-right">New Request</a></h4>
@@ -30,7 +30,7 @@
                             @foreach (RequisitionVM requisition in requisitionList)
                             {
                             <tr>
-                                <td>@requisition.Id</td>
+                                <td>@requisition.DepartmentId/@requisition.Id</td>
                                 <td>@requisition.Date.ToString("dd/MM/yyyy")</td>
                                 <td>@requisition.Quantity</td>
                                 <td>
