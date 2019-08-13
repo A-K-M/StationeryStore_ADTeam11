@@ -55,6 +55,21 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return items;
         }
+        public string GetItemDescription(string id)
+        {
+            string itemDescription="";
+            SqlConnection conn = connection;
+            conn.Open();
+            string sql = @"select Description from Item where ID='" + id + "'";
+            SqlCommand command = new SqlCommand(sql, conn);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                itemDescription = (string)reader["Description"];
+            }
+            conn.Close();
+            return itemDescription;
+        }
 
         public Item GetItemById(string id)
         {

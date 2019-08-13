@@ -261,3 +261,5 @@ __pycache__/
 *.pyc
 
 DatabaseConnection.cs
+/StationeryStore_ADTeam11/App_Data
+/StationeryStore_ADTeam11/Views/StoreSupervisor

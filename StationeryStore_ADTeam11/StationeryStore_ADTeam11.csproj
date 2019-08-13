@@ -157,14 +157,17 @@
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Controllers\StoreSupervisorController.cs" />
     <Compile Include="DAOs\AdjustmentVoucherDAO.cs" />
-    <Compile Include="DAOs\DisbursementDAO.cs" />
     <Compile Include="DAOs\CollectionPointDAO.cs" />
+    <Compile Include="DAOs\DepartmentDAO.cs" />
+    <Compile Include="DAOs\DisbursementDAO.cs" />
     <Compile Include="DAOs\CategoryDAO.cs" />
     <Compile Include="DAOs\DAO.cs" />
     <Compile Include="DAOs\DatabaseConnection.cs" />
     <Compile Include="DAOs\DelegationDAO.cs" />
     <Compile Include="DAOs\EmployeeDAO.cs" />
     <Compile Include="DAOs\ItemDAO.cs" />
+    <Compile Include="DAOs\ItemRequestDAO.cs" />
+    <Compile Include="DAOs\OutstandingDAO.cs" />
     <Compile Include="DAOs\RequestDAO.cs" />
     <Compile Include="DAOs\RetrievalDAO.cs" />
     <Compile Include="DAOs\StockCardDAO.cs" />
@@ -201,7 +204,7 @@
     <Compile Include="Models\ItemRequest.cs" />
     <Compile Include="Models\ItemSupplier.cs" />
     <Compile Include="Models\Outstanding.cs" />
-    <Compile Include="Models\PuechaserOrderItem.cs" />
+    <Compile Include="Models\PurchaseOrderItem.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\Retrieval.cs" />
@@ -210,12 +213,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View_Models\AdjustmentVoucherVM.cs" />
     <Compile Include="View_Models\DeligationStatus.cs" />
+    <Compile Include="View_Models\DepartmentDelegation.cs" />
+    <Compile Include="View_Models\RequestDetailViewModel.cs" />
+    <Compile Include="View_Models\RequestViewModel.cs" />
     <Compile Include="View_Models\RequisitionVM.cs" />
     <Compile Include="View_Models\RetrievalList.cs" />
     <Compile Include="View_Models\StationeryRequest.cs" />
     <Compile Include="View_Models\VoucherItemVM.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\data.xml" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -226,6 +233,9 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="App_Data\data.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
@@ -429,6 +439,7 @@
     <Content Include="Statics\webfonts\fa-brands-400.svg" />
     <Content Include="Statics\webfonts\fa-regular-400.svg" />
     <Content Include="Statics\webfonts\fa-solid-900.svg" />
+    <Content Include="Views\StoreSupervisor\store_manager_view_barcharts.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -497,14 +508,15 @@
     <Content Include="Views\StoreClerk\ViewStockCard.cshtml" />
     <Content Include="Views\StoreSupervisor\VoucherItems.cshtml" />
     <Content Include="Views\StoreManager\Suppliers.cshtml" />
-    <Content Include="Views\StoreClerk\ViewStockCard L.cshtml" />
-    <Content Include="Views\StoreManager\AdjustmentVouchers.cshtml" />
-    <Content Include="Views\StoreManager\VoucherItems.cshtml" />
-    <Content Include="Views\DepartmentEmployee\RequisitionList.cshtml" />
-    <Content Include="Views\Shared\FlashMessage.cshtml" />
+    <Content Include="Views\StoreClerk\CreateAdjustmentVoucher.cshtml" />
+    <Content Include="Views\DepartmentHead\HeadIndex.cshtml" />
+    <Content Include="Views\DepartmentHead\Delegation.cshtml" />
+    <Content Include="Views\DepartmentHead\CollectionPoint.cshtml" />
+    <Content Include="Views\DepartmentRepresentative\CollectionPoint.cshtml" />
+    <Content Include="Views\DepartmentRepresentative\Disbursement.cshtml" />
+    <Content Include="Views\StoreSupervisor\ChartDataXML.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>

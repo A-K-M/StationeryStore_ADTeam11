@@ -1,0 +1,110 @@
+﻿@using StationeryStore_ADTeam11.Models;
+@model StationeryStore_ADTeam11.Models.Delegation
+
+@{
+    ViewBag.Title = "Delegation";
+    var Delegations = (IEnumerable<Delegation>)ViewData["Delegations"];
+    var employees = (List<SelectListItem>)ViewData["employees"];
+
+}
+
+<div class="card">
+    <div class="card-header d-flex align-items-center">
+        <h4>Delegation Form</h4>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm())
+        {
+        <form>
+
+            @*<div class="form-group">
+            <label class="from">Employee </label>
+            @Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", placeholder = "Enter Employee Id" })
+              </div>*@
+
+            <div class="form-group">
+                <label class="from">Employee </label>
+                @{
+                    var emps = new List<SelectListItem>{ new SelectListItem{ Text="Select Employee Name",
+                        Value = "0" , Disabled = true, Selected = true}, };
+                    foreach(var e in employees)
+                    {
+                        emps.Add(e);
+                    }
+                }
+                @Html.DropDownListFor(model => model.EmployeeName, emps, new { @class = "form-control"})
+            </div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label class="from">From</label>
+                    @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control" })
+                    @*<input id="dele_startdate" type="Date" class="form-control">*@
+                </div>
+                <div class="col-6">
+                    <label class="from">To</label>
+                    @Html.TextBoxFor(model => model.EndDate, new { @class = "form-control" })
+                    @*<input id="dele_enddate" type="date" class="form-control">*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="from">Reason</label>
+                @Html.TextAreaFor(model => model.Reason, new { @class = "form-control", placeholder = "Reason" })
+                @*<input id="reason" type="text" placeholder="Reason" class="form-control">*@
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-5"></div>
+                    <div class="col-4">
+                        <input type="submit" value="Grant" class="btn btn-success">
+                    </div>
+                </div>
+            </div>
+        </form>
+        }
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table  table-hover table-striped">
+            <thead>
+                <tr>
+                    @*<th>ID</th>*@
+                    <th>Employee Name</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var delegation in Delegations)
+                {
+                    <tr>
+                        @*<th scope="row">@delegation.Id</th>*@
+                        <td>@delegation.EmployeeName</td>
+                        <td>@delegation.StartDate</td>
+                        <td>@delegation.EndDate</td>
+                        <td>
+                            @{
+                                if (delegation.EndDate > DateTime.Today)
+                                {
+                                    <input type="button" class="btn btn-danger btn-sm" value="Cancel" onclick="location.href='@Url.Action("CancelDelegation", "DepartmentHead",new { id= delegation.Id})'" />
+                                }
+                                else
+                                {
+                                    @Html.Label("Completed")
+                                }
+                            }
+                        </td>
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

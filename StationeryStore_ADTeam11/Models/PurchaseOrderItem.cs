@@ -5,7 +5,7 @@ using System.Web;
 
 namespace StationeryStore_ADTeam11.Models
 {
-    public class PuechaserOrderItem
+    public class PurchaseOrderItem
     {
         private int _id;
         private int _purchaseId;

@@ -7,7 +7,7 @@ namespace StationeryStore_ADTeam11.Models
 {
     public class Department
     {
-        private int _id;
+        private string _id;
         private int _contactId;
         private int _headId;
         private int _repId;
@@ -16,10 +16,11 @@ namespace StationeryStore_ADTeam11.Models
         private string _name;
         private string _delegateStatus;
 
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int ContactId { get; set; }
         public int HeadId { get; set; }
         public int RepId { get; set; }
+        public string RepName { get; set; }
         public int DelegationId { get; set; }
         public int CollectionPoinId { get; set; }
         public string Name { get; set; }
