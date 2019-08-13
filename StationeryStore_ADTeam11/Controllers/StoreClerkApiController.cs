@@ -16,7 +16,7 @@ namespace StationeryStore_ADTeam11.Controllers
     {
         [Route("stockcard/item/{itemCode}")]
         [HttpGet]
-        public MResponse getStockCard(string itemCode)
+        public MResponse GetStockCard(string itemCode)
         {
             Item item = new ItemDAO().GetItemById(itemCode);
             if (item == null) return new MResponse(false);
@@ -29,14 +29,14 @@ namespace StationeryStore_ADTeam11.Controllers
 
         [Route("{clerkId}/adjustmentvoucher")]
         [HttpGet]
-        public MResponse getAdjVoucherList(int clerkId) {
+        public MResponse GetAdjVoucherList(int clerkId) {
             List<AdjustmentVoucherVM> voucherList = new AdjustmentVoucherDAO().GetAdjVoucherByClerk(clerkId);
             return new MResponseList<AdjustmentVoucherVM>() { ResList = voucherList };
         }
 
         [Route("adjustmentvoucher/{voucherId}/detail")]
         [HttpGet]
-        public MResponse getAdjVoucherItems(int voucherId)
+        public MResponse GetAdjVoucherItems(int voucherId)
         {
             List<MAdjustmentItem> itemList = new AdjustmentVoucherDAO().GetAdjVoucherItems(voucherId);
             return new MResponseList<MAdjustmentItem>() { ResList = itemList };
@@ -44,11 +44,20 @@ namespace StationeryStore_ADTeam11.Controllers
 
         [Route("{clerkId}/adjustmentvoucher")]
         [HttpPost]
-        public MResponse createAdjVoucher(int clerkId,List<MAdjustmentItem> items)
+        public MResponse CreateAdjVoucher(int clerkId,List<MAdjustmentItem> items)
         {
             AdjustmentVoucherDAO dao = new AdjustmentVoucherDAO();
             return new MResponse() { Success = dao.CreateAdjVoucher(clerkId, items) };
         }
+
+        [Route("retrievals")]
+        [HttpGet]
+        public MResponse GetRetrievalList()
+        {
+            List<Retrieval> retrievals = new RetrievalDAO().GetRetrievalList();
+            return new MResponseList<Retrieval>() { ResList = retrievals };
+        }
+     
     }
     
 }

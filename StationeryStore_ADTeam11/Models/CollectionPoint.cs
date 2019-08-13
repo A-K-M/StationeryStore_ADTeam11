@@ -38,6 +38,11 @@ namespace StationeryStore_ADTeam11.Models
             reader.Close();
             return points;
         }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 
 }

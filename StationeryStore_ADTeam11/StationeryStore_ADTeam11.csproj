@@ -157,6 +157,7 @@
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Controllers\StoreSupervisorController.cs" />
     <Compile Include="DAOs\AdjustmentVoucherDAO.cs" />
+    <Compile Include="DAOs\DisbursementDAO.cs" />
     <Compile Include="DAOs\CollectionPointDAO.cs" />
     <Compile Include="DAOs\CategoryDAO.cs" />
     <Compile Include="DAOs\DAO.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="DAOs\EmployeeDAO.cs" />
     <Compile Include="DAOs\ItemDAO.cs" />
     <Compile Include="DAOs\RequestDAO.cs" />
+    <Compile Include="DAOs\RetrievalDAO.cs" />
     <Compile Include="DAOs\StockCardDAO.cs" />
     <Compile Include="DAOs\SupplierDAO.cs" />
     <Compile Include="Filters\AuthenticationFilter.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="MobileModels\MAdjustmentItem.cs" />
     <Compile Include="MobileModels\MAdjVoucher.cs" />
     <Compile Include="MobileModels\MCollectionAndRep.cs" />
+    <Compile Include="MobileModels\MDisbursement.cs" />
     <Compile Include="MobileModels\MEmployee.cs" />
     <Compile Include="MobileModels\MItemSpinner.cs" />
     <Compile Include="MobileModels\MRequestItem.cs" />
@@ -207,6 +210,7 @@
     <Compile Include="View_Models\AdjustmentVoucherVM.cs" />
     <Compile Include="View_Models\DeligationStatus.cs" />
     <Compile Include="View_Models\RequisitionVM.cs" />
+    <Compile Include="View_Models\RetrievalList.cs" />
     <Compile Include="View_Models\StationeryRequest.cs" />
     <Compile Include="View_Models\VoucherItemVM.cs" />
   </ItemGroup>

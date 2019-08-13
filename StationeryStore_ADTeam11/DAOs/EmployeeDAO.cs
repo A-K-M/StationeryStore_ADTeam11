@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
@@ -74,6 +75,59 @@ namespace StationeryStore_ADTeam11.DAOs
             return true;
         }
 
+        //public async Task<List<MEmployee>> GetEmployees()
+        //{
+
+        //    List<MEmployee> mEmployees = new List<MEmployee>();
+        //    await connection.OpenAsync().ConfigureAwait(false);
+        //    string sql = @"SELECT id,DeptID,Name,Email FROM employee";
+        //    SqlCommand cmd = new SqlCommand(sql, connection);
+        //    SqlDataReader reader = await cmd.ExecuteReaderAsync();
+        //    while (reader != null && await reader.ReadAsync())
+        //    {
+
+        //        mEmployees.Add(new MEmployee()
+        //        {
+        //            Id = (int)reader["id"],
+        //            DepartmentId = (string)reader["deptID"],
+        //            Name = (string)reader["Name"],
+        //            Email = (string)reader["Email"]
+        //        });
+        //        System.Diagnostics.Debug.WriteLine("Employee Read " + (string)reader["Name"]);
+
+        //    }
+        //    reader.Close();
+        //    connection.Close();
+        //    return mEmployees;
+        //}
+
+        //public Task<List<MEmployee>> GetEmployees()
+        //{
+        //    return Task.Run(async () =>
+        //    {
+        //        List<MEmployee> mEmployees = new List<MEmployee>();
+        //        await connection.OpenAsync().ConfigureAwait(false);
+        //        string sql = @"SELECT id,DeptID,Name,Email FROM employee";
+        //        SqlCommand cmd = new SqlCommand(sql, connection);
+        //        SqlDataReader reader = await cmd.ExecuteReaderAsync();
+        //        while (await reader.ReadAsync())
+        //        {
+
+        //            mEmployees.Add(new MEmployee()
+        //            {
+        //                Id = (int)reader["id"],
+        //                DepartmentId = (string)reader["deptID"],
+        //                Name = (string)reader["Name"],
+        //                Email = (string)reader["Email"]
+        //            });
+        //            System.Diagnostics.Debug.WriteLine("Employee Read " + (string)reader["Name"]);
+
+        //        }
+        //        reader.Close();
+        //        connection.Close();
+        //        return mEmployees;
+        //    });
+        //}
 
     }
 }

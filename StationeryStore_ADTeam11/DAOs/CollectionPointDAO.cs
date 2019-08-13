@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace StationeryStore_ADTeam11.DAOs
@@ -20,6 +21,21 @@ namespace StationeryStore_ADTeam11.DAOs
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
+            List<CollectionPoint> points = CollectionPoint.MapToList(cmd.ExecuteReader());
+
+            connection.Close();
+            return points;
+        }
+        public List<CollectionPoint> GetCollectionPointsByClerk(int clerkId)
+        {
+            CollectionPoint p = null;
+
+            string sql = "SELECT * FROM CollectionPoint WHERE EmpID = @clerkID";
+
+            connection.Open();
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@clerkID", clerkId);
             List<CollectionPoint> points = CollectionPoint.MapToList(cmd.ExecuteReader());
 
             connection.Close();
@@ -109,6 +125,71 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return new MResponse() { Success = true };
         }
+        
 
+        //public async Task<List<CollectionPoint>> GetCollectionPointsTAsync()
+        //{
+
+        //    CollectionPoint p = null;
+
+        //    string sql = "SELECT * FROM CollectionPoint";
+        //    await connection.OpenAsync().ConfigureAwait(false);
+
+        //    SqlCommand cmd = new SqlCommand(sql, connection);
+
+        //    List<CollectionPoint> points = new List<CollectionPoint>();
+        //    SqlDataReader reader = await cmd.ExecuteReaderAsync();
+        //    while (await reader.ReadAsync())
+        //    {
+        //        p = new CollectionPoint()
+        //        {
+        //            Id = (int)reader["ID"],
+        //            Name = reader["Name"].ToString(),
+        //            Address = reader["Address"].ToString(),
+        //            CollectionTime = reader["CollectionTime"].ToString()
+        //        };
+        //        System.Diagnostics.Debug.WriteLine("Collection Point Read  " + reader["Name"].ToString());
+        //        points.Add(p);
+        //    }
+        //    reader.Close();
+        //    connection.Close();
+
+        //    return points;
+
+        //}
+
+        //public Task<List<CollectionPoint>> GetCollectionPointsTAsync()
+        //{
+        //    return Task.Run(async () =>
+        //   {
+        //       CollectionPoint p = null;
+
+        //       string sql = "SELECT * FROM CollectionPoint";
+        //       await connection.OpenAsync().ConfigureAwait(false);
+
+        //       SqlCommand cmd = new SqlCommand(sql, connection);
+
+        //       List<CollectionPoint> points = new List<CollectionPoint>();
+        //       SqlDataReader reader = await cmd.ExecuteReaderAsync();
+        //       while (await reader.ReadAsync())
+        //       {
+        //           p = new CollectionPoint()
+        //           {
+        //               Id = (int)reader["ID"],
+        //               Name = reader["Name"].ToString(),
+        //               Address = reader["Address"].ToString(),
+        //               CollectionTime = reader["CollectionTime"].ToString()
+        //           };
+        //           points.Add(p);
+        //           System.Diagnostics.Debug.WriteLine("Collection Point Read  " + reader["Name"].ToString());
+
+        //       }
+        //       reader.Close();
+        //       connection.Close();
+
+        //       return points;
+        //   });
+
+        //}
     }
 }

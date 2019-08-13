@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.MobileModels;
@@ -53,6 +54,20 @@ namespace StationeryStore_ADTeam11.Controllers
             ItemDAO dao = new ItemDAO();
             return new MResponseList<MItemSpinner>() { ResList = dao.GetAllItems() };
         }
+
+        //[Route("async")]
+        //[HttpGet]
+        //public MResponse Test()
+        //{
+
+        //    Task<List<MEmployee>> task2 =  new EmployeeDAO().GetEmployees();
+
+        //    Task<List<CollectionPoint>> task1 =  new CollectionPointDAO().GetCollectionPointsTAsync();
+            
+        //    ItemDAO dao = new ItemDAO();
+            
+        //    return new MResponseList<MItemSpinner>() { ResList = dao.GetAllItems() };
+        //}
 
     }
 }

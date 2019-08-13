@@ -9,21 +9,19 @@ namespace StationeryStore_ADTeam11.Models
     {
         private int _id;
         private string _itemId;
+        private string _description;
+        private string _binNo;
         private DateTime _date;
-        private string _status;
-        private int _employeeId;
         private int _retrievalQty;
+        private int _qty;
 
         public int Id { get; set; }
 
         public string ItemId { get; set; }
-
+        public string Description { get; set; }
+        public string BinNo { get; set; }
         public DateTime Date { get; set; }
-
-        public string Status { get; set; }
-
-        public int EmployeeId { get; set; }
-
         public int RetrievalQty { get; set; }
+        public int Qty { get; set; }
     }
 }
