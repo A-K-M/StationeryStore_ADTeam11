@@ -72,15 +72,23 @@ namespace StationeryStore_ADTeam11.DAOs
                         {
                             Id = (string)reader["ID"],
                             Name = (string)reader["Name"],
-                            GstNumber = (string)reader["GstNo"],
                             ContactName = (string)reader["ContactName"],
                             PhoneNo = (int)reader["PhoneNo"],
                             Fax = (int)reader["Fax"],
                             Address = (string)reader["Address"]
                         };
+
+                        try
+                        {
+                            supplier.GstNumber = (string)reader["GstNo"];
+                        }
+                        catch (Exception e)
+                        {
+                            supplier.GstNumber = "Nil";
+                        }
                     }
 
-                    connection.Close();
+                connection.Close();
             }
             catch (Exception e)
             {
@@ -141,16 +149,17 @@ namespace StationeryStore_ADTeam11.DAOs
                         Fax = (int)reader["Fax"],
                         Address = (string)reader["Address"]
                     };
+                    try
+                    {
+                        supplier.GstNumber = (string)reader["GstNo"];
+                    }
+                    catch (Exception e)
+                    {
+                        supplier.GstNumber = "Nil";
+                    }
                 }
 
-                try
-                {
-                    supplier.GstNumber = (string)reader["GstNo"];
-                }
-                catch (Exception e)
-                {
-                    supplier.GstNumber = "Nil";
-                }
+                
 
                 connection.Close();
 
@@ -176,12 +185,19 @@ namespace StationeryStore_ADTeam11.DAOs
                     {
                         Id = (string)reader["ID"],
                         Name = (string)reader["Name"],
-                        GstNumber = (string)reader["GstNo"],
                         ContactName = (string)reader["ContactName"],
                         PhoneNo = (int)reader["PhoneNo"],
                         Fax = (int)reader["Fax"],
                         Address = (string)reader["Address"]
                     };
+                    try
+                    {
+                        supplier.GstNumber = (string)reader["GstNo"];
+                    }
+                        catch (Exception e)
+                    {
+                        supplier.GstNumber = "Nil";
+                    }
                 }
 
                 connection.Close();

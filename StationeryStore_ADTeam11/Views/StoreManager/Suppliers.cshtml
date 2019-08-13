@@ -9,13 +9,14 @@
     var suppliers = (List<Supplier>)ViewData["suppliers"];
 
 }
-
+<br />
     <section class="statistics">
         <div class="container-fluid">
             <div class="row d-flex">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
+                            <h3>@Html.Partial("FlashMessage")</h3>
                             <h3>Supplier List <a href="@Url.Content("~/StoreManager/CreateSupplier")" class="btn btn-success btn-sm pull-right">Add New Supplier </a></h3>
                         </div>
                         <div class="card-body">
