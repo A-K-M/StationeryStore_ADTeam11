@@ -276,8 +276,7 @@ namespace StationeryStore_ADTeam11.DAOs
                         EmployeeName = reader["UserName"].ToString(),
                         Date = (DateTime)reader["DateTime"],
                         Status = reader["Status"].ToString(),
-                        Quantity = (int)reader["Quantity"],
-                        DepartmentId = reader["DeptID"].ToString()
+                        Quantity = (int)reader["Quantity"]
                     };
                     reqList.Add(req);
                 }
