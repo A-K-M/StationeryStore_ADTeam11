@@ -10,7 +10,7 @@ using StationeryStore_ADTeam11.Filters;
 namespace StationeryStore_ADTeam11.Controllers
 {
     [LayoutFilter("_deptartmentEmployeeLayout")]
-    public class DepartmentEmployeeController : Controller
+    public class DepartmentEmployeeController : BaseController
     {
         // GET: DepartmentEmployee
         public ActionResult Index()
@@ -39,6 +39,37 @@ namespace StationeryStore_ADTeam11.Controllers
 
             ViewData["Requisitions"] = request.GetRequistionListByEmpId(11233);
             return View();
+        }
+
+        public ActionResult CancelRequest(string id)
+        {
+            RequestDAO request = new RequestDAO();
+
+            switch (request.CancelRequest(id, 11233))
+            {
+                case ("success"):
+                    {
+                        SetFlash(Enums.FlashMessageType.Success, "Successfully Cancelled!");
+                        return RedirectToAction("RequisitionList");                        
+                    }
+                case ("failed"):
+                    {
+                        SetFlash(Enums.FlashMessageType.Error, "Something went wrong! Please try again later or contact your webmaster.");
+                        return RedirectToAction("RequisitionList");
+                    }
+                case ("unauthorized"):
+                    {
+                        SetFlash(Enums.FlashMessageType.Warning, "You cannot cancel requests which are not yours!");
+                        return RedirectToAction("RequisitionList");
+                    }
+                case ("reviewed"):
+                    {
+                        SetFlash(Enums.FlashMessageType.Warning, "You cannot cancel requests which are already reviewed!");
+                        return RedirectToAction("RequisitionList");
+                    }
+            }
+
+            return RedirectToAction("RequisitionList");
         }
     }
 }

@@ -114,6 +114,103 @@ namespace StationeryStore_ADTeam11.DAOs
             return requisitionList;
         }
 
+        public Request GetRequestById(string id)
+        {
+            string sql = "SELECT * FROM Request WHERE ID = @id";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@id", id);
+            //connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            Request request = null;
+
+            while (data.Read())
+            {
+                request = new Request()
+                {
+                    Id = data["ID"].ToString(),
+                    Status = data["Status"].ToString(),
+                    DateTime = Convert.ToDateTime(data["DateTime"]),
+                   // DisbursedDate = Convert.ToDateTime(data["DisbursedDate"])
+                };
+            }
+
+            data.Close();
+            //connection.Close();
+
+            return request;
+        }
+
+        public string CancelRequest(string id, int empId)
+        {
+            string sql = "SELECT EmployeeID FROM Request WHERE ID = @id";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@id", id);
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            int employeeId = 0;
+
+            while (data.Read())
+            {
+                employeeId = Convert.ToInt32(data["EmployeeID"]);
+            }
+
+            data.Close();
+
+            if (employeeId != empId)
+            {
+                connection.Close();
+                return "unauthorized";
+            }
+
+            Request req = GetRequestById(id);
+
+            if (req.Status != "Pending")
+            {
+                connection.Close();
+                return "reviewed";
+            }
+
+            SqlTransaction transaction = null;
+            try
+            {
+                string cancelRequestSql = "";
+
+                transaction = connection.BeginTransaction();
+
+                sql = "DELETE FROM ItemRequest WHERE RequestID = @id";
+
+                cmd = new SqlCommand(sql, connection, transaction);
+                cmd.Parameters.AddWithValue("@id", id);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+
+                cancelRequestSql = "DELETE FROM Request WHERE ID = @id";
+
+                cmd = new SqlCommand(cancelRequestSql, connection, transaction);
+                cmd.Parameters.AddWithValue("@id", id);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return "failed";
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return "success";
+        }
+
 
         public List<RequisitionVM> GetReqListByDepartment(string deptId)
         {
