@@ -13,5 +13,9 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             return View();
         }
+        public ActionResult ChartDataXML()
+        {
+            return View();
+        }
     }
 }

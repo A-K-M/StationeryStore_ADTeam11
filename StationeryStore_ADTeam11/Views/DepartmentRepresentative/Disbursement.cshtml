@@ -1,0 +1,63 @@
+﻿@using StationeryStore_ADTeam11.View_Models;
+
+@{
+    ViewBag.Title = "DisburDetail";
+    var collectionPoint = (List<string>)ViewData["collectionPoint"];
+    var itemRequests = (List<RequestDetailViewModel>)ViewData["itemRequests"];
+
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="col-12">Disbursement List for @collectionPoint[0]</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <Label class="col-12">Date : @DateTime.Now</Label>
+            <Label class="col-12">Collection Point : @collectionPoint[1]</Label>
+            <Label class="col-12">Store Clerk Name : @collectionPoint[2]</Label>
+            <div class="col-12">
+                <table class="table  table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Item Code</th>
+                            <th>Description</th>
+                            <th>Requested Quantity</th>
+                            <th>Recieved Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var reqitem in itemRequests)
+                            {
+                                <tr>
+                                    <td>@reqitem.ItemId</td>
+                                    <td>@reqitem.ItemDescription</td>
+                                    <td>@reqitem.NeededQty</td>
+                                    <td>@reqitem.ActualQty</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-5"></div>
+                    <div class="col-4">
+                        @{
+                            if (@itemRequests.Count != 0)
+                            {
+                                <input type="button" class="btn btn-success" value="Approve" onclick="location.href='@Url.Action("ApproveDisbursement", "DepartmentRepresentative")'" />
+                            }
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+          </div>
+

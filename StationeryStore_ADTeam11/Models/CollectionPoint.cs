@@ -9,17 +9,14 @@ namespace StationeryStore_ADTeam11.Models
     {
         private int _id;
         private string _name;
-        private string _clerkId;
+        private int _clerkId;
         private string _address;
         private string _collectionTime;
+
         public int Id { get; set; }
-
         public string Name { get; set; }
-
-        public string ClerkId { get; set;  }
-
+        public int ClerkId { get; set;  }
         public string Address { get; set; }
-
         public string CollectionTime { get; set; }
        
     }
