@@ -1,0 +1,34 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_storeManagerLayout.cshtml";
+
+    ViewBag.Title = "DeleteSupplier";
+
+    var supplierId = (string)ViewData["id"];
+    var deleted = (bool)ViewData["deleted"];
+}
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    @{
+                        if (deleted)
+                        {
+                            <h2>Supplier Deleted!</h2>
+                            <p>Supplier record for supplier code @supplierId successfully deleted.</p>
+                        }
+                        else
+                        {
+                            <h2>Failed to delete supplier</h2>
+                            <p>Supplier record for supplier code @supplierId not deleted</p>
+                        }
+                    }
+                    <a href="@Url.Content("~/StoreManager/Suppliers")" class="btn btn-success btn-sm">Supplier List</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

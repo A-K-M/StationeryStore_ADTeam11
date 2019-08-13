@@ -2,33 +2,147 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using StationeryStore_ADTeam11.Filters;
 using System.Web.Mvc;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.DAOs;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
+    [LayoutFilter("_storeManagerLayout")]
     public class StoreManagerController : Controller
     {
         // GET: StoreManager
         public ActionResult Index()
         {
+            //Session Objects will have to be edited when including session objects later
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
             return View();
         }
 
         public ActionResult Suppliers()
         {
-            List<Supplier> suppliers = SupplierDAO.getAllSuppliers();
+           
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
+            List<Supplier> suppliers = new SupplierDAO().GetAllSuppliers();
 
             ViewData["Suppliers"] = suppliers;
             return View();
         }
 
+        public ActionResult CreateSupplier()
+        {
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
+            return View();
+        }
+
         public ActionResult AddSupplier(Supplier supplier)
         {
-            bool saved = SupplierDAO.addSupplier(supplier);
+            SupplierDAO suppDAO = new SupplierDAO();
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
+            bool saved = false;
+            string duplicateMsg = "supplier ID already exist";
+
+            Supplier existingSupp = suppDAO.FindSupplierbyId(supplier.Id);
+            if (supplier.Id != existingSupp.Id)
+            {
+                saved = suppDAO.AddSupplier(supplier);
+            }
+            else
+            {
+                ViewData["duplicateMsg"] = duplicateMsg;
+            }
 
             ViewData["saved"] = saved;
             return View();
+        }
+
+        public ActionResult EditSupplier(Supplier supp)
+        {
+            SupplierDAO suppDAO = new SupplierDAO();
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
+            Supplier supplier = suppDAO.EditSupplier(supp.Id);
+
+            ViewData["supplier"] = supplier;
+            return View();
+        }
+
+        public ActionResult UpdateSupplier(Supplier supp)
+        {
+            SupplierDAO suppDAO = new SupplierDAO();
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
+            bool updated = suppDAO.UpdateSupplier(supp);
+
+            ViewData["updated"] = updated;
+            ViewData["supplier"] = supp;
+            return View();
+        }
+
+        public ActionResult DeleteSupplier(string id)
+        {
+            SupplierDAO suppDAO = new SupplierDAO();
+            Session["Username"] = "User";
+            Session["Role"] = "Role";
+
+            bool deleted = suppDAO.DeleteSupplier(id);
+
+            ViewData["deleted"] = deleted;
+            ViewData["id"] =id;
+            return View();
+        }
+
+        public ActionResult AdjustmentVouchers()
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            ViewData["AdjustmentVouchers"] = adjustmentVoucherDAO.GetByStatusForManager("Pending");
+
+            return View();
+        }
+
+        public JsonResult FilterAdjustmentVouchers(string id) //Since we are using default route the parameter name must be id instead of status unless we wanna modify routes
+        {
+            AdjustmentVoucherDAO adjustment = new AdjustmentVoucherDAO();
+
+            return Json(adjustment.GetByStatusForManager(id), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult VoucherItems(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            ViewData["VoucherItems"] = adjustmentVoucherDAO.GetVoucherItems(id);
+
+            return View();
+        }
+
+        public ActionResult ApproveAdjustmentVoucher(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Approved", adjustmentVoucherDAO.GetVoucherItems(id));
+
+            return RedirectToAction("AdjustmentVouchers");
+        }
+
+        public ActionResult RejectAdjustmentVoucher(int id)
+        {
+            AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
+
+            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Rejected", adjustmentVoucherDAO.GetVoucherItems(id));
+
+            return RedirectToAction("AdjustmentVouchers");
         }
     }
 }

@@ -1,0 +1,160 @@
+﻿@model IEnumerable<StationeryStore_ADTeam11.Models.StockCard>
+@using StationeryStore_ADTeam11.Models
+
+@{
+    ViewBag.Title = "ViewStockCard";
+
+    @*var Model = (List<StockCard>)ViewData["stockCards"]; *@
+}
+
+
+    <div class="container-fluid">
+        <div class="row d-flex">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h4>Stock Card</h4>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-11">
+                                    <div class="form-group">
+                                        <input id="Search" type="text" placeholder="Item Code" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-1">
+                                    <input type="submit" value="View" id="SearchBtn" class="btn btn-success">
+                                </div>
+                                <div class="form-group">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container-fluid">
+                <div class="row d-flex">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div id="ItemDetails">
+                                        @*<div class="col-6">
+                                            <label class="col-12">Item Code - P085</label>
+                                            <label class="col-12">Description - PENCIL 2B, ERASER end</label>
+                                            <label class="col-12">Bin - #A7      UOM : Box</label>
+
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="col-12">1st Supplier : BANES</label>
+                                            <label class="col-12">2nd Supplier : CHEP</label>
+                                            <label class="col-12">3rd Supplier : ALPHA</label>
+                                        </div>*@
+                                    </div>
+                                    <table class="table  table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>@Html.DisplayNameFor(model => model.ItemId)</th>
+                                                <th>@Html.DisplayNameFor(model => model.Date)</th>
+                                                <th>@Html.DisplayNameFor(model => model.RefType)</th>
+                                                <th>@Html.DisplayNameFor(model => model.Qty)</th>
+                                                <th>@Html.DisplayNameFor(model => model.Balance)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ItemStockCard">
+                                            @*<tr>
+                                                <th scope="row">1</th>
+                                                <td>2019-07-09</td>
+                                                <td>Supplier BANES</td>
+                                                <td>+500</td>
+                                                <td>500</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">2</th>
+                                                <td>2019-07-11</td>
+                                                <td>English Department</td>
+                                                <td>-20</td>
+                                                <td>480</td>
+                                            </tr>*@
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#SearchBtn").click(function () {
+            var SearchBy = $("#SearchBy").val();
+            var SearchValue = $("#Search").val();
+            var SetData = $("#ItemStockCard");
+            var ItemData = $("#ItemDetails")
+            var StockCardData, div, item;
+            div = document.getElementById("ItemDetails");
+            SetData.html("");
+            $.ajax({
+                type: "post",
+                url: "/StoreClerk/GetItemStockCard?SearchBy=" + SearchBy + "&SearchValue=" + SearchValue,
+                contentType: "html",
+                success: function (result) {
+
+                    if (result.length == 0) {
+
+                        SetData.append('<tr style="color:red"><td colspan="5">No Matching Data</td></tr>')
+                    }
+                    else {
+
+                        item = result[0];
+                        ItemDetails =
+                            "<div class=\"col-6\">"
+                            + "<label class=\"col-12\">Item Code - " + item.Id + "</label>"
+                            + "<label class=\"col-12\">Description - " + item.Description + "</label>"
+                            + "<label class=\"col-12\">Item Code - " + item.BinNo + "    UOM - " + item.Uom + "</label>"
+                            + "</div>"
+                            + "<div class=\"col-6\">"
+                            + "<label class=\"col-12\">1st Supplier - " + item.FirstSupplier + "</label>"
+                            + "<label class=\"col-12\">2nd Supplier - " + item.SecondSupplier + "</label>"
+                            + "<label class=\"col-12\">3rd Supplier - " + item.ThirdSupplier + "</label>"
+                            + "</div>";
+
+                        //"<td>"
+                        //+ "<p class=\"text-body\">Item Code - " + item.ItemId + "</p ><br/>"
+                        //+ "<p class=\"text-body\">Description - " + item.Description + "</p><br/>"
+                        //+ "<p class=\"text-body\">Bin - " + item.BinNo + "</p><br/>"
+                        //+ "<p class=\"text-body\">UOM - " + item.Uom + "</p>"
+                        //+ "</td>"
+                        //+ "<td>"
+                        //+ "<p class=\"text-body\">1st Supplier - " + item.FirstSupplier + "</p><br/>"
+                        //+ "<p class=\"text-body\">2nd Supplier - " + item.SecondSupplier + "</p><br/>"
+                        //+ "<p class=\"text-body\">3rd Supplier - " + item.ThirdSupplier + "</p><br/><br/>"
+                        //+ "</td>";
+
+                        ItemData.replaceWith(ItemDetails);
+
+                        $.each(result[1], function (index, value) {
+                            StockCardData = "<tr>" +
+                                "<th scope=\"row\">" + value.ItemId + "</th>" +
+                                "<td>" + value.Date + "</td>" +
+                                "<td>" + value.Qty + "</td>" +
+                                "<td>" + value.Balance + "</td>" +
+                                "<td>" + value.RefType + "</td>" +
+                                "<tr>";
+
+                            SetData.append(StockCardData);
+                        });
+                    }
+                }
+            })
+        });
+    });
+
+</script>

@@ -1,0 +1,190 @@
+﻿@model IEnumerable<StationeryStore_ADTeam11.Models.StockCard>
+@using StationeryStore_ADTeam11.Models
+
+@{
+    ViewBag.Title = "ViewStockCard";
+
+    @*var Model = (List<StockCard>)ViewData["stockCards"]; *@
+}
+
+
+<div class="container-fluid">
+    <div class="row d-flex">
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <h4>Stock Card</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-11">
+                            <input class="form-control form-group" id="ItemId" name="ItemId" placeholder="Item Code" type="text">
+                        </div>
+                        <div class="col-1">
+                            <input type="submit" id="SearchBtn" value="View" class="btn btn-success form-group">
+                        </div>
+                        <br />
+                        <div class="col-12" id="NoResultsMsg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<br>
+
+<div class="container-fluid" id="DisplayCard" style="display:none">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row" id="DetailsDiv" style="display:none">
+                        <div id="ItemDetails">
+                            <div class="col-6">
+                                <label class="col-12">Item Code -  </label>
+                                <label class="col-12">Description - </label>
+                                <label class="col-12">Item Code -      UOM - </label>
+                            </div>
+                            <div class="col-6">
+                                <label class="col-12">1st Supplier - </label>
+                                <label class="col-12">2nd Supplier - </label>
+                                <label class="col-12">3rd Supplier - </label>
+                            </div>
+                        </div>
+
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Date)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Qty)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Balance)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.RefType)
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="ItemStockCard">
+                               
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Scripts/moment-with-locales.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#SearchBtn").click(function () {
+            var Id = $("#ItemId").val();
+            var SetData = $("#ItemStockCard");
+            var ItemData = $("#ItemDetails");
+            var DisplayCard = document.getElementById("DisplayCard");
+            var DetailsDiv = document.getElementById("DetailsDiv");
+            var NoResultsMsg = $("#NoResultsMsg");
+            var StockCardData, div, Item, NoData;
+            div = document.getElementById("ItemDetails");
+            SetData.html("");
+            $.ajax({
+                type: "post",
+                url: "/StoreClerk/GetItemStockCard?id=" + Id,
+                contentType: "html",
+                success: function (result) {
+
+                    if (result[0] == null) {
+                        DisplayCard.style.display = 'none';
+                        DetailsDiv.style.display = 'none';
+                        ItemData.html(null);
+                        NoData = "<div class=\"text-danger\">No Matching Item Code: " + Id + "</div>";
+                        NoResultsMsg.html(NoData);
+                    }
+                    else if (result[0] != null && result[1].length == 0) {
+                        DisplayCard.style.display = '';
+                        DetailsDiv.style.display = '';
+                        NoData = "<div> </div>";
+                        NoResultsMsg.html(NoData);
+
+                        Item = result[0];
+                        ItemDetails =
+                            "<div class=\"row\">"
+                            + "<div class=\"col-6\">"
+                            + "<label class=\"col-12\">Item Code: &ensp;" + Item.Id + "</label>"
+                            + "<label class=\"col-12\">Description: &ensp;" + Item.Description + "</label>"
+                            + "<label class=\"col-12\">Bin: &ensp;#" + Item.BinNo + "&emsp;&emsp;&emsp; UOM: &ensp;" + Item.Uom + "</label>"
+                            + "</div>"
+                            + "<div class=\"col-6\">"
+                            + "<label class=\"col-12\">1st Supplier: &ensp;" + Item.FirstSupplier + "</label>"
+                            + "<label class=\"col-12\">2nd Supplier: &ensp;" + Item.SecondSupplier + "</label>"
+                            + "<label class=\"col-12\">3rd Supplier: &ensp;" + Item.ThirdSupplier + "</label>"
+                            + "</div>"
+                            + "</div>";
+
+                        ItemData.html(ItemDetails);
+
+                        SetData.append('<tr style="color:red"><td colspan="5">No StockCard Records </td></tr>')
+                    }
+                    else
+                    {
+                        DisplayCard.style.display = '';
+                        DetailsDiv.style.display = '';
+                        NoData = "<div> </div>";
+                        NoResultsMsg.html(NoData);
+
+                        Item = result[0];
+                        ItemDetails =
+                            "<div class=\"row\">"
+                            + "<div class=\"col-6\">"
+                            + "<label class=\"col-12\">Item Code: &ensp;" + Item.Id + "</label>"
+                            + "<label class=\"col-12\">Description: &ensp;" + Item.Description + "</label>"
+                            + "<label class=\"col-12\">Bin: &ensp;#" + Item.BinNo + "&emsp;&emsp;&emsp; UOM: &ensp;" + Item.Uom + "</label>"
+                            + "</div>"
+                            + "<div class=\"col-6\">"
+                            + "<label class=\"col-12\">1st Supplier: &ensp;" + Item.FirstSupplier + "</label>"
+                            + "<label class=\"col-12\">2nd Supplier: &ensp;" + Item.SecondSupplier + "</label>"
+                            + "<label class=\"col-12\">3rd Supplier: &ensp;" + Item.ThirdSupplier + "</label>"
+                            + "</div>"
+                            + "</div>";
+
+                        ItemData.html(ItemDetails);
+
+                        $.each(result[1], function (index, value) {
+                            StockCardData = "<tr>" +
+                                "<th scope=\"row\">" + value.Id + "</th>" +
+                                "<td>" + moment(value.Date).format("DD/MM/YYYY") + "</td>" +
+                                "<td>" + value.RefType + "</td>" +
+                                "<td>" + value.Qty + "</td>" +
+                                "<td>" + value.Balance + "</td>" +
+                                "</tr>";
+
+                            SetData.append(StockCardData);
+                        });
+
+                    }
+                }
+            })
+        });
+    });
+
+</script>

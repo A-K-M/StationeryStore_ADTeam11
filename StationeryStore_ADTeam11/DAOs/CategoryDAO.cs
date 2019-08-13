@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace StationeryStore_ADTeam11.DAOs
@@ -15,7 +16,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             Category category = null;
 
-            string sql = "SELECT * FROM Category";
+            string sql = "SELECT * FROM Category ORDER BY ID ASC";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
 
@@ -27,7 +28,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 category = new Category()
                 {
-                    Id = data["ID"].ToString(),
+                    Id = (int)data["ID"],
                     Name = data["Name"].ToString()
                 };
 
@@ -37,5 +38,7 @@ namespace StationeryStore_ADTeam11.DAOs
             data.Close();
             return categories;
         }
+
+
     }
 }

@@ -1,0 +1,71 @@
+﻿@using StationeryStore_ADTeam11.View_Models;
+@{
+    var requisitionList = (List<RequisitionVM>)ViewData["Requisitions"];
+ }
+@{
+    ViewBag.Title = "RequisitionList";
+}
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card" style="height: 550px">
+                <div class="card-header">
+                    @Html.Partial("FlashMessage")
+                    <h4>Your Requisition Histroy <a href="#" class="btn btn-outline-success pull-right">New Request</a></h4>
+                </div>
+                <div class="card-body">
+                    <table class="table  table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Total Items</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (RequisitionVM requisition in requisitionList)
+                            {
+                            <tr>
+                                <td>@requisition.Id</td>
+                                <td>@requisition.Date.ToString("dd/MM/yyyy")</td>
+                                <td>@requisition.Quantity</td>
+                                <td>
+                                    @if (requisition.Status == "Pending")
+                                    {
+                                       @: <text style="color:blue">@requisition.Status</text>
+                                    }
+                                    else if (requisition.Status == "Approved")
+                                    {
+                                        @:<text style="color:green">@requisition.Status</text>
+                                    }
+                                    else
+                                    {
+                                        @: <text style="color:red">@requisition.Status</text>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="~/DepartmentEmployee/RequestDetail/@requisition.Id" class="btn btn-outline-info">View</a>
+                                </td>
+
+                                @if (requisition.Status == "Pending")
+                                {
+                                    <td><a href="~/DepartmentEmployee/CancelRequest/@requisition.Id" class="btn btn-outline-danger">Cancel</a></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

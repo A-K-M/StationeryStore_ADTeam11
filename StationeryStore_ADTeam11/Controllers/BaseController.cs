@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-//using StationeryStore_ADTeam11.Filters;
+using StationeryStore_ADTeam11.Filters;
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.Enums;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
@@ -20,19 +21,19 @@ namespace StationeryStore_ADTeam11.Controllers
                 string error = null;
                 ViewData["error"] = error;
             }
-
+            
             return View();
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Login(string username, string password)
+       public ActionResult Login(string username, string password)
         {
             string error = null;
             EmployeeDAO employeeDAO = new EmployeeDAO();
             Employee employee = employeeDAO.GetEmployeeByUsername(username);
 
-            if (employee == null || employee.Role == null)
+            if(employee == null || employee.Role == null)
             {
                 error = "No Employee with this name.";
                 ViewData["error"] = error;
@@ -42,7 +43,7 @@ namespace StationeryStore_ADTeam11.Controllers
             {
                 error = "Wrong password.";
                 ViewData["error"] = error;
-                return View();
+                return View(); 
             }
             string sessionID = Guid.NewGuid().ToString();
             Session["sessionID"] = sessionID;
@@ -66,11 +67,11 @@ namespace StationeryStore_ADTeam11.Controllers
                 default:
                     break;
             }
-            return RedirectToAction("ShowError", "Base");
+            return RedirectToAction("ShowError","Base");
 
         }
 
-        //[AuthenticationFilter]
+        [AuthenticationFilter]
         public ActionResult LogOut()
         {
             Session["sessionID"] = null;
@@ -79,7 +80,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return RedirectToAction("Login", "Base");
         }
 
-        //[AuthenticationFilter]
+        [AuthenticationFilter]
         public ActionResult RedirectBack()
         {
             return Redirect(Request.UrlReferrer.ToString());
@@ -94,6 +95,10 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
-
+        public void SetFlash(FlashMessageType type, string text)
+        {
+            TempData["FlashMessage.Type"] = type;
+            TempData["FlashMessage.Text"] = text;
+        }
     }
 }

@@ -1,6 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string username = Session["username"].ToString();
+    string role = Session["role"].ToString();
+}
+<!DOCTYPE html>
 <html>
-
 <head>
     <link rel="stylesheet" href="~/Statics/vendor/bootstrap/css/bootstrap.min.css">
     <link href="~/Statics/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
@@ -13,109 +16,112 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-    <body>
-        <!-- Side Navbar -->
-        <nav class="side-navbar">
-            <div class="side-navbar-wrapper">
-                <!-- Sidebar Header    -->
-                <div class="sidenav-header d-flex align-items-center justify-content-center">
-                    <!-- User Info-->
-                    <div class="sidenav-header-inner text-center">
-                        <h2 class="h5">Somebody</h2><span>Store Supervisor</span>
-                    </div>
-                    <!-- Small Brand information, appears on minimized sidebar-->
-                    <div class="sidenav-header-logo">
-                        <a href="head_index.html" class="brand-small text-center">
-                            <strong>B</strong><strong class="text-success">D</strong>
+<body>
+    <!-- Side Navbar -->
+    <nav class="side-navbar">
+        <div class="side-navbar-wrapper">
+            <!-- Sidebar Header    -->
+            <div class="sidenav-header d-flex align-items-center justify-content-center">
+                <!-- User Info-->
+                <div class="sidenav-header-inner text-center">
+                    <h2 class="h5">@username</h2><span>Store @role</span>
+                </div>
+                <!-- Small Brand information, appears on minimized sidebar-->
+                <div class="sidenav-header-logo">
+                    <a href="head_index.html" class="brand-small text-center">
+                        <strong>B</strong><strong class="text-success">D</strong>
+                    </a>
+                </div>
+            </div>
+            <!-- Sidebar Navigation Menus-->
+            <div class="main-menu">
+                <h5 class="sidenav-heading">Main</h5>
+                <ul id="side-main-menu" class="side-menu list-unstyled">
+                    <li><a href="store_supervisor_index.html"> <i class="icon-home"></i>Home </a></li>
+                    <li><a href="store_supervisor_purchase_order.html"> <i class="fas fa-user"></i>Purchase Orders </a></li>
+                    <li><a href="store_supervisor_approve_av.html"> <i class="fa fa-file-alt"></i>Adjustment Vouchers </a></li>
+                    <li>
+                        <a href="store_supervisor_reorder_stock_list.html"> <i class="fa fa-users"></i>Reorder Stock List </a>
+                    </li>
+                    <li>
+                        <a href="store_supervisor_create_barcharts.html">
+                            <i class="fa fa-map-marker-alt"></i>Create
+                            Barchart
                         </a>
-                    </div>
-                </div>
-                <!-- Sidebar Navigation Menus-->
-                <div class="main-menu">
-                    <h5 class="sidenav-heading">Main</h5>
-                    <ul id="side-main-menu" class="side-menu list-unstyled">
-                        <li><a href="store_supervisor_index.html"> <i class="icon-home"></i>Home </a></li>
-                        <li><a href="store_supervisor_purchase_order.html"> <i class="fas fa-user"></i>Purchase Orders </a></li>
-                        <li><a href="store_supervisor_approve_av.html"> <i class="fa fa-file-alt"></i>Adjustment Vouchers </a></li>
-                        <li>
-                            <a href="store_supervisor_reorder_stock_list.html"> <i class="fa fa-users"></i>Reorder Stock List </a>
-                        </li>
-                        <li>
-                            <a href="store_supervisor_create_barcharts.html">
-                                <i class="fa fa-map-marker-alt"></i>Create
-                                Barchart
-                            </a>
-                        </li>
-                        <li><a href="view_barcharts.html"> <i class="fa fa-map-marker-alt"></i>View Barcharts </a></li>
-                    </ul>
-                </div>
-                <div class="admin-menu">
-                    <!-- <h5 class="sidenav-heading">Lists</h5>
+                    </li>
+                    <li><a href="view_barcharts.html"> <i class="fa fa-map-marker-alt"></i>View Barcharts </a></li>
+                </ul>
+            </div>
+            <div class="admin-menu">
+                <!-- <h5 class="sidenav-heading">Lists</h5>
                 <ul id="side-admin-menu" class="side-menu list-unstyled">
                   <li> <a href="#"> <i class="icon-screen"> </i>Demo</a></li>
                 </ul> -->
-                </div>
             </div>
-        </nav>
-        <div class="page">
-            <!-- navbar-->
-            <header class="header">
-                <nav class="navbar">
-                    <div class="container-fluid">
-                        <div class="navbar-holder d-flex align-items-center justify-content-between">
-                            <div class="navbar-header">
-                                <!-- <a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand"> -->
-                                <div class="brand-text d-none d-md-inline-block"><strong class="text-success">Stationary Store</strong></div></a>
-                            </div>
-                            <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
-                                <!-- Notifications dropdown-->
-                                <li class="nav-item dropdown">
-                                    <a id="notifications" rel="nofollow" data-target="#" href="#"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">
-                                        <i class="fa fa-bell"></i><span class="badge badge-warning">2</span>
-                                    </a>
-                                    <ul aria-labelledby="notifications" class="dropdown-menu">
-                                        <li>
-                                            <a rel="nofollow" href="#" class="dropdown-item">
-                                                <div class="notification d-flex justify-content-between">
-                                                    <div class="notification-content"></i>Sample Notification</div>
-                                                    <!--<div class="notification-time"><small>4 minutes ago</small></div>-->
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a rel="nofollow" href="#" class="dropdown-item">
-                                                <div class="notification d-flex justify-content-between">
-                                                    <div class="notification-content"></i>Sample Notification</div>
-                                                    <!-- <div class="notification-time"><small>4 minutes ago</small></div> -->
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <!-- Log out-->
-                                <li class="nav-item">
-                                    <a href="emp_login.html" class="nav-link logout">
-                                        <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out-alt"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-            </header>
         </div>
+    </nav>
+    <div class="page">
+        <!-- navbar-->
+        <header class="header">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <div class="navbar-holder d-flex align-items-center justify-content-between">
+                        <div class="navbar-header">
+                            <!-- <a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand"> -->
+                            <div class="brand-text d-none d-md-inline-block"><strong class="text-success">Stationary Store</strong></div></a>
+                        </div>
+                        <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                            <!-- Notifications dropdown-->
+                            <li class="nav-item dropdown">
+                                <a id="notifications" rel="nofollow" data-target="#" href="#"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">
+                                    <i class="fa fa-bell"></i><span class="badge badge-warning">2</span>
+                                </a>
+                                <ul aria-labelledby="notifications" class="dropdown-menu">
+                                    <li>
+                                        <a rel="nofollow" href="#" class="dropdown-item">
+                                            <div class="notification d-flex justify-content-between">
+                                                <div class="notification-content"></i>Sample Notification</div>
+                                                <!--<div class="notification-time"><small>4 minutes ago</small></div>-->
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a rel="nofollow" href="#" class="dropdown-item">
+                                            <div class="notification d-flex justify-content-between">
+                                                <div class="notification-content"></i>Sample Notification</div>
+                                                <!-- <div class="notification-time"><small>4 minutes ago</small></div> -->
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Log out-->
+                            <li class="nav-item">
+                                <a href="@Url.Action("Logout", "Base")" class="nav-link logout">
+                                    <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out-alt"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
         <section class="statistics">
             @RenderBody()
         </section>
-        <script src="~/Statics/vendor/jquery/jquery.min.js"></script>
-        <script src="~/Statics/vendor/popper.js/umd/popper.min.js"></script>
-        <script src="~/Statics/vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="~/Statics/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
-        <script src="~/Statics/vendor/jquery.cookie/jquery.cookie.js"></script>
-        <script src="~/Statics/vendor/chart.js/Chart.min.js"></script>
-        <script src="~/Statics/vendor/jquery-validation/jquery.validate.min.js"></script>
-        <script src="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-        <script src="~/Statics/js/charts-home.js"></script>
-    </body>
+    </div>
+
+    <script src="~/Statics/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Statics/vendor/popper.js/umd/popper.min.js"></script>
+    <script src="~/Statics/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Statics/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+    <script src="~/Statics/vendor/jquery.cookie/jquery.cookie.js"></script>
+    <script src="~/Statics/vendor/chart.js/Chart.min.js"></script>
+    <script src="~/Statics/vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/Statics/js/charts-home.js"></script>
+
+    @RenderSection("Scripts", false)
+</body>
 </html>

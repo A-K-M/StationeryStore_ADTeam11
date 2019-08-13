@@ -1,30 +1,40 @@
 ﻿
 
 @{
+    Layout = "~/Views/Shared/_storeManagerLayout.cshtml";
+
     ViewBag.Title = "addSupplierStatus";
 
     var saved = (bool)ViewData["saved"];
+    var duplicateMsg = (string)ViewData["duplicateMsg"];
 }
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
-</head>
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
 
-<body>
-<h2>addSupplierStatus</h2>
+                    @{
+                        if (saved == true)
+                        {
+                            <h2>Supplier Added!</h2>
+                            <p>Supplier record successfully created.</p>
+                        }
+                        else
+                        {
+                            <h2>Supplier Not Added!</h2>
+                            <p>Error, @duplicateMsg, supplier record not created.</p>
+                        }
+                    }
 
-@{
-    if (saved == true)
-    {
-        <p>Supplier record successfully created</p>
-    }
-    else
-    {
-        <p>Error, supplier record not saved</p>
-    }
-}
+                    <a href="@Url.Content("~/StoreManager/Suppliers")" class="btn btn-success btn-sm">Supplier List</a>
 
-</body>
-</html>
+                    </body>
+                    </html>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

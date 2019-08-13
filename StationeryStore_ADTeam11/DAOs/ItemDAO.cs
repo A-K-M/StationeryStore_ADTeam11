@@ -1,4 +1,5 @@
-﻿using StationeryStore_ADTeam11.Models;
+﻿using StationeryStore_ADTeam11.MobileModels;
+using StationeryStore_ADTeam11.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -27,11 +28,11 @@ namespace StationeryStore_ADTeam11.DAOs
 
             SqlDataReader data = cmd.ExecuteReader();
 
-            while (data.Read())
+            if (data.Read())
             {
                 item = new Item()
                 {
-                    Id = Convert.ToInt32(data["ID"]),
+                    Id = data["ID"].ToString(),
                     CategoryId = Convert.ToInt32(data["CategoryID"]),
                     Description = data["Description"].ToString(),
                     ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
@@ -50,6 +51,7 @@ namespace StationeryStore_ADTeam11.DAOs
             }
 
             data.Close();
+            connection.Close();
 
             return items;
         }
@@ -68,5 +70,85 @@ namespace StationeryStore_ADTeam11.DAOs
             conn.Close();
             return itemDescription;
         }
+
+        public Item GetItemById(string id)
+        {
+            Item item = null;
+
+            string sql = "SELECT * FROM Item WHERE ID = '" + id + "'";
+
+            connection.Open();
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            SqlDataReader data = cmd.ExecuteReader();
+
+            if (data.Read())
+            {
+                try
+                {
+                    item = new Item()
+                    {
+                        Id = data["ID"].ToString(),
+                        CategoryId = Convert.ToInt32(data["CategoryID"]),
+                        Description = data["Description"].ToString(),
+                        ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
+                        ReorderQty = Convert.ToInt32(data["ReorderQty"]),
+                        Uom = data["UOM"].ToString(),
+                        BinNo = data["BinNo"].ToString(),
+                        FirstSupplier = data["FirstSupplier"].ToString(),
+                        FirstPrice = Convert.ToDouble(data["FirstPrice"]),
+                        SecondSupplier = data["SecondSupplier"].ToString(),
+                        SecondPrice = Convert.ToDouble(data["SecondPrice"]),
+                        ThirdSupplier = data["ThirdSupplier"].ToString(),
+                        ThirdPrice = Convert.ToDouble(data["ThirdPrice"])
+                    };
+                }
+                catch
+                {
+                    item = null;
+                }
+            }
+            data.Close();
+            connection.Close();
+
+            return item;
+        }
+
+        public List<MItemSpinner> GetAllItems()
+        {
+            List<MItemSpinner> itemList = new List<MItemSpinner>();
+            SqlDataReader reader = null;
+            try
+            {
+                connection.Open();
+                string sql = "SELECT ID,CategoryID,Description FROM Item ORDER BY CategoryID ASC";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+
+                reader = cmd.ExecuteReader();
+                MItemSpinner item = null;
+                while (reader.Read()) {
+                    item = new MItemSpinner()
+                    {
+                        Id = reader["ID"].ToString(),
+                        CategoryId = (int)reader["CategoryID"],
+                        Description = reader["Description"].ToString()
+                    };
+
+                    itemList.Add(item);
+                }
+               
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
+            return itemList;
+        }
+
+
     }
 }

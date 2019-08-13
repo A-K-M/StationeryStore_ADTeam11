@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace ADProjectTeam11.Filters
+namespace StationeryStore_ADTeam11.Filters
 {
     public class LayoutFilter : ActionFilterAttribute
     {

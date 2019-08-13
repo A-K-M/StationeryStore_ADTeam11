@@ -1,5 +1,136 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using StationeryStore_ADTeam11.MobileModels;
+using StationeryStore_ADTeam11.Models;
+
+namespace StationeryStore_ADTeam11.DAOs
+{
+    public class DelegationDAO : DatabaseConnection
+    {
+        public List<Delegation> GetDelegationStatus(int empId)
+        {
+            List<Delegation> delegation = new List<Delegation>();
+            string sql = "select StartDate, EndDate from Delegation where EmpID='"+ empId +"'";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while(reader != null && reader.Read())
+            {
+                Delegation del = new Delegation()
+                {
+                    StartDate = (DateTime)reader["StartDate"],
+                    EndDate = (DateTime)reader["EndDate"],
+                };
+
+                delegation.Add(del);
+            }
+            reader.Close();
+          
+            return delegation;
+        }
+
+          public List<Delegation> GetDelegations()
+        {
+            List<Delegation> delegations = new List<Delegation>();
+            SqlConnection conn = connection;
+            conn.Open();
+            string sql = @"select * from Delegation";
+            SqlCommand command = new SqlCommand(sql, conn);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                Delegation delegation = new Delegation()
+                {
+                    Id=(int)reader["ID"],
+                    EmployeeId=(int)reader["EmpID"],
+                    StartDate=(DateTime)reader["StartDate"],
+                    EndDate = (DateTime)reader["EndDate"]
+                };
+                delegations.Add(delegation);
+            }
+            conn.Close();
+            return delegations;
+        }
+        public bool InsertDelegation(Delegation del, string deptId) {
+
+            SqlTransaction transaction = null;
+            int newDelegationId = 0;
+
+            try
+            {
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                SqlCommand cmd1 = new SqlCommand("INSERT INTO Delegation (StartDate, EndDate, EmpID) VALUES (@startDate,@endDate,@empId) ; SELECT CAST(scope_identity() AS int) ", connection, transaction);
+                cmd1.Parameters.AddWithValue("@startDate", del.StartDate);
+                cmd1.Parameters.AddWithValue("@endDate",del.EndDate);
+                cmd1.Parameters.AddWithValue("@empId",del.EmployeeId);
+                newDelegationId =(Int32) cmd1.ExecuteScalar() ;
+                if (newDelegationId == 0) throw new Exception();
+
+                SqlCommand cmd2 = new SqlCommand("UPDATE Department SET DelegateID = @delegateId WHERE ID = @id", connection, transaction);
+                //cmd2.Parameters.AddWithValue("@status", Constant.STATUS_PENDING);
+                cmd2.Parameters.AddWithValue("@delegateId",newDelegationId);
+                cmd2.Parameters.AddWithValue("@id", deptId);
+                if (cmd2.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                if (transaction != null) { transaction.Rollback(); }
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+
+            }
+            return true;
+
+        }
+        public bool CancelDelegation(string deptId,int delegationId)
+        {
+            SqlTransaction transaction = null;
+                 
+            try
+            {
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                string sql = @"UPDATE Department SET DelegateID = 0 WHERE ID = @deptId";
+                SqlCommand cmd = new SqlCommand(sql, connection, transaction);
+                cmd.Parameters.AddWithValue("@deptId", deptId);
+
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                sql = @"UPDATE Delegation SET EndDate = '" + DateTime.Today + "' where ID = @delegationId";
+                cmd = new SqlCommand(sql, connection, transaction);
+                cmd.Parameters.AddWithValue("@delegationId", delegationId);
+
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                if (transaction != null) transaction.Rollback();
+                return false;
+            }
+            finally {
+                if (connection != null) connection.Close();
+            }
+
+            return true;
+        }
+
+    }
+}
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using StationeryStore_ADTeam11.Models;

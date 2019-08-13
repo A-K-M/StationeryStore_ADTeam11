@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string username = Session["username"].ToString();
+    string role = Session["role"].ToString();
+}
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -21,7 +25,7 @@
             <div class="sidenav-header d-flex align-items-center justify-content-center">
                 <!-- User Info-->
                 <div class="sidenav-header-inner text-center">
-                    <h2 class="h5">Jenny</h2><span>Store Manager</span>
+                    <h2 class="h5">@username</h2><span>Store @role</span>
                 </div>
                 <!-- Small Brand information, appears on minimized sidebar-->
                 <div class="sidenav-header-logo">
@@ -88,7 +92,7 @@
                             </li>
                             <!-- Log out-->
                             <li class="nav-item">
-                                <a href="head_login.html" class="nav-link logout">
+                                <a href="@Url.Action("Logout", "Base")" class="nav-link logout">
                                     <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out-alt"></i>
                                 </a>
                             </li>
@@ -110,5 +114,6 @@
     <script src="~/Statics/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/Statics/js/charts-home.js"></script>
+    @RenderSection("Scripts", false)
 </body>
 </html>

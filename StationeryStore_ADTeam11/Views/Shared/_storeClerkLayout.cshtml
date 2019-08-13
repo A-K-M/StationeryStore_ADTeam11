@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string username = Session["username"].ToString();
+    string role = Session["role"].ToString();
+}
+<!DOCTYPE html>
 <html>
 
     <head>
@@ -21,7 +25,7 @@
                 <div class="sidenav-header d-flex align-items-center justify-content-center">
                     <!-- User Info-->
                     <div class="sidenav-header-inner text-center">
-                        <h2 class="h5">Esther Tan</h2><span>Store clerk</span>
+                        <h2 class="h5">@username</h2><span>Store @role</span>
 
                     </div>
                     <!-- Small Brand information, appears on minimized sidebar-->
@@ -88,7 +92,7 @@
                                 </li>
                                 <!-- Log out-->
                                 <li class="nav-item">
-                                    <a href="clerk_login.html" class="nav-link logout">
+                                    <a href="@Url.Action("Logout", "Base")" class="nav-link logout">
                                         <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out-alt"></i>
                                     </a>
                                 </li>

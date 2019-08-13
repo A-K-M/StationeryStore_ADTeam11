@@ -68,6 +68,7 @@
     <script>
         $(document).ready(function () {
             var error = @Html.Raw(Json.Encode(ViewData["error"]));
+            console.log(error);
             if (error != null)
                 alert(error);
         });
