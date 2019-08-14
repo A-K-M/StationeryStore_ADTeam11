@@ -11,7 +11,7 @@ using Microsoft.Ajax.Utilities;
 namespace StationeryStore_ADTeam11.Controllers
 {
     [LayoutFilter("_storeClerkLayout")]
-    public class StoreClerkController : Controller
+    public class StoreClerkController : BaseController
     {
         public ActionResult Index()
         {
