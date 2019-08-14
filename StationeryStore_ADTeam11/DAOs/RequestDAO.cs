@@ -65,6 +65,7 @@ namespace StationeryStore_ADTeam11.DAOs
             conn.Close();
             return requests;
         }
+
         public void UpdateDisbursedDate(ItemRequest request) //NZCK
         {
             int outstandingQty = request.NeededQty - request.ActualQty;
@@ -114,10 +115,42 @@ namespace StationeryStore_ADTeam11.DAOs
             return row > 0;
         }
 
-        //public List<RequisitionVM> GetApprovedRequests()
-        //{
+        public List<RequisitionVM> GetApprovedRequests()
+        {
+            List<RequisitionVM> requisitions = new List<RequisitionVM>();
+            RequisitionVM requisition = null;
 
-        //}
+            string sql = "SELECT r.ID, r.DateTime, r.Status, e.Name, SUM(ir.NeededQty) AS [TotalItems] " +
+                          "FROM Request r, Employee e, ItemRequest ir " +
+                          "WHERE Status = 'Approved' " +
+                          "AND r.EmployeeID = e.ID " +
+                          "AND r.ID = ir.RequestID " +
+                          "GROUP BY  r.ID, r.DateTime, r.Status, e.Name " +
+                          "ORDER BY r.DateTime ASC; ";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                requisition = new RequisitionVM()
+                {
+                    Id = Convert.ToInt32(data["ID"]),
+                    Date = Convert.ToDateTime(data["DateTime"]),
+                    Status = data["Status"].ToString(),
+                    EmployeeName = data["Name"].ToString(),
+                    Quantity = Convert.ToInt32(data["TotalItems"])
+                };
+
+                requisitions.Add(requisition);
+            }
+            data.Close();
+            connection.Close();
+
+            return requisitions;
+        }
 
         public List<RequisitionVM> GetRequistionListByEmpId(int empId)
         {
