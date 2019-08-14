@@ -41,6 +41,14 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
+        public ActionResult RequestDetail(int id)
+        {
+            RequestDAO requestDAO = new RequestDAO();
+            ViewData["RequestDetail"] = requestDAO.GetRequestDetail(id);
+
+            return View();
+        }
+
         public ActionResult CancelRequest(string id)
         {
             RequestDAO request = new RequestDAO();

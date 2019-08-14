@@ -154,6 +154,42 @@ namespace StationeryStore_ADTeam11.DAOs
             return requisitionList;
         }
 
+        public List<RequestDetailViewModel> GetRequestDetail(int empId)
+        {
+            List<RequestDetailViewModel> requestDetailList = new List<RequestDetailViewModel>();
+
+            string sql = "SELECT i.Description, ir.NeededQty, r.DateTime, cp.Name " +
+                        "FROM ItemRequest ir, Item i, Request r, Employee e, Department d, CollectionPoint cp " +
+                        "WHERE r.ID = @empId " +
+                        "AND ir.RequestID = r.ID " +
+                        "AND i.ID = ir.ItemID " +
+                        "AND e.ID = r.EmployeeID " +
+                        "AND d.ID = e.DeptID " +
+                        "AND cp.ID = d.CollectionPointID";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@empId", empId);
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            RequestDetailViewModel requestDetail = null;
+
+            while (data.Read())
+            {
+                requestDetail = new RequestDetailViewModel()
+                {
+                    ItemDescription = data["Description"].ToString(),
+                    NeededQty = Convert.ToInt32(data["NeededQty"]),
+                    RequestedDate = Convert.ToDateTime(data["DateTime"]),
+                    CollectionPoint = data["Name"].ToString()
+                };
+
+                requestDetailList.Add(requestDetail);
+            }
+
+            return requestDetailList;
+        }
+
         public Request GetRequestById(string id)
         {
             string sql = "SELECT * FROM Request WHERE ID = @id";
@@ -293,6 +329,7 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             return reqList;
         }
+
         public List<MRequestItem> GetRequestItems(string reqId) {
             List<MRequestItem> itemList = new List<MRequestItem>();
             MRequestItem req = null;
