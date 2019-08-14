@@ -464,7 +464,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     foreach (var item in voucherItems)
                     {
                         stockCardSql += $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
-                           $" VALUES ('{item.ItemID}','{DateTime.Today}','{item.Quantity}'," +
+                           $" VALUES ('{item.ItemID}','{DateTime.Today}','{-item.Quantity}'," +
                            $"(SELECT TOP 1 Balance FROM Stockcard WHERE ItemID='{item.ItemID}' ORDER BY ID DESC)-({item.Quantity})" +
                            $",'ADJ-{id}-Rejected'); \n";
                     }
