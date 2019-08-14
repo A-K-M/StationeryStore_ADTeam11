@@ -408,5 +408,47 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             return itemList;
         }
+
+        /*DELETE FROM HERE IF SOMETHING WRONG!*/
+
+        public bool CreateRequest(int empId, List<RequestStationery> reqStationery)
+        {
+            DateTime date = DateTime.Now;
+            string sqlFormattedDate = date.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            SqlTransaction transaction = null;
+            try
+            {
+                connection.Open();
+                transaction = connection.BeginTransaction();
+                string sql = "INSERT INTO Request (EmployeeID , DateTime , Status , DisbursedDate) OUTPUT INSERTED.ID VALUES" +
+                "(" + empId + ", '" + sqlFormattedDate + "', 'Pending', null)";
+                SqlCommand cmd = new SqlCommand(sql, connection, transaction);
+
+                int reqID = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+                sql = "";
+                foreach (var req in reqStationery)
+                {
+
+                    sql += "INSERT INTO ItemRequest (RequestID,ItemID, NeededQty, ActualQty) VALUES ('" + reqID + "','" +
+                           req.ItemId + "', " + req.Quantity + ", 0 );";
+                }
+                cmd = new SqlCommand(sql, connection, transaction);
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return true;
+        }
+        /***************************************************************************************/
     }
 }

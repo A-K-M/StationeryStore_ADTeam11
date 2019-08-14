@@ -216,6 +216,7 @@
     <Compile Include="View_Models\DeligationStatus.cs" />
     <Compile Include="View_Models\DepartmentDelegation.cs" />
     <Compile Include="View_Models\RequestDetailViewModel.cs" />
+    <Compile Include="View_Models\RequestStationery.cs" />
     <Compile Include="View_Models\RequestViewModel.cs" />
     <Compile Include="View_Models\RequisitionVM.cs" />
     <Compile Include="View_Models\RetrievalList.cs" />
@@ -238,6 +239,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\department_employee.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
@@ -519,6 +521,7 @@
     <Content Include="Views\DepartmentEmployee\RequestDetail.cshtml" />
     <Content Include="Views\StoreClerk\ApprovedRequests.cshtml" />
     <Content Include="Views\StoreClerk\ApprovedRequestDetails.cshtml" />
+    <Content Include="Views\DepartmentEmployee\CreateStationeryRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />
