@@ -66,6 +66,14 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
+        public ActionResult ApprovedRequestDetails(int id)
+        {
+            RequestDAO request = new RequestDAO();
+            ViewData["RequestDetails"] = request.GetRequestDetail(id);
+
+            return View();
+        }
+
         public ActionResult ViewStockCard()
         {
             Session["Username"] = "Clerk User";

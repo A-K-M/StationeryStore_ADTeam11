@@ -192,20 +192,20 @@ namespace StationeryStore_ADTeam11.DAOs
             return requisitionList;
         }
 
-        public List<RequestDetailViewModel> GetRequestDetail(int empId)
+        public List<RequestDetailViewModel> GetRequestDetail(int reqId)
         {
             List<RequestDetailViewModel> requestDetailList = new List<RequestDetailViewModel>();
 
             string sql = "SELECT i.Description, ir.NeededQty, r.DateTime, cp.Name " +
                         "FROM ItemRequest ir, Item i, Request r, Employee e, Department d, CollectionPoint cp " +
-                        "WHERE r.ID = @empId " +
+                        "WHERE r.ID = @reqId " +
                         "AND ir.RequestID = r.ID " +
                         "AND i.ID = ir.ItemID " +
                         "AND e.ID = r.EmployeeID " +
                         "AND d.ID = e.DeptID " +
                         "AND cp.ID = d.CollectionPointID";
             SqlCommand cmd = new SqlCommand(sql, connection);
-            cmd.Parameters.AddWithValue("@empId", empId);
+            cmd.Parameters.AddWithValue("@reqId", reqId);
             connection.Open();
 
             SqlDataReader data = cmd.ExecuteReader();

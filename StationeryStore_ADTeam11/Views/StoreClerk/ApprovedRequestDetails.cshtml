@@ -1,6 +1,11 @@
-﻿@using StationeryStore_ADTeam11.View_Models;
+﻿
 @{
-    var requisitionDetails = (List<RequestDetailViewModel>)ViewData["RequestDetail"];
+    ViewBag.Title = "ApprovedRequestDetails";
+}
+
+@using StationeryStore_ADTeam11.View_Models;
+@{
+    var requisitionDetails = (List<RequestDetailViewModel>)ViewData["RequestDetails"];
 }
 @{
     ViewBag.Title = "RequestDetail";
