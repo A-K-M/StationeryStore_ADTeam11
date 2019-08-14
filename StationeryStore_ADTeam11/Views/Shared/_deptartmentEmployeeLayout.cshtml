@@ -49,6 +49,17 @@
                     <li><a href="emp_stationary.html"> <i class="fa fa-file-alt"></i>Stationary Requests </a></li>
                 </ul>
             </div>
+
+            @if (role == "Representative")
+            {
+
+                <div class="admin-menu">
+                    <h5 class="sidenav-heading">Rep</h5>
+                    <ul id="side-admin-menu" class="side-menu list-unstyled">
+                        <li><a href="emp_stationary.html"> <i class="fa fa-file-alt"></i>Rep</a></li>
+                    </ul>
+                </div>
+            }
         </div>
     </nav>
     <div class="page">
