@@ -114,6 +114,11 @@ namespace StationeryStore_ADTeam11.DAOs
             return row > 0;
         }
 
+        //public List<RequisitionVM> GetApprovedRequests()
+        //{
+
+        //}
+
         public List<RequisitionVM> GetRequistionListByEmpId(int empId)
         {
             List<RequisitionVM> requisitionList = new List<RequisitionVM>();
@@ -286,7 +291,6 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return "success";
         }
-
 
         public List<RequisitionVM> GetReqListByDepartment(string deptId)
         {
