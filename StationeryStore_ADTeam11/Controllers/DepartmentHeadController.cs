@@ -154,8 +154,13 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
-     
-       
+        public ActionResult ViewPendingRequestDetails(int id)
+        {
+            RequestDAO requestDAO = new RequestDAO();
+            ViewData["PendingRequests"] = requestDAO.ViewPendingRequestDetails(id);
+
+            return View();
+        }
 
         public ActionResult ApproveRejectRequest(string status, string reqId)
         {

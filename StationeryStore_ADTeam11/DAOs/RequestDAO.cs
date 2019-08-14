@@ -17,7 +17,12 @@ namespace StationeryStore_ADTeam11.DAOs
             List<StationeryRequest> requestlist = new List<StationeryRequest>();
             
            
-            string sql = "SELECT R.Status as Status,E.Name as Name,R.DateTIme as Date,R.Id as RequestId FROM Request R,Employee E WHERE E.ID=R.EmployeeID";
+            string sql = "SELECT R.Status as Status,E.Name as Name,R.DateTime as Date,R.Id as RequestId , SUM(IR.NeededQty) AS [TotalQuantity] " +
+                        "FROM Request R,Employee E, ItemRequest IR " +
+                        "WHERE E.ID = R.EmployeeID " +
+                        "AND R.ID = IR.RequestID " +
+                        "GROUP BY R.Status ,E.Name,R.DateTime,R.Id; ";
+
             SqlCommand cmd = new SqlCommand(sql, connection);
             connection.Open();
             SqlDataReader reader = cmd.ExecuteReader();
@@ -28,7 +33,8 @@ namespace StationeryStore_ADTeam11.DAOs
                     EmpName = (string)reader["Name"],
                     Date = (DateTime)reader["Date"],
                     Status = (string)reader["Status"],
-                    RequestId = (string)reader["RequestId"],
+                    RequestId = (int)reader["RequestId"],
+                    TotalItem = (int)reader["TotalQuantity"]
                 };
                 requestlist.Add(request);
             }
@@ -77,7 +83,7 @@ namespace StationeryStore_ADTeam11.DAOs
             conn.Close();
         }
 
-        public List<StationeryRequest> ViewPendingRequestDetails(string requestId)
+        public List<StationeryRequest> ViewPendingRequestDetails(int requestId)
         {
             List<StationeryRequest> requestlist = new List<StationeryRequest>();
 
@@ -95,7 +101,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     EmpName = (string)reader["Name"],
                     Description = (string)reader["Description"],
                     TotalItem = (int)reader["Qty"],
-                    RequestId = (string)reader["RequestId"]
+                    RequestId = (int)reader["RequestId"]
                 };
                 requestlist.Add(request);
             }
