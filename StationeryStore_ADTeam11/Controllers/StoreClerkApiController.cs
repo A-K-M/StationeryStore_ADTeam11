@@ -57,7 +57,22 @@ namespace StationeryStore_ADTeam11.Controllers
             List<Retrieval> retrievals = new RetrievalDAO().GetRetrievalList();
             return new MResponseList<Retrieval>() { ResList = retrievals };
         }
-     
+
+        [Route("{clerkId}/disbursements")]
+        [HttpGet]
+        public MResponse GetDisbursements(int clerkId)
+        {
+            List<MDisbursement> retrievals = new DisbursementDAO().GetDisbursementsByClerk(clerkId);
+            return new MResponseList<MDisbursement>() { ResList = retrievals };
+        }
+
+        [Route("{clerkId}/collectionPoints")]
+        [HttpGet]
+        public MResponse GetCollectionPoints(int clerkId)
+        {
+            List<CollectionPoint> points = new CollectionPointDAO().GetMCollectionPointsByClerk(clerkId);
+            return new MResponseList<CollectionPoint>() { ResList = points };
+        }
     }
     
 }

@@ -33,8 +33,7 @@ namespace StationeryStore_ADTeam11.Controllers
             MResponseList<Delegation> respone = new MResponseList<Delegation>()
             {
                 ResList = delegationDAO.GetDelegations(),
-                Success = true
-            };
+             };
             return respone;
         }
 
@@ -65,13 +64,6 @@ namespace StationeryStore_ADTeam11.Controllers
             return response;
         }
 
-
-        //[Route("collectionpoints/representative")]
-        //[HttpGet]
-        //public MResponse GetCollectionPointAndRep()
-        //{
-        //    return new CollectionPointDAO().GetCollecitonPointAndRep("COMM");
-        //}
 
         [Route("collectionpoints/{pointId}/representative/{repId}")]
         [HttpPut]

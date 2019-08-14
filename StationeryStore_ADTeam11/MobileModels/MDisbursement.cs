@@ -9,9 +9,21 @@ namespace StationeryStore_ADTeam11.MobileModels
     public class MDisbursement
     {
         private string _deptId;
+        private int _collectionPointID;
         private string _deptName;
-        private string _representative;
+        private string _repName;
         private string _phone;
-        private List<ItemRequest> _itemList;
+        private List<ItemRequest> _itemList = new List<ItemRequest>();
+
+        public string DeptId { get; set; }
+        public int CollectionPointID { get; set; }
+        public string DeptName { get; set; }
+        public string RepName { get; set; }
+        public string Phone { get; set; }
+        public List<ItemRequest> ItemList { get; set; }
+        public void AddItem(ItemRequest item) { _itemList.Add(item);  }
+
+
+
     }
 }

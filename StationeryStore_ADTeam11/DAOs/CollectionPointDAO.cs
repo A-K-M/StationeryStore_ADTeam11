@@ -26,6 +26,23 @@ namespace StationeryStore_ADTeam11.DAOs
             connection.Close();
             return points;
         }
+
+        public List<CollectionPoint> GetMCollectionPointsByClerk(int clerkID)
+        {
+            CollectionPoint p = null;
+
+            string sql = "SELECT * FROM CollectionPoint WHERE EmpID = @clerkID";
+        
+            connection.Open();
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@clerkID",clerkID);
+
+            List<CollectionPoint> points = CollectionPoint.MapToList(cmd.ExecuteReader());
+
+            connection.Close();
+            return points;
+        }
         public List<CollectionPoint> GetCollectionPointsByClerk(int clerkId)
         {
             CollectionPoint p = null;
