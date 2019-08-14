@@ -162,7 +162,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
-        public ActionResult ApproveRejectRequest(string status, string reqId)
+        public ActionResult ApproveRejectRequest(string status, int reqId)
         {
             RequestDAO chngStatus = new RequestDAO();
             chngStatus.UpdateStatus(status, reqId);

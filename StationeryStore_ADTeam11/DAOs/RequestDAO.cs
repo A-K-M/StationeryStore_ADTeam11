@@ -58,7 +58,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 {
                     Request request = new Request()
                     {
-                        Id = (string)reader["ID"],
+                        Id = (int)reader["ID"],
                         EmployeeId = (int)reader["EmployeeID"],
                         DateTime = (DateTime)reader["DateTime"],
                         Status = (string)reader["Status"]
@@ -77,8 +77,9 @@ namespace StationeryStore_ADTeam11.DAOs
             int outstandingQty = request.NeededQty - request.ActualQty;
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"update Request set DisbursedDate='" + DateTime.Now + "'where ID='" + request.RequestId + "'";
+            string sql = @"update Request set DisbursedDate='" + DateTime.Now + "'where ID= @reqId";
             SqlCommand command = new SqlCommand(sql, conn);
+            command.Parameters.AddWithValue("@reqId", request.RequestId);
             command.ExecuteNonQuery();
             conn.Close();
         }
@@ -109,7 +110,7 @@ namespace StationeryStore_ADTeam11.DAOs
             return requestlist;
         }
 
-        public bool UpdateStatus(string status, string reqId)
+        public bool UpdateStatus(string status, int reqId)
         {
             string sql = "UPDATE Request SET Status= @status WHERE ID= @reqId";
             SqlCommand cmd = new SqlCommand(sql, connection);
@@ -250,7 +251,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 request = new Request()
                 {
-                    Id = data["ID"].ToString(),
+                    Id = (int)data["ID"],
                     Status = data["Status"].ToString(),
                     DateTime = Convert.ToDateTime(data["DateTime"]),
                    // DisbursedDate = Convert.ToDateTime(data["DisbursedDate"])
@@ -373,7 +374,7 @@ namespace StationeryStore_ADTeam11.DAOs
             return reqList;
         }
 
-        public List<MRequestItem> GetRequestItems(string reqId) {
+        public List<MRequestItem> GetRequestItems(int reqId) {
             List<MRequestItem> itemList = new List<MRequestItem>();
             MRequestItem req = null;
             SqlDataReader reader = null;

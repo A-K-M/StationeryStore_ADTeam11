@@ -93,17 +93,17 @@ namespace StationeryStore_ADTeam11.Controllers
 
         [Route("requests/{reqId}/detail")]
         [HttpGet]
-        public MResponse GetRequestDetail(string reqId)
+        public MResponse GetRequestDetail(int reqId)
         {
             RequestDAO dao = new RequestDAO();
-            return new MResponseList<MRequestItem>() { ResList = dao.GetRequestItems("COMM/111/100") };
+            return new MResponseList<MRequestItem>() { ResList = dao.GetRequestItems(reqId) };
         }
 
-        [Route("requests/{reqId}")]
+        [Route("requests")]
         [HttpPatch]
-        public MResponse UpdateReqStatus(string reqId, RequisitionVM status)
+        public MResponse UpdateReqStatus(RequisitionVM status)
         {
-            bool success = new RequestDAO().UpdateStatus(status.Status, "COMM/111/100");
+            bool success = new RequestDAO().UpdateStatus(status.Status, status.Id);
             MResponse response = new MResponse(success);
 
             return response;
