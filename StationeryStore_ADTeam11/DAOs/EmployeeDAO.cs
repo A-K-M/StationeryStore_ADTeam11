@@ -80,13 +80,39 @@ namespace StationeryStore_ADTeam11.DAOs
             return deptId;
         }
 
+        public bool UpdateUserRole(int empId)
+        {
+            string sql = "UPDATE Employee SET Role = 'Representative'WHERE ID = @id";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@id", empId);
+            connection.Open();
+
+            if (cmd.ExecuteNonQuery() == 0)
+            {
+                connection.Close();
+                return false;
+            }
+
+            connection.Close();
+            return true;
+        }
+
         public List<Employee> GetEmployeeByDeptId(string deptId)
         {
             List<Employee> employees = new List<Employee>();
             Employee employee = null;
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"select * from employee where DeptID = '" + deptId + "'";
+            //string sql = @"select * from employee where DeptID = '" + deptId + "'";
+            //string sql = @"select * from Employee as e, Department as d
+            //                where not e.ID=d.HeadID and not e.ID=d.RepID and e.DeptID='"+deptId+"'";
+
+            string sql = "SELECT e.* " +
+                          "FROM Employee e, Department d " +
+                           "WHERE e.DeptID = d.ID " +
+                            "AND e.ID != d.HeadID " +
+                            "AND e.ID != d.RepID " +
+                            "AND d.ID = '" + deptId + "'";
             SqlCommand command = new SqlCommand(sql, conn);
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())

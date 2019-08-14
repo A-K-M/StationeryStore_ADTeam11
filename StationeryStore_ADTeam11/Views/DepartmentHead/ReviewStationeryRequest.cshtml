@@ -5,11 +5,11 @@
     var reqlist = (List<StationeryRequest>)ViewData["reqlist"];
 }
 
-<h2>ReviewStationeryRequest</h2>
 
-<div class="card" style="height: 550px">
-    <div class="card-header">
-        <h4>Stationary Requests</h4>
+<div class="card">
+    <div class="card-header d-flex align-items-center">
+        
+        <h4>Stationary Request List</h4>
     </div>
     <div class="card-body">
         <table class="table  table-hover table-striped">
@@ -25,30 +25,33 @@
             <tbody>
                 @{
                     @:<tr>
-                    {
-                        foreach (var req in reqlist)
                         {
-                      <tr>
-                          <th scope="row">1</th>
-                          <td>@req.EmpName</td>
-                          <td>@req.Date</td>
-                          <td>11</td>
-                          @{
-                              if (req.Status == "Pending")
-                              {
-                                  <td>@Html.ActionLink(req.Status, "ViewPendingRequestDetails", "DepartmentHead", new { reqid = req.RequestId}, null)</td>
-                              }
-                              else
-                              {
-                                  <td>@req.Status</td>
-                              }
-                            }
+                            foreach (var req in reqlist)
+                            {
+                            <tr>
+                                <th scope="row">@req.RequestId</th>
+                                <td>@req.EmpName</td>
+                                <td>@req.Date</td>
+                                <td>@req.TotalItem</td>
+                                @{
+                                    if (req.Status == "Pending")
+                                    {
+                                <td>
+                                    <a href="/DepartmentHead/ViewPendingRequestDetails/@req.RequestId">@req.Status</a>
+                                    @*@Html.ActionLink(req.Status, "ViewPendingRequestDetails", "DepartmentHead", new { reqid = req.RequestId }, null)*@
+                                </td>
+                                    }
+                                    else
+                                    {
+                                        <td>@req.Status</td>
+                                    }
+                                }
 
-                      </tr>
+                            </tr>
                         }
                     }
                 }
-                </tbody>
-            </table>
+            </tbody>
+        </table>
     </div>
 </div>

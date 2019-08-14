@@ -11,7 +11,7 @@ using Microsoft.Ajax.Utilities;
 namespace StationeryStore_ADTeam11.Controllers
 {
     [LayoutFilter("_storeClerkLayout")]
-    public class StoreClerkController : Controller
+    public class StoreClerkController : BaseController
     {
         public ActionResult Index()
         {
@@ -56,6 +56,22 @@ namespace StationeryStore_ADTeam11.Controllers
             {
                 return Json("Something went wrong! Please try again later.", JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public ActionResult ApprovedRequests()
+        {
+            RequestDAO request = new RequestDAO();
+            ViewData["Requests"] = request.GetApprovedRequests();
+
+            return View();
+        }
+
+        public ActionResult ApprovedRequestDetails(int id)
+        {
+            RequestDAO request = new RequestDAO();
+            ViewData["RequestDetails"] = request.GetRequestDetail(id);
+
+            return View();
         }
 
         public ActionResult ViewStockCard()

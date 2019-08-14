@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "ApprovedRequestDetails";
+}
+
+@using StationeryStore_ADTeam11.View_Models;
+@{
+    var requisitionDetails = (List<RequestDetailViewModel>)ViewData["RequestDetails"];
+}
+@{
+    ViewBag.Title = "RequestDetail";
+}
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Request Detail</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <Label class="col-12">Collection Point - <i>@requisitionDetails.First().CollectionPoint </i></Label>
+                        <Label class="col-12">Requested Date - <i> @requisitionDetails.First().RequestedDate </i></Label>
+                        <div class="col-12">
+                            <table class="table  table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Stationary Name</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (RequestDetailViewModel requestDetail in requisitionDetails)
+                                    {
+                                        <tr>
+                                            <td>@requestDetail.ItemDescription</td>
+                                            <td>@requestDetail.NeededQty</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
