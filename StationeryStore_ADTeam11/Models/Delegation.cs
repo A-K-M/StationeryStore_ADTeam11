@@ -10,6 +10,7 @@ namespace StationeryStore_ADTeam11.Models
         private int _id;
         private int _employeeId;
         private string _employeeName;
+        private string _email;
         private DateTime _startDate;
         private DateTime _endDate;
         private bool _status;
@@ -18,6 +19,7 @@ namespace StationeryStore_ADTeam11.Models
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         public string EmployeeName { get; set; }
+        public string Email { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public bool Status { get; set; }
