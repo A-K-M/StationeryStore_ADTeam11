@@ -1,131 +1,132 @@
 ﻿@model List<StationeryStore_ADTeam11.Models.Supplier>
 @using StationeryStore_ADTeam11.Models
 
-@{ 
+@{
     var suppliers = (List<Supplier>)@Model;
+    //var rank = ViewData["rank"];
 }
 
 @*<div>
-    <h4>Supplier</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+        <h4>Supplier</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.GstNumber)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.GstNumber)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.GstNumber)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.GstNumber)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ContactName)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.ContactName)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ContactName)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.ContactName)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNo)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.PhoneNo)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNo)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.PhoneNo)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Fax)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Fax)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Fax)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Fax)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Address)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Address)
+            </dd>
 
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>*@
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>*@
 
 
 @{
     if (suppliers != null)
     {
-        foreach (var supplier in suppliers)
+        int i = 0;
+        string[] rank = new string[] {"1st Supplier", "2nd Supplier", "3rd Supplier"};
+        foreach (Supplier supplier in suppliers)
         {
-        <div class="container-fluid">
-            <div class="row d-flex">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>
-                                @supplier.Name
-                                    @*<a class="pull-right" style="padding:2px">
-                                        @using (Html.BeginForm("DeleteSupplier", "StoreManager", FormMethod.Post))
-                                        {
-                                            @Html.HiddenFor(supp => supp.Id, new { @readonly = "readonly", @Value = supplier.Id })
-                                            <input type="submit" value="Delete" class="btn btn-danger btn-sm" style='width:70px'>
-                                        }
-                                    </a>
+            
+            <div class="container-fluid">
+                <div class="row d-flex">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>
+                                    @rank[i] - @supplier.Name
                                     <a class="pull-right" style="padding:2px">
-                                        @using (Html.BeginForm("EditSupplier", "StoreManager", FormMethod.Post))
-                                        {
-                                            @Html.HiddenFor(supp => supp.Id, new { @Value = supplier.Id })
-                                            <input type="submit" value="Edit" class="btn btn-warning btn-sm" style='width:70px'>
-                                        }
-                                    </a>*@
-                            </h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <table class="table table-striped table-hover">
-                                        <tr>
-                                            <td align="left">
-                                                Supplier Code
-                                                <br>Supplier Name
-                                                <br>GST Registration No
-                                                <br>Contact Name
-                                                <br>Phone No
-                                                <br>Fax No
-                                                <br>Address
-                                            </td>
-                                            <td>
-                                                : @supplier.Id
-                                                <br>: @supplier.Name
-                                                <br>: @supplier.GstNumber
-                                                <br>: @supplier.ContactName
-                                                <br>: @supplier.PhoneNo
-                                                <br>: @supplier.Fax
-                                                <br>: @supplier.Address
-                                            </td>
-                                        </tr>
-                                    </table>
+                                        <div style="display:none">
+                                            <input id="ItemId" name="ItemId" placeholder="Item Code" type="text">
+                                        </div>
+                                        <div class="col-1">
+                                            <input type="submit" id="SearchBtn" value="Replace" class="btn btn-warning btn-sm form-group">
+                                        </div>
+                                    </a>
+                                </h4>
+
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <table class="table table-striped table-hover">
+                                            <tr>
+                                                <td align="left">
+                                                    Supplier Code
+                                                    <br>Supplier Name
+                                                    <br>GST Registration No
+                                                    <br>Contact Name
+                                                    <br>Phone No
+                                                    <br>Fax No
+                                                    <br>Address
+                                                </td>
+                                                <td>
+                                                    : @supplier.Id
+                                                    <br>: @supplier.Name
+                                                    <br>: @supplier.GstNumber
+                                                    <br>: @supplier.ContactName
+                                                    <br>: @supplier.PhoneNo
+                                                    <br>: @supplier.Fax
+                                                    <br>: @supplier.Address
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         <br />
-            }
+
+            i++;
         }
+    }
 }
