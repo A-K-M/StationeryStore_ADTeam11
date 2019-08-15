@@ -151,6 +151,40 @@ namespace StationeryStore_ADTeam11.Controllers
             }
         }
 
+        public PartialViewResult ReplaceSupplierList(string Id)
+        {
+            List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersExceptId(Id);
+            if (Id == null)
+            {
+                return PartialView("_noSupplierResults", Id);
+            }
+            else if (itemSuppliers != null)
+            {
+                return PartialView("_replaceSupplierList", itemSuppliers);
+            }
+            else
+            {
+                return PartialView("_noSupplierResults", Id);
+            }
+        }
+
+        public JsonResult ReplaceSupplierList2(string Id)
+        {
+            List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersExceptId(Id);
+            if (Id == null)
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+            else if (itemSuppliers != null)
+            {
+                return Json(itemSuppliers, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpGet]
         public ActionResult CreateRetrievalList()
         {

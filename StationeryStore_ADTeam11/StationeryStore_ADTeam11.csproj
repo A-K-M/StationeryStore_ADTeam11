@@ -521,6 +521,7 @@
     <Content Include="Views\Shared\_noSupplierResults.cshtml" />
     <Content Include="Views\StoreClerk\CreateRetrievalList.cshtml" />
     <Content Include="Views\StoreClerk\ViewRetrievalList.cshtml" />
+    <Content Include="Views\Shared\_replaceSupplierList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

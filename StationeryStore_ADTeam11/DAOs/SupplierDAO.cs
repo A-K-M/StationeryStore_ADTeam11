@@ -426,5 +426,38 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return suppliers;
         }
+
+        public List<Supplier> FindSuppliersExceptId(string id)
+        {
+            List <Supplier> suppliers = new List<Supplier>();
+            Supplier supplier = new Supplier();
+
+            try
+            {
+                connection.Open();
+
+                string sql = @"SELECT * FROM Supplier WHERE ID != '" + id + "'";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    supplier = new Supplier()
+                    {
+                        Id = (string)reader["ID"],
+                        Name = (string)reader["Name"]
+                    };
+                    suppliers.Add(supplier);
+                }
+
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                suppliers = null;
+            }
+
+            return suppliers;
+        }
     }
 }
