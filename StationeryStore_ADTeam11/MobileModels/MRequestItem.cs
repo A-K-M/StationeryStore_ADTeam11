@@ -7,11 +7,11 @@ namespace StationeryStore_ADTeam11.MobileModels
 {
     public class MRequestItem
     {
-
+        private int _requestId;
         private int _quantity;
         private string _description;
 
-        public string RequestId { get; set; }
+        public int RequestId { get; set; }
         public int Quantity { get; set; }
         public string Description { get; set; }
     }

@@ -215,6 +215,7 @@
     <Compile Include="View_Models\DeligationStatus.cs" />
     <Compile Include="View_Models\DepartmentDelegation.cs" />
     <Compile Include="View_Models\RequestDetailViewModel.cs" />
+    <Compile Include="View_Models\RequestStationery.cs" />
     <Compile Include="View_Models\RequestViewModel.cs" />
     <Compile Include="View_Models\RequisitionVM.cs" />
     <Compile Include="View_Models\RetrievalList.cs" />

@@ -8,14 +8,14 @@ namespace StationeryStore_ADTeam11.Models
     public class ItemRequest
     {
         private int _id;
-        private string _requestId;
+        private int _requestId;
         private string _description;
         private string _itemId;
         private int _neededQty;
         private int _actualQty;
 
         public int Id { get; set; }
-        public string RequestId { get; set; }
+        public int RequestId { get; set; }
         public string Description { get; set; }
         public string ItemId { get; set; }
         public int NeededQty { get; set; }

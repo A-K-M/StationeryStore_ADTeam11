@@ -17,7 +17,12 @@ namespace StationeryStore_ADTeam11.DAOs
             List<StationeryRequest> requestlist = new List<StationeryRequest>();
             
            
-            string sql = "SELECT R.Status as Status,E.Name as Name,R.DateTIme as Date,R.Id as RequestId FROM Request R,Employee E WHERE E.ID=R.EmployeeID";
+            string sql = "SELECT R.Status as Status,E.Name as Name,R.DateTime as Date,R.Id as RequestId , SUM(IR.NeededQty) AS [TotalQuantity] " +
+                        "FROM Request R,Employee E, ItemRequest IR " +
+                        "WHERE E.ID = R.EmployeeID " +
+                        "AND R.ID = IR.RequestID " +
+                        "GROUP BY R.Status ,E.Name,R.DateTime,R.Id; ";
+
             SqlCommand cmd = new SqlCommand(sql, connection);
             connection.Open();
             SqlDataReader reader = cmd.ExecuteReader();
@@ -28,7 +33,8 @@ namespace StationeryStore_ADTeam11.DAOs
                     EmpName = (string)reader["Name"],
                     Date = (DateTime)reader["Date"],
                     Status = (string)reader["Status"],
-                    RequestId = (string)reader["RequestId"],
+                    RequestId = (int)reader["RequestId"],
+                    TotalItem = (int)reader["TotalQuantity"]
                 };
                 requestlist.Add(request);
             }
@@ -52,7 +58,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 {
                     Request request = new Request()
                     {
-                        Id = (string)reader["ID"],
+                        Id = (int)reader["ID"],
                         EmployeeId = (int)reader["EmployeeID"],
                         DateTime = (DateTime)reader["DateTime"],
                         Status = (string)reader["Status"]
@@ -65,18 +71,20 @@ namespace StationeryStore_ADTeam11.DAOs
             conn.Close();
             return requests;
         }
+
         public void UpdateDisbursedDate(ItemRequest request) //NZCK
         {
             int outstandingQty = request.NeededQty - request.ActualQty;
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"update Request set DisbursedDate='" + DateTime.Now + "'where ID='" + request.RequestId + "'";
+            string sql = @"update Request set DisbursedDate='" + DateTime.Now + "'where ID= @reqId";
             SqlCommand command = new SqlCommand(sql, conn);
+            command.Parameters.AddWithValue("@reqId", request.RequestId);
             command.ExecuteNonQuery();
             conn.Close();
         }
 
-        public List<StationeryRequest> ViewPendingRequestDetails(string requestId)
+        public List<StationeryRequest> ViewPendingRequestDetails(int requestId)
         {
             List<StationeryRequest> requestlist = new List<StationeryRequest>();
 
@@ -94,7 +102,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     EmpName = (string)reader["Name"],
                     Description = (string)reader["Description"],
                     TotalItem = (int)reader["Qty"],
-                    RequestId = (string)reader["RequestId"]
+                    RequestId = (int)reader["RequestId"]
                 };
                 requestlist.Add(request);
             }
@@ -102,7 +110,7 @@ namespace StationeryStore_ADTeam11.DAOs
             return requestlist;
         }
 
-        public bool UpdateStatus(string status, string reqId)
+        public bool UpdateStatus(string status, int reqId)
         {
             string sql = "UPDATE Request SET Status= @status WHERE ID= @reqId";
             SqlCommand cmd = new SqlCommand(sql, connection);
@@ -112,6 +120,43 @@ namespace StationeryStore_ADTeam11.DAOs
             int row = cmd.ExecuteNonQuery(); // return no of rows affected by query
             connection.Close();
             return row > 0;
+        }
+
+        public List<RequisitionVM> GetApprovedRequests()
+        {
+            List<RequisitionVM> requisitions = new List<RequisitionVM>();
+            RequisitionVM requisition = null;
+
+            string sql = "SELECT r.ID, r.DateTime, r.Status, e.Name, SUM(ir.NeededQty) AS [TotalItems] " +
+                          "FROM Request r, Employee e, ItemRequest ir " +
+                          "WHERE Status = 'Approved' " +
+                          "AND r.EmployeeID = e.ID " +
+                          "AND r.ID = ir.RequestID " +
+                          "GROUP BY  r.ID, r.DateTime, r.Status, e.Name " +
+                          "ORDER BY r.DateTime ASC; ";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                requisition = new RequisitionVM()
+                {
+                    Id = Convert.ToInt32(data["ID"]),
+                    Date = Convert.ToDateTime(data["DateTime"]),
+                    Status = data["Status"].ToString(),
+                    EmployeeName = data["Name"].ToString(),
+                    Quantity = Convert.ToInt32(data["TotalItems"])
+                };
+
+                requisitions.Add(requisition);
+            }
+            data.Close();
+            connection.Close();
+
+            return requisitions;
         }
 
         public List<RequisitionVM> GetRequistionListByEmpId(int empId)
@@ -154,6 +199,42 @@ namespace StationeryStore_ADTeam11.DAOs
             return requisitionList;
         }
 
+        public List<RequestDetailViewModel> GetRequestDetail(int reqId)
+        {
+            List<RequestDetailViewModel> requestDetailList = new List<RequestDetailViewModel>();
+
+            string sql = "SELECT i.Description, ir.NeededQty, r.DateTime, cp.Name " +
+                        "FROM ItemRequest ir, Item i, Request r, Employee e, Department d, CollectionPoint cp " +
+                        "WHERE r.ID = @reqId " +
+                        "AND ir.RequestID = r.ID " +
+                        "AND i.ID = ir.ItemID " +
+                        "AND e.ID = r.EmployeeID " +
+                        "AND d.ID = e.DeptID " +
+                        "AND cp.ID = d.CollectionPointID";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@reqId", reqId);
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            RequestDetailViewModel requestDetail = null;
+
+            while (data.Read())
+            {
+                requestDetail = new RequestDetailViewModel()
+                {
+                    ItemDescription = data["Description"].ToString(),
+                    NeededQty = Convert.ToInt32(data["NeededQty"]),
+                    RequestedDate = Convert.ToDateTime(data["DateTime"]),
+                    CollectionPoint = data["Name"].ToString()
+                };
+
+                requestDetailList.Add(requestDetail);
+            }
+
+            return requestDetailList;
+        }
+
         public Request GetRequestById(string id)
         {
             string sql = "SELECT * FROM Request WHERE ID = @id";
@@ -170,7 +251,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 request = new Request()
                 {
-                    Id = data["ID"].ToString(),
+                    Id = (int)data["ID"],
                     Status = data["Status"].ToString(),
                     DateTime = Convert.ToDateTime(data["DateTime"]),
                    // DisbursedDate = Convert.ToDateTime(data["DisbursedDate"])
@@ -251,7 +332,6 @@ namespace StationeryStore_ADTeam11.DAOs
             return "success";
         }
 
-
         public List<RequisitionVM> GetReqListByDepartment(string deptId)
         {
             List<RequisitionVM> reqList = new List<RequisitionVM>();
@@ -293,7 +373,8 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             return reqList;
         }
-        public List<MRequestItem> GetRequestItems(string reqId) {
+
+        public List<MRequestItem> GetRequestItems(int reqId) {
             List<MRequestItem> itemList = new List<MRequestItem>();
             MRequestItem req = null;
             SqlDataReader reader = null;
@@ -328,5 +409,47 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             return itemList;
         }
+
+        /*DELETE FROM HERE IF SOMETHING WRONG!*/
+
+        public bool CreateRequest(int empId, List<RequestStationery> reqStationery)
+        {
+            DateTime date = DateTime.Now;
+            string sqlFormattedDate = date.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            SqlTransaction transaction = null;
+            try
+            {
+                connection.Open();
+                transaction = connection.BeginTransaction();
+                string sql = "INSERT INTO Request (EmployeeID , DateTime , Status , DisbursedDate) OUTPUT INSERTED.ID VALUES" +
+                "(" + empId + ", '" + sqlFormattedDate + "', 'Pending', null)";
+                SqlCommand cmd = new SqlCommand(sql, connection, transaction);
+
+                int reqID = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+                sql = "";
+                foreach (var req in reqStationery)
+                {
+
+                    sql += "INSERT INTO ItemRequest (RequestID,ItemID, NeededQty, ActualQty) VALUES ('" + reqID + "','" +
+                           req.ItemId + "', " + req.Quantity + ", 0 );";
+                }
+                cmd = new SqlCommand(sql, connection, transaction);
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return true;
+        }
+        /***************************************************************************************/
     }
 }
