@@ -1,6 +1,11 @@
-﻿@model StationeryStore_ADTeam11.Models.Supplier
+﻿@model List<StationeryStore_ADTeam11.Models.Supplier>
+@using StationeryStore_ADTeam11.Models
 
-<div>
+@{ 
+    var suppliers = (List<Supplier>)@Model;
+}
+
+@*<div>
     <h4>Supplier</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -57,12 +62,14 @@
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
-</p>
+</p>*@
 
 
 @{
-    foreach (var supplier in suppliers)
+    if (suppliers != null)
     {
+        foreach (var supplier in suppliers)
+        {
         <div class="container-fluid">
             <div class="row d-flex">
                 <div class="col-12">
@@ -70,20 +77,20 @@
                         <div class="card-header">
                             <h4>
                                 @supplier.Name
-                                <a class="pull-right" style="padding:2px">
-                                    @using (Html.BeginForm("DeleteSupplier", "StoreManager", FormMethod.Post))
-                                    {
-                                        @Html.HiddenFor(supp => supp.Id, new { @readonly = "readonly", @Value = supplier.Id })
-                                        <input type="submit" value="Delete" class="btn btn-danger btn-sm" style='width:70px'>
-                                    }
-                                </a>
-                                <a class="pull-right" style="padding:2px">
-                                    @using (Html.BeginForm("EditSupplier", "StoreManager", FormMethod.Post))
-                                    {
-                                        @Html.HiddenFor(supp => supp.Id, new { @Value = supplier.Id })
-                                        <input type="submit" value="Edit" class="btn btn-warning btn-sm" style='width:70px'>
-                                    }
-                                </a>
+                                    @*<a class="pull-right" style="padding:2px">
+                                        @using (Html.BeginForm("DeleteSupplier", "StoreManager", FormMethod.Post))
+                                        {
+                                            @Html.HiddenFor(supp => supp.Id, new { @readonly = "readonly", @Value = supplier.Id })
+                                            <input type="submit" value="Delete" class="btn btn-danger btn-sm" style='width:70px'>
+                                        }
+                                    </a>
+                                    <a class="pull-right" style="padding:2px">
+                                        @using (Html.BeginForm("EditSupplier", "StoreManager", FormMethod.Post))
+                                        {
+                                            @Html.HiddenFor(supp => supp.Id, new { @Value = supplier.Id })
+                                            <input type="submit" value="Edit" class="btn btn-warning btn-sm" style='width:70px'>
+                                        }
+                                    </a>*@
                             </h4>
                         </div>
                         <div class="card-body">
@@ -119,5 +126,6 @@
             </div>
         </div>
         <br />
-    }
+            }
+        }
 }

@@ -112,10 +112,42 @@ namespace StationeryStore_ADTeam11.Controllers
 
         }
 
+        public ActionResult ItemSuppliers(String Id)
+        {
+            Session["Username"] = "Clerk User";
+            Session["Role"] = "Clerk";
+            List<Supplier> itemSuppliers = null;
+
+            if (Id != null)
+            {
+                itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
+            }
+
+            ViewData["suppliers"] = itemSuppliers;
+            return View();
+        }
+
         public JsonResult GetSuppliersByItemId(string Id)
         {
             List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
             return Json(itemSuppliers, JsonRequestBehavior.AllowGet);
+        }
+
+        public PartialViewResult ItemSupplierList(string Id)
+        {
+            List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
+            if (Id == null)
+            {
+                return PartialView("_noSupplierResults", Id);
+            }
+            else if (itemSuppliers != null)
+            {
+                return PartialView("_itemSupplier", itemSuppliers);
+            }
+            else
+            {
+                return PartialView("_noSupplierResults", Id);
+            }
         }
     }
 }

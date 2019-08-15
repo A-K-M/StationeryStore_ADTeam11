@@ -262,127 +262,167 @@ namespace StationeryStore_ADTeam11.DAOs
         {
             List<Supplier> suppliers = new List<Supplier>();
             Supplier supplier = new Supplier();
+            Item item = new Item();
 
             connection.Open();
 
             try
             {
-                string sql = @"Select S.ID, S.Name, S.GstNo, S.ContactName, S.PhoneNo, S.Fax, S.Address 
-                                FROM Supplier S JOIN Item I ON I.FirstSupplier = S.ID WHERE I.Id = '" + id + "'";
+                string sql = @"Select ID FROM Item WHERE Id = '" + id + "'";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    supplier = new Supplier()
-                    {
-                        Id = (string)reader["ID"],
-                        Name = (string)reader["Name"],
-                        ContactName = (string)reader["ContactName"],
-                        PhoneNo = (int)reader["PhoneNo"],
-                        Fax = (int)reader["Fax"],
-                        Address = (string)reader["Address"]
-                    };
-
                     try
                     {
-                        supplier.GstNumber = (string)reader["GstNo"];
+                        item = new Item()
+                        {
+                            Id = (string)reader["ID"]
+                        };
                     }
                     catch (Exception e)
                     {
-                        supplier.GstNumber = "Nil";
+                        item.Id = null;
                     }
-                    
+
                 }
 
             }
             catch (Exception e)
             {
-                supplier = null;
+                item.Id = null;
             }
-            suppliers.Add(supplier);
-
+            
             connection.Close();
-            connection.Open();
 
-            try
+            if (item.Id == id)
             {
-                string sql2 = @"Select S.ID, S.Name, S.GstNo, S.ContactName, S.PhoneNo, S.Fax, S.Address 
-                                FROM Supplier S JOIN Item I ON I.SecondSupplier = S.ID WHERE I.Id = '" + id + "'";
-                SqlCommand cmd2 = new SqlCommand(sql2, connection);
-                SqlDataReader reader2 = cmd2.ExecuteReader();
+                connection.Open();
 
-                while (reader2.Read())
+                try
                 {
-                    supplier = new Supplier()
-                    {
-                        Id = (string)reader2["ID"],
-                        Name = (string)reader2["Name"],
-                        ContactName = (string)reader2["ContactName"],
-                        PhoneNo = (int)reader2["PhoneNo"],
-                        Fax = (int)reader2["Fax"],
-                        Address = (string)reader2["Address"]
-                    };
+                    string sql = @"Select S.ID, S.Name, S.GstNo, S.ContactName, S.PhoneNo, S.Fax, S.Address 
+                                    FROM Supplier S JOIN Item I ON I.FirstSupplier = S.ID WHERE I.Id = '" + id + "'";
+                    SqlCommand cmd = new SqlCommand(sql, connection);
+                    SqlDataReader reader = cmd.ExecuteReader();
 
-                    try
+                    while (reader.Read())
                     {
-                        supplier.GstNumber = (string)reader2["GstNo"];
-                    }
-                    catch (Exception e)
-                    {
-                        supplier.GstNumber = "Nil";
+                        supplier = new Supplier()
+                        {
+                            Id = (string)reader["ID"],
+                            Name = (string)reader["Name"],
+                            ContactName = (string)reader["ContactName"],
+                            PhoneNo = (int)reader["PhoneNo"],
+                            Fax = (int)reader["Fax"],
+                            Address = (string)reader["Address"]
+                        };
+
+                        try
+                        {
+                            supplier.GstNumber = (string)reader["GstNo"];
+                        }
+                        catch (Exception e)
+                        {
+                            supplier.GstNumber = "Nil";
+                        }
+
                     }
 
                 }
-
-            }
-            catch (Exception e)
-            {
-                supplier = null;
-            }
-            suppliers.Add(supplier);
-
-            connection.Close();
-            connection.Open();
-
-            try
-            {
-                string sql3 = @"Select S.ID, S.Name, S.GstNo, S.ContactName, S.PhoneNo, S.Fax, S.Address 
-                                FROM Supplier S JOIN Item I ON I.ThirdSupplier = S.ID WHERE I.Id = '" + id + "'";
-                SqlCommand cmd3 = new SqlCommand(sql3, connection);
-                SqlDataReader reader3 = cmd3.ExecuteReader();
-
-                while (reader3.Read())
+                catch (Exception e)
                 {
-                    supplier = new Supplier()
-                    {
-                        Id = (string)reader3["ID"],
-                        Name = (string)reader3["Name"],
-                        ContactName = (string)reader3["ContactName"],
-                        PhoneNo = (int)reader3["PhoneNo"],
-                        Fax = (int)reader3["Fax"],
-                        Address = (string)reader3["Address"]
-                    };
+                    supplier = null;
+                }
+                suppliers.Add(supplier);
 
-                    try
+                connection.Close();
+                connection.Open();
+
+                try
+                {
+                    string sql2 = @"Select S.ID, S.Name, S.GstNo, S.ContactName, S.PhoneNo, S.Fax, S.Address 
+                                    FROM Supplier S JOIN Item I ON I.SecondSupplier = S.ID WHERE I.Id = '" + id + "'";
+                    SqlCommand cmd2 = new SqlCommand(sql2, connection);
+                    SqlDataReader reader2 = cmd2.ExecuteReader();
+
+                    while (reader2.Read())
                     {
-                        supplier.GstNumber = (string)reader3["GstNo"];
-                    }
-                    catch (Exception e)
-                    {
-                        supplier.GstNumber = "Nil";
+                        supplier = new Supplier()
+                        {
+                            Id = (string)reader2["ID"],
+                            Name = (string)reader2["Name"],
+                            ContactName = (string)reader2["ContactName"],
+                            PhoneNo = (int)reader2["PhoneNo"],
+                            Fax = (int)reader2["Fax"],
+                            Address = (string)reader2["Address"]
+                        };
+
+                        try
+                        {
+                            supplier.GstNumber = (string)reader2["GstNo"];
+                        }
+                        catch (Exception e)
+                        {
+                            supplier.GstNumber = "Nil";
+                        }
+
                     }
 
                 }
+                catch (Exception e)
+                {
+                    supplier = null;
+                }
+                suppliers.Add(supplier);
+
+                connection.Close();
+                connection.Open();
+
+                try
+                {
+                    string sql3 = @"Select S.ID, S.Name, S.GstNo, S.ContactName, S.PhoneNo, S.Fax, S.Address 
+                                    FROM Supplier S JOIN Item I ON I.ThirdSupplier = S.ID WHERE I.Id = '" + id + "'";
+                    SqlCommand cmd3 = new SqlCommand(sql3, connection);
+                    SqlDataReader reader3 = cmd3.ExecuteReader();
+
+                    while (reader3.Read())
+                    {
+                        supplier = new Supplier()
+                        {
+                            Id = (string)reader3["ID"],
+                            Name = (string)reader3["Name"],
+                            ContactName = (string)reader3["ContactName"],
+                            PhoneNo = (int)reader3["PhoneNo"],
+                            Fax = (int)reader3["Fax"],
+                            Address = (string)reader3["Address"]
+                        };
+
+                        try
+                        {
+                            supplier.GstNumber = (string)reader3["GstNo"];
+                        }
+                        catch (Exception e)
+                        {
+                            supplier.GstNumber = "Nil";
+                        }
+
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    supplier = null;
+                }
+                suppliers.Add(supplier);
+
+                connection.Close();
 
             }
-            catch (Exception e)
-            {
-                supplier = null;
-            }
-            suppliers.Add(supplier);
 
-            connection.Close();
+            else
+                suppliers = null;
 
             return suppliers;
         }

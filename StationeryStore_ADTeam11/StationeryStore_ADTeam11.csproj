@@ -518,6 +518,7 @@
     <Content Include="Views\StoreSupervisor\ChartDataXML.cshtml" />
     <Content Include="Views\StoreClerk\ItemSuppliers.cshtml" />
     <Content Include="Views\Shared\_itemSupplier.cshtml" />
+    <Content Include="Views\Shared\_noSupplierResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />
