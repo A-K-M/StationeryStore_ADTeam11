@@ -170,8 +170,15 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
 
-            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Approved", adjustmentVoucherDAO.GetVoucherItems(id));
+            bool result = adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Approved", adjustmentVoucherDAO.GetVoucherItems(id));
 
+            if (result)
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Successfully Approved!");
+                return RedirectToAction("AdjustmentVouchers");
+            }
+
+            SetFlash(Enums.FlashMessageType.Error, "Something went wrong! Please try again later!");
             return RedirectToAction("AdjustmentVouchers");
         }
 
@@ -179,8 +186,15 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
 
-            adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Rejected", adjustmentVoucherDAO.GetVoucherItems(id));
+            bool result = adjustmentVoucherDAO.ReviewAdjustmentVoucher(id, "Rejected", adjustmentVoucherDAO.GetVoucherItems(id));
 
+            if (result)
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Successfully Rejected!");
+                return RedirectToAction("AdjustmentVouchers");
+            }
+
+            SetFlash(Enums.FlashMessageType.Error, "Something went wrong! Please try again later!");
             return RedirectToAction("AdjustmentVouchers");
         }
     }
