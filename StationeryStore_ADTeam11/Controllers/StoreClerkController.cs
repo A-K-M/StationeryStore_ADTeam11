@@ -1,6 +1,7 @@
 ﻿using StationeryStore_ADTeam11.Filters;
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.View_Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -148,6 +149,135 @@ namespace StationeryStore_ADTeam11.Controllers
             {
                 return PartialView("_noSupplierResults", Id);
             }
+        }
+
+        [HttpGet]
+        public ActionResult CreateRetrievalList()
+        {
+
+            RetrievalDAO retrieval = new RetrievalDAO();
+
+            RetrievalList retrievalList = new RetrievalList();
+            retrievalList.retrievals = retrieval.GetRetrievalList();
+            //foreach (var item in retrievalList.retrievals)
+            //{
+            //    if (retrieval.checkOutstandingList(item.ItemId))
+            //    {
+            //        int outstandingQty = retrieval.GetOutstandingQtyByItemId(item.ItemId);
+            //        item.Qty += outstandingQty;
+            //    }
+            //}
+            return View(retrievalList);
+        }
+
+        [HttpPost]
+        public ActionResult CreateRetrieval()
+        {
+            string username = Session["username"].ToString();
+            string ItemId;
+            int retrieved;
+            foreach (string key in Request.Form.AllKeys)
+            {
+                string out_ids = "";
+                string req_ids = "";
+                string ir_query = "";
+                ItemId = Convert.ToString(key);
+                retrieved = Convert.ToInt32(Request[key]);
+                RetrievalDAO retrieval = new RetrievalDAO();
+                retrieval.CreateRetrieval(username, ItemId, retrieved);
+
+                List<Outstanding> out_list = retrieval.GetPendingOutstandingsListByItemId(ItemId);
+                if (out_list != null)
+                {
+                    foreach (Outstanding row in out_list)
+                    {
+                        int real = 0;
+                        if (retrieved > 0)
+                        {
+                            real = retrieved;
+                        }
+                        retrieved -= row.RemainingQty;
+                        if (retrieved >= 0)
+                        {
+                            out_ids += row.Id.ToString() + ", ";
+                            real = retrieved;
+                        }
+                    }
+                    out_ids = out_ids.TrimEnd(',', ' ');
+                    if (out_ids != "")
+                        retrieval.UpdateOutstanding(out_ids);
+                }
+
+
+                List<ItemRequest> request_list = retrieval.GetReqDeptListByItemId(ItemId);
+                if (request_list != null && retrieved > 0)
+                {
+                    foreach (ItemRequest request in request_list)
+                    {
+                        int real = 0;
+                        if (retrieved > 0)
+                        {
+                            real = retrieved;
+                        }
+                        retrieved -= request.NeededQty;
+                        if (retrieved >= 0)
+                        {
+                            req_ids += request.RequestId.ToString() + ", ";
+                            real = retrieved;
+                            retrieval.UpdateItemRequest(request.Id, request.NeededQty);
+                        }
+                        else
+                        {
+                            ir_query += retrieval.CreateOutstandingQuery(request.Id, request.NeededQty - real);
+                            retrieval.UpdateItemRequest(request.Id, real);
+                        }
+                    }
+                    req_ids = req_ids.TrimEnd(',', ' ');
+                    if (req_ids != "")
+                        retrieval.UpdateRequestStatus(req_ids);
+                    if (ir_query != "")
+                        retrieval.CreateOutstanding(ir_query);
+                }
+
+            }
+            return RedirectToAction("ViewRetrievalList");
+        }
+
+        [HttpGet]
+        public ActionResult ViewRetrievalList()
+        {
+            List<RetrievalList> list = new List<RetrievalList>();
+            RetrievalList retrievalList = new RetrievalList();
+            RetrievalDAO retrieval = new RetrievalDAO();
+            retrievalList.retrievals = retrieval.GetItemsAndQty();
+            foreach (var item in retrievalList.retrievals)
+            {
+                if (retrieval.checkOutstandingList(item.ItemId))
+                {
+                    int outstandingQty = retrieval.GetOutstandingQtyByItemId(item.ItemId);
+                    item.Qty += outstandingQty;
+                }
+            }
+
+            foreach (var item in retrievalList.retrievals)
+            {
+                string itemId = item.ItemId;
+                RetrievalList r_list = new RetrievalList();
+
+                r_list.ItemId = itemId;
+                r_list.ItemDesc = retrieval.GetItemDescByItemId(itemId);
+                r_list.Total = item.Qty;
+                r_list.RetrievedQty = 0;
+                r_list.ItemReqList = retrieval.GetItemRequestAndDepts(itemId);
+                foreach (var row in r_list.ItemReqList)
+                {
+                    r_list.RetrievedQty += row.ActualQty;
+                }
+                list.Add(r_list);
+
+            }
+            return View(list);
+
         }
     }
 }

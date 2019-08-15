@@ -1,0 +1,59 @@
+﻿@model StationeryStore_ADTeam11.View_Models.RetrievalList
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_storeClerkLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Create Retrieval List</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <table class="table table-striped table-hovered">
+                            <tr>
+                                <th>
+                                    Item ID
+                                </th>
+                                <th>
+                                    Needed Qty
+                                </th>
+                                <th>
+                                    Retrieved Qty
+                                </th>
+                            </tr>
+
+                            @foreach (var item in Model.retrievals)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ItemId)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Qty)
+                                    </td>
+                                    <td>
+                                        <input type="number" name="@item.ItemId" value="@item.RetrievalQty" onchange="if(this.value > @item.Qty) warning()"/>
+                                    </td>
+                                    
+                                </tr>
+                            }
+
+                        </table>
+                        <input type="submit" name="" value="Create" formaction="/StoreClerk/CreateRetrieval/"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function warning() {
+        alert("Cannot retrieve more than needed qty.")
+    }
+        
+</script>
