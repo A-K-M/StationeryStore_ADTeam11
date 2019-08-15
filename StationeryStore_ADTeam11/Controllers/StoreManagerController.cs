@@ -9,6 +9,8 @@ using StationeryStore_ADTeam11.DAOs;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
+    //[AuthenticationFilter]
+    //[RoleFilter("Manager")]
     [LayoutFilter("_storeManagerLayout")]
     public class StoreManagerController : BaseController
     {
@@ -50,7 +52,7 @@ namespace StationeryStore_ADTeam11.Controllers
             bool saved = false;
             //string duplicateMsg = "supplier ID already exist";
 
-            Supplier existingSupp = suppDAO.FindSupplierbyId(supplier.Id);
+            Supplier existingSupp = suppDAO.FindSupplierById(supplier.Id);
 
             if (supplier.Id == existingSupp.Id)
             {
@@ -147,6 +149,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
+        
         public JsonResult FilterAdjustmentVouchers(string id) //Since we are using default route the parameter name must be id instead of status unless we wanna modify routes
         {
             AdjustmentVoucherDAO adjustment = new AdjustmentVoucherDAO();

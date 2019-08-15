@@ -516,6 +516,11 @@
     <Content Include="Views\DepartmentRepresentative\CollectionPoint.cshtml" />
     <Content Include="Views\DepartmentRepresentative\Disbursement.cshtml" />
     <Content Include="Views\StoreSupervisor\ChartDataXML.cshtml" />
+    <Content Include="Views\StoreClerk\ItemSuppliers.cshtml" />
+    <Content Include="Views\Shared\_itemSupplier.cshtml" />
+    <Content Include="Views\Shared\_noSupplierResults.cshtml" />
+    <Content Include="Views\StoreClerk\CreateRetrievalList.cshtml" />
+    <Content Include="Views\StoreClerk\ViewRetrievalList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

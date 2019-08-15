@@ -1,0 +1,101 @@
+﻿@using StationeryStore_ADTeam11.Models
+@model StationeryStore_ADTeam11.Models.Supplier
+
+@{
+    Layout = "~/Views/Shared/_storeManagerLayout.cshtml";
+
+    ViewBag.Title = "ViewSuppliers";
+
+    var suppliers = (List<Supplier>)ViewData["suppliers"];
+
+}
+<br />
+<section class="statistics">
+    <div class="container-fluid">
+        <div class="row d-flex">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>@Html.Partial("FlashMessage")</h3>
+                        <h3>Item Supplier List @*<a href="@Url.Content("~/StoreManager/CreateSupplier")" class="btn btn-success btn-sm pull-right">Add New Supplier </a>*@</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-11">
+                                <input class="form-control form-group" id="ItemId" name="ItemId" placeholder="Item Code" type="text">
+                            </div>
+                            <div class="col-1">
+                                <input type="submit" id="SearchBtn" value="View" class="btn btn-success form-group">
+                            </div>
+                            <br />
+                            <div class="col-12" id="NoResultsMsg">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <section id="supplierDisplay">
+        <div id="supplierList">
+            @{ if (suppliers != null)
+                {
+                    Html.RenderPartial("_itemSupplier", suppliers);
+                }
+            }
+        </div>
+    </section>
+</section>
+
+<script src="~/Scripts/moment-with-locales.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#SearchBtn").click(function () {
+            var Id = $("#ItemId").val();
+            var DetailsDiv = document.getElementById("supplierDisplay");
+            var SuppList = $("#supplierList");
+            var NoResultsMsg = $("#NoResultsMsg");
+            var NoData = "<div class=\"text-danger\">No Matching Item Code: " + Id + "</div>";
+            SuppList.html("");
+            $.ajax({
+                type: "post",
+                url: "@(Url.Action("ItemSupplierList", "StoreClerk", new { id = "----" }))/".replace("----", Id),
+                type: "POST",
+                cache: false,
+                async: true,
+                success: function (result) {
+                    DetailsDiv.style.display = '';
+                    SuppList.html(result);
+
+                }
+            })
+        });
+    });
+
+    //function myFunction() {
+    //    var input, filter, varsect, div, i, table, tr, td, txtValue;
+    //    input = document.getElementById("suppFilter");
+    //    filter = input.value.toUpperCase();
+    //    varsect = document.getElementById("supplierList");
+    //    div = varsect.getElementsByClassName("container-fluid");
+    //    for (i = 0; i < div.length; i++) {
+    //        table = div[i].getElementsByTagName("table")[0];
+    //        tr = table.getElementsByTagName("tr")[0];
+    //        td = tr.getElementsByTagName("td")[1];
+    //        if (td) {
+    //            txtValue = td.textContent || td.innerText;
+    //            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+    //                div[i].style.display = "";
+    //            } else {
+    //                div[i].style.display = "none";
+    //            }
+    //        }
+    //    }
+    //}
+</script>
+

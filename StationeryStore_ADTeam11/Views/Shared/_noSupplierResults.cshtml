@@ -1,0 +1,18 @@
+﻿@model string
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                @if (@Model != null)
+                {
+                    <div class="text-danger">No Matching Item Code: " @Model"</div>
+                }
+                else
+                {
+                    <div class="text-danger">No Item Code was keyed in</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

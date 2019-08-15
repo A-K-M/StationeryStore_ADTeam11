@@ -22,7 +22,8 @@ namespace StationeryStore_ADTeam11.DAOs
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 reader = cmd.ExecuteReader();
-                while (reader.Read()) {
+                while (reader.Read())
+                {
                     Retrieval r = new Retrieval();
                     r.ItemId = (string)reader["itemid"];
                     r.Qty = (int)reader["total"];
@@ -42,11 +43,9 @@ namespace StationeryStore_ADTeam11.DAOs
                 connection.Close();
             }
             return retrievals;
-
         }
-
-
-        public bool InsertRetrievals(List<Retrieval> retrievals,int clerkId) {
+        public bool InsertRetrievals(List<Retrieval> retrievals, int clerkId)
+        {
             SqlTransaction transaction = null;
             try
             {
@@ -55,9 +54,10 @@ namespace StationeryStore_ADTeam11.DAOs
                 DateTime date = DateTime.Now;
 
                 transaction = connection.BeginTransaction();
-                SqlCommand cmd = new SqlCommand(sql, connection,transaction);
-                foreach (Retrieval retrieval in retrievals) {
-                     sql += $"INSERT INTO Retrieval (ItemID,Date,Status,EmployeeID,RetrievalQty) VALUES('{retrieval.ItemId}','{date}','{Constant.STATUS_PENDING}','{clerkId}','{retrieval.RetrievalQty}');\n";
+                SqlCommand cmd = new SqlCommand(sql, connection, transaction);
+                foreach (Retrieval retrieval in retrievals)
+                {
+                    sql += $"INSERT INTO Retrieval (ItemID,Date,Status,EmployeeID,RetrievalQty) VALUES('{retrieval.ItemId}','{date}','{Constant.STATUS_PENDING}','{clerkId}','{retrieval.RetrievalQty}');\n";
                 }
                 if (cmd.ExecuteNonQuery() != retrievals.Count()) throw new Exception();
 
@@ -76,14 +76,14 @@ namespace StationeryStore_ADTeam11.DAOs
             return true;
 
         }
-
         public List<Retrieval> GetItemsAndQty()
         {
             List<Retrieval> retrievals = new List<Retrieval>();
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"select list.itemid as itemid, SUM(list.NeededQty) as sum from (select i.ID as itemid,r.ID as reqid,ir.NeededQty from Request r, ItemRequest ir, Item i 
-                        where status = 'Approved' and r.ID = ir.RequestID and ir.ItemID = i.id) as list group by list.itemid";
+            string sql = @"select list.itemid as itemid, SUM(list.NeededQty) as sum from (select i.ID as itemid,r.ID as reqid,ir.NeededQty 
+                        from Request r, ItemRequest ir, Item i 
+                        where r.Status  in ('Disbursed', 'Approved') and r.ID = ir.RequestID and ir.ItemID = i.id) as list group by list.itemid";
             SqlCommand command = new SqlCommand(sql, conn);
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -91,35 +91,57 @@ namespace StationeryStore_ADTeam11.DAOs
                 Retrieval r = new Retrieval();
                 r.ItemId = (string)reader["ItemID"];
                 r.Qty = (int)reader["sum"];
+
                 retrievals.Add(r);
             }
             conn.Close();
             return retrievals;
         }
-        public List<ItemRequest> GetReqDeptListByItemId()
+        public int GetOutstandingQtyByItemId(string itemId)
+        {
+            int qty = 0;
+            SqlConnection conn = connection;
+            conn.Open();
+            string sql = @"select (ir.NeededQty - ir.ActualQty) as remaining
+                        from ItemRequest ir , Request r
+                        where ir.id in (select ItemRequestID from Outstanding where Status = 'Pending')
+                        and ir.RequestID = r.ID 
+                        and ir.ItemID = '" + itemId + "' ";
+            SqlCommand command = new SqlCommand(sql, conn);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                qty = (int)reader["remaining"];
+            }
+            conn.Close();
+            return qty;
+        }
+        public List<ItemRequest> GetReqDeptListByItemId(string itemId)
         {
             List<ItemRequest> list = new List<ItemRequest>();
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"select (select name from  where id = (select deptid from Employee where id = r.EmployeeID)) as dept, 
+            string sql = @"select (select name from Department where id = (select deptid from Employee where id = r.EmployeeID)) as dept, 
                             ir.NeededQty ,
-                                ir.ItemId
+                                ir.ItemId, ir.RequestID, ir.id
                            from Request r, ItemRequest ir
-                            where r.ID = ir.RequestID  and Status = 'approved'";
+                            where ir.ItemID = '" + itemId + "' and r.ID = ir.RequestID  and Status in ('Approved', 'Disbursed')";
             SqlCommand command = new SqlCommand(sql, conn);
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
                 ItemRequest ir = new ItemRequest();
                 ir.ItemId = (string)reader["ItemId"];
-             //   ir.DeptName = (string)reader["dept"];
+                ir.DeptName = (string)reader["dept"];
                 ir.NeededQty = (int)reader["NeededQty"];
+                ir.RequestId = (int)reader["RequestID"];
+                ir.Id = (int)reader["id"];
                 list.Add(ir);
             }
             conn.Close();
             return list;
         }
-        public List<Outstanding> GetPendingOutstandingsListByItemId()
+        public List<Outstanding> GetPendingOutstandingsListByItemId(string itemId)
         {
             List<Outstanding> outstandings = new List<Outstanding>();
             SqlConnection conn = connection;
@@ -127,17 +149,21 @@ namespace StationeryStore_ADTeam11.DAOs
             string sql = @"select (select name from Department where id = (select deptid from Employee where id = r.EmployeeID)) as dept,
                         (ir.NeededQty - ir.ActualQty) as remaining,
                         r.DateTime as ReqDate,
-                        ir.ItemId
-                        from ItemRequest ir , Request r
+                        ir.ItemId,
+						o.id
+                        from ItemRequest ir , Request r, Outstanding o 
                         where ir.id in (select ItemRequestID from Outstanding where Status = 'Pending')
-                        and ir.RequestID = r.ID  order by ReqDate";
+                        and ir.RequestID = r.ID 
+						and o.ItemRequestID = ir.ID
+                        and ir.ItemID = '" + itemId + "' order by ReqDate";
             SqlCommand command = new SqlCommand(sql, conn);
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
                 Outstanding o = new Outstanding();
+                o.Id = (int)reader["id"];
                 o.ItemId = (string)reader["ItemId"];
-                o.ReqId = (string)reader["reqid"];
+                o.Dept = (string)reader["dept"];
                 o.RemainingQty = (int)reader["remaining"];
                 o.DateTime = (DateTime)reader["reqdate"];
                 outstandings.Add(o);
@@ -145,12 +171,11 @@ namespace StationeryStore_ADTeam11.DAOs
             conn.Close();
             return outstandings;
         }
-        
         public bool checkOutstandingList(string itemId)
         {
             SqlConnection conn = connection;
-            bool hasOutstanding = false;
             conn.Open();
+            bool hasOutstanding = false;
             string sql = @"select o.* from Outstanding o , ItemRequest ir  
                         where o.ItemRequestID = ir.ID 
                         and o.Status = 'pending' 
@@ -163,6 +188,100 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             conn.Close();
             return hasOutstanding;
+        }
+        public void CreateRetrieval(string username, string itemId, int Qty)
+        {
+            EmployeeDAO e = new EmployeeDAO();
+            Employee e_info = e.GetEmployeeByUsername(username);
+
+            SqlConnection conn = connection;
+            conn.Open();
+            string sql = @"  insert into Retrieval(itemID, Status, EmployeeID, RetrievalQty) values ('" + itemId + "', 'Approved', '" + e_info.Id + "', " + Qty + " )";
+
+            SqlCommand command = new SqlCommand(sql, conn);
+            command.ExecuteNonQuery();
+            conn.Close();
+        }
+        public string GetItemDescByItemId(string itemId)
+        {
+            string itemDesc = "";
+            SqlConnection conn = connection;
+            conn.Open();
+            string sql = @"select Description from item where id = '" + itemId + "'";
+            SqlCommand command = new SqlCommand(sql, conn);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                itemDesc = (string)reader["Description"];
+            }
+            conn.Close();
+            return itemDesc;
+        }
+        public void UpdateOutstanding(string ids)
+        {
+            SqlConnection conn = connection;
+            conn.Open();
+            string sql = @"update Outstanding set status ='Disbursed' where id in (" + ids + ") ;";
+            SqlCommand command = new SqlCommand(sql, conn);
+            command.ExecuteNonQuery();
+            conn.Close();
+        }
+        public void UpdateRequestStatus(string ids)
+        {
+            SqlConnection conn = connection;
+            conn.Open();
+            string sql = @"update Request set status ='Disbursed' where id in (" + ids + ") ;";
+            SqlCommand command = new SqlCommand(sql, conn);
+            command.ExecuteNonQuery();
+            conn.Close();
+        }
+        public string CreateOutstandingQuery(int ir_id, int qty)
+        {
+            return "insert into Outstanding  (ItemRequestID, qty, Status) values (" + ir_id + "," + qty + ",'Pending');";
+        }
+        public void UpdateItemRequest(int ir_id, int actual_qty)
+        {
+            SqlConnection conn = connection;
+            conn.Open();
+            string sql = @"update ItemRequest set ActualQty = " + actual_qty + " where id = " + ir_id + ";";
+
+            SqlCommand command = new SqlCommand(sql, conn);
+            command.ExecuteNonQuery();
+            conn.Close();
+        }
+        public void CreateOutstanding(string query)
+        {
+            SqlConnection conn = connection;
+            conn.Open();
+            SqlCommand command = new SqlCommand(query, conn);
+            command.ExecuteNonQuery();
+            conn.Close();
+        }
+        public List<ItemRequest> GetItemRequestAndDepts(string itemId)
+        {
+            List<ItemRequest> list = new List<ItemRequest>();
+            SqlConnection conn = connection;
+            conn.Open();
+            string sql = @"select (select name from Department where id = (select deptid from Employee where id = r.EmployeeID)) as dept, 
+                            ir.NeededQty ,
+                                ir.ItemId, ir.RequestID, ir.id, ir.ActualQty
+                           from Request r, ItemRequest ir
+                            where ir.ItemID = '" + itemId + "' and r.ID = ir.RequestID  and Status  in ('Disbursed', 'Approved') ";
+            SqlCommand command = new SqlCommand(sql, conn);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                ItemRequest ir = new ItemRequest();
+                ir.ItemId = (string)reader["ItemId"];
+                ir.DeptName = (string)reader["dept"];
+                ir.NeededQty = (int)reader["NeededQty"];
+                ir.RequestId = (int)reader["RequestID"];
+                ir.ActualQty = (int)reader["ActualQty"];
+                ir.Id = (int)reader["id"];
+                list.Add(ir);
+            }
+            conn.Close();
+            return list;
         }
     }
 }
