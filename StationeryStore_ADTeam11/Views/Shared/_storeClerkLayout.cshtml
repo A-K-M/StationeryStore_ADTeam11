@@ -5,106 +5,106 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <link rel="stylesheet" href="~/Statics/vendor/bootstrap/css/bootstrap.min.css">
-        <link href="~/Statics/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-        <link href="~/Statics/css/fontastic.css" rel="stylesheet" />
-        <link href="~/Statics/css/grasp_mobile_progress_circle-1.0.0.min.css" rel="stylesheet" />
-        <link href="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-        <link href="~/Statics/css/style.default.css" rel="stylesheet" />
-        <link href="~/Statics/css/fa-all.css" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    </head>
+<head>
+    <link rel="stylesheet" href="~/Statics/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="~/Statics/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Statics/css/fontastic.css" rel="stylesheet" />
+    <link href="~/Statics/css/grasp_mobile_progress_circle-1.0.0.min.css" rel="stylesheet" />
+    <link href="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link href="~/Statics/css/style.default.css" rel="stylesheet" />
+    <link href="~/Statics/css/fa-all.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
 
-    <body>
-        <!-- Side Navbar -->
-        <nav class="side-navbar">
-            <div class="side-navbar-wrapper">
-                <!-- Sidebar Header    -->
-                <div class="sidenav-header d-flex align-items-center justify-content-center">
-                    <!-- User Info-->
-                    <div class="sidenav-header-inner text-center">
-                        <h2 class="h5">@username</h2><span>Store @role</span>
+<body>
+    <!-- Side Navbar -->
+    <nav class="side-navbar">
+        <div class="side-navbar-wrapper">
+            <!-- Sidebar Header    -->
+            <div class="sidenav-header d-flex align-items-center justify-content-center">
+                <!-- User Info-->
+                <div class="sidenav-header-inner text-center">
+                    <h2 class="h5">@username</h2><span>Store @role</span>
 
-                    </div>
-                    <!-- Small Brand information, appears on minimized sidebar-->
-                    <div class="sidenav-header-logo">
-                        <a href="clerk_index.html" class="brand-small text-center">
-                            <strong>B</strong><strong class="text-success">D</strong>
-                        </a>
-                    </div>
                 </div>
-                <!-- Sidebar Navigation Menus-->
-                <div class="main-menu">
-                    <h5 class="sidenav-heading">Main</h5>
-                    <ul id="side-main-menu" class="side-menu list-unstyled">
-                        <li><a href="index.html"> <i class="icon-home"></i>Home </a></li>
-                        <li><a href="approved_request.html"> <i class="icon-list-1"></i>Approved Requests</a></li>
-                        <li><a href="clerk_retrieval_category.html"> <i class="icon-padnote"></i>Create Retrieval Form</a></li>
-                        <li><a href="clerk_disbursment.html"> <i class="icon-bill"></i>Disbursment List</a></li>
-                        <li><a href="adjustmant.html"> <i class="icon-form"></i>Adjustment Voucher</a></li>
-                        <li><a href="clerk_low_stock.html"> <i class="icon-page"></i>Low-stock Items</a></li>
-                        <li><a href="stock_card.html"> <i class="icon-website"></i>Stock Card</a></li>
-                        <li><a href="clerk_suppliers.html"> <i class="icon-user"></i>Suppliers</a></li>
-                        <li><a href="clerk_item_list.html"> <i class="icon-pencil-case"></i>Items</a></li>
-                        <li><a href="clerk_category.html"> <i class="icon-bars"></i>Categories</a></li>
-                        <li><a href="clerk_purchase_order.html"> <i class="icon-list"></i>Purchase Orders</a></li>
-                    </ul>
+                <!-- Small Brand information, appears on minimized sidebar-->
+                <div class="sidenav-header-logo">
+                    <a href="clerk_index.html" class="brand-small text-center">
+                        <strong>B</strong><strong class="text-success">D</strong>
+                    </a>
                 </div>
             </div>
-        </nav>
-        <div class="page">
-            <!-- navbar-->
-            <header class="header">
-                <nav class="navbar">
-                    <div class="container-fluid">
-                        <div class="navbar-holder d-flex align-items-center justify-content-between">
-                            <div class="navbar-header">
-                                <!-- <a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand"> -->
-                                <div class="brand-text d-none d-md-inline-block"><strong class="text-success">Stationary Store</strong></div>
-                            </div>
-                            <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
-                                <!-- Notifications dropdown-->
-                                <li class="nav-item dropdown">
-                                    <a id="notifications" rel="nofollow" data-target="#" href="#"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">
-                                        <i class="fa fa-bell"></i><span class="badge badge-warning">2</span>
-                                    </a>
-                                    <ul aria-labelledby="notifications" class="dropdown-menu">
-                                        <li>
-                                            <a rel="nofollow" href="#" class="dropdown-item">
-                                                <div class="notification d-flex justify-content-between">
-                                                    <div class="notification-content">Sample Notification</div>
-                                                    <!--<div class="notification-time"><small>4 minutes ago</small></div>-->
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a rel="nofollow" href="#" class="dropdown-item">
-                                                <div class="notification d-flex justify-content-between">
-                                                    <div class="notification-content">Sample Notification</div>
-                                                    <!-- <div class="notification-time"><small>4 minutes ago</small></div> -->
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <!-- Log out-->
-                                <li class="nav-item">
-                                    <a href="@Url.Action("Logout", "Base")" class="nav-link logout">
-                                        <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out-alt"></i>
-                                    </a>
-                                </li>
-                            </ul>
+            <!-- Sidebar Navigation Menus-->
+            <div class="main-menu">
+                <h5 class="sidenav-heading">Main</h5>
+                <ul id="side-main-menu" class="side-menu list-unstyled">
+                    <li><a href="@Url.Action("Index", "StoreClerk")"> <i class="icon-home"></i>Home </a></li>
+                    <li><a href="approved_request.html"> <i class="icon-list-1"></i>Approved Requests</a></li>
+                    <li><a href="@Url.Action("CreateRetrievalList","StoreClerk")"> <i class="icon-padnote"></i>Create Retrieval Form</a></li>
+                    <li><a href="clerk_disbursment.html"> <i class="icon-bill"></i>Disbursment List</a></li>
+                    <li><a href="@Url.Action( "CreateAdjustmentVoucher", "StoreClerk")"> <i class="icon-form"></i>Adjustment Voucher</a></li>
+                    <li><a href="clerk_low_stock.html"> <i class="icon-page"></i>Low-stock Items</a></li>
+                    <li><a href="@Url.Action( "ViewStockCard", "StoreClerk")"> <i class="icon-website"></i>Stock Card</a></li>
+                    <li><a href="clerk_suppliers.html"> <i class="icon-user"></i>Suppliers</a></li>
+                    <li><a href="clerk_item_list.html"> <i class="icon-pencil-case"></i>Items</a></li>
+                    <li><a href="clerk_category.html"> <i class="icon-bars"></i>Categories</a></li>
+                    <li><a href="clerk_purchase_order.html"> <i class="icon-list"></i>Purchase Orders</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="page">
+        <!-- navbar-->
+        <header class="header">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <div class="navbar-holder d-flex align-items-center justify-content-between">
+                        <div class="navbar-header">
+                            <!-- <a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand"> -->
+                            <div class="brand-text d-none d-md-inline-block"><strong class="text-success">Stationary Store</strong></div>
                         </div>
+                        <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                            <!-- Notifications dropdown-->
+                            <li class="nav-item dropdown">
+                                <a id="notifications" rel="nofollow" data-target="#" href="#"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">
+                                    <i class="fa fa-bell"></i><span class="badge badge-warning">2</span>
+                                </a>
+                                <ul aria-labelledby="notifications" class="dropdown-menu">
+                                    <li>
+                                        <a rel="nofollow" href="#" class="dropdown-item">
+                                            <div class="notification d-flex justify-content-between">
+                                                <div class="notification-content">Sample Notification</div>
+                                                <!--<div class="notification-time"><small>4 minutes ago</small></div>-->
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a rel="nofollow" href="#" class="dropdown-item">
+                                            <div class="notification d-flex justify-content-between">
+                                                <div class="notification-content">Sample Notification</div>
+                                                <!-- <div class="notification-time"><small>4 minutes ago</small></div> -->
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Log out-->
+                            <li class="nav-item">
+                                <a href="@Url.Action("Logout", "Base")" class="nav-link logout">
+                                    <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out-alt"></i>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                </nav>
-            </header>
-            <section class="statistics">
-                @RenderBody()
+                </div>
+            </nav>
+        </header>
+        <section class="statistics">
+            @RenderBody()
 
-                @*<div class="container-fluid">
+            @*<div class="container-fluid">
                     <div class="row d-flex">
                         <div class="col-12">
                             <div class="card">
@@ -113,18 +113,18 @@
                         </div>
                     </div>
                 </div>*@
-            </section>
-        </div>
-        <script src="~/Statics/vendor/jquery/jquery.min.js"></script>
-        <script src="~/Statics/vendor/popper.js/umd/popper.min.js"></script>
-        <script src="~/Statics/vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="~/Statics/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
-        <script src="~/Statics/vendor/jquery.cookie/jquery.cookie.js"></script>
-        <script src="~/Statics/vendor/chart.js/Chart.min.js"></script>
-        <script src="~/Statics/vendor/jquery-validation/jquery.validate.min.js"></script>
-        <script src="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-        <script src="~/Statics/js/charts-home.js"></script>
+        </section>
+    </div>
+    <script src="~/Statics/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Statics/vendor/popper.js/umd/popper.min.js"></script>
+    <script src="~/Statics/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Statics/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+    <script src="~/Statics/vendor/jquery.cookie/jquery.cookie.js"></script>
+    <script src="~/Statics/vendor/chart.js/Chart.min.js"></script>
+    <script src="~/Statics/vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/Statics/js/charts-home.js"></script>
 
-        @RenderSection("Scripts", false)
-    </body>
+    @RenderSection("Scripts", false)
+</body>
 </html>

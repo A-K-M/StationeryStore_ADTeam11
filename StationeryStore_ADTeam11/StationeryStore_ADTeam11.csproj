@@ -215,6 +215,7 @@
     <Compile Include="View_Models\DeligationStatus.cs" />
     <Compile Include="View_Models\DepartmentDelegation.cs" />
     <Compile Include="View_Models\RequestDetailViewModel.cs" />
+    <Compile Include="View_Models\RequestStationery.cs" />
     <Compile Include="View_Models\RequestViewModel.cs" />
     <Compile Include="View_Models\RequisitionVM.cs" />
     <Compile Include="View_Models\RetrievalList.cs" />
@@ -515,6 +516,11 @@
     <Content Include="Views\DepartmentRepresentative\CollectionPoint.cshtml" />
     <Content Include="Views\DepartmentRepresentative\Disbursement.cshtml" />
     <Content Include="Views\StoreSupervisor\ChartDataXML.cshtml" />
+    <Content Include="Views\StoreClerk\ItemSuppliers.cshtml" />
+    <Content Include="Views\Shared\_itemSupplier.cshtml" />
+    <Content Include="Views\Shared\_noSupplierResults.cshtml" />
+    <Content Include="Views\StoreClerk\CreateRetrievalList.cshtml" />
+    <Content Include="Views\StoreClerk\ViewRetrievalList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

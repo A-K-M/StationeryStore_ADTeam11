@@ -71,7 +71,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 ItemRequest request = new ItemRequest()
                 {
                     Id = (int)reader["ID"],
-                    RequestId=(string)reader["RequestID"],
+                    RequestId=(int)reader["RequestID"],
                     NeededQty = (int)reader["NeededQty"],
                     ActualQty = (int)reader["ActualQty"]
                 };

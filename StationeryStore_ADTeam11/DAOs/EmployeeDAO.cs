@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -79,13 +80,39 @@ namespace StationeryStore_ADTeam11.DAOs
             return deptId;
         }
 
+        public bool UpdateUserRole(int empId)
+        {
+            string sql = "UPDATE Employee SET Role = 'Representative'WHERE ID = @id";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@id", empId);
+            connection.Open();
+
+            if (cmd.ExecuteNonQuery() == 0)
+            {
+                connection.Close();
+                return false;
+            }
+
+            connection.Close();
+            return true;
+        }
+
         public List<Employee> GetEmployeeByDeptId(string deptId)
         {
             List<Employee> employees = new List<Employee>();
             Employee employee = null;
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"select * from employee where DeptID = '" + deptId + "'";
+            //string sql = @"select * from employee where DeptID = '" + deptId + "'";
+            //string sql = @"select * from Employee as e, Department as d
+            //                where not e.ID=d.HeadID and not e.ID=d.RepID and e.DeptID='"+deptId+"'";
+
+            string sql = "SELECT e.* " +
+                          "FROM Employee e, Department d " +
+                           "WHERE e.DeptID = d.ID " +
+                            "AND e.ID != d.HeadID " +
+                            "AND e.ID != d.RepID " +
+                            "AND d.ID = '" + deptId + "'";
             SqlCommand command = new SqlCommand(sql, conn);
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -125,6 +152,43 @@ namespace StationeryStore_ADTeam11.DAOs
             return employee;
 
         }
+
+        public List<MDisbursement> GetRepresentativeForDisbursement(int clerkID) {
+            List<MDisbursement> disbursements = new List<MDisbursement>();
+
+            SqlDataReader reader = null;
+            MDisbursement dis = null;
+            try
+            {
+                connection.Open();
+                string sql = "spGetDeptRepresentative";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@ClerkID", clerkID);
+            reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                dis = new MDisbursement()
+                {
+                    DeptId = reader["ID"].ToString(),
+                    RepName = reader["RepName"].ToString(),
+                    DeptName = reader["DeptName"].ToString()
+                };
+                disbursements.Add(dis);
+            }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
+            return disbursements;
+
+        }
         public List<MEmployee> GetEmployeeByDepartment(string deptId)
         {
             List<MEmployee> mEmployees = new List<MEmployee>();
@@ -138,8 +202,6 @@ namespace StationeryStore_ADTeam11.DAOs
             reader.Close();
             conn.Close();
             return mEmployees;
-
-
         }
         public bool checkEmployeeExist(int empId, string deptId) {
 

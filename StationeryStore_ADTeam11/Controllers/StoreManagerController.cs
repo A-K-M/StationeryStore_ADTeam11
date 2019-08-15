@@ -9,8 +9,10 @@ using StationeryStore_ADTeam11.DAOs;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
+    //[AuthenticationFilter]
+    //[RoleFilter("Manager")]
     [LayoutFilter("_storeManagerLayout")]
-    public class StoreManagerController : Controller
+    public class StoreManagerController : BaseController
     {
         // GET: StoreManager
         public ActionResult Index()
@@ -48,20 +50,41 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Role"] = "Role";
 
             bool saved = false;
-            string duplicateMsg = "supplier ID already exist";
+            //string duplicateMsg = "supplier ID already exist";
 
-            Supplier existingSupp = suppDAO.FindSupplierbyId(supplier.Id);
-            if (supplier.Id != existingSupp.Id)
+            Supplier existingSupp = suppDAO.FindSupplierById(supplier.Id);
+
+            if (supplier.Id == existingSupp.Id)
+            {
+                SetFlash(Enums.FlashMessageType.Error, "Supplier information for supplier name: " + supplier.Name + " was not added due to duplicate Supplier ID: " + supplier.Id + ".");
+                return RedirectToAction("Suppliers");
+            }
+            else if (supplier.Id != existingSupp.Id)
             {
                 saved = suppDAO.AddSupplier(supplier);
+                if (saved)
+                {
+                    SetFlash(Enums.FlashMessageType.Success, "Supplier record for Supplier ID: " + supplier.Id + " successfully added!");
+                    return RedirectToAction("Suppliers");
+                }
+
+                SetFlash(Enums.FlashMessageType.Error, "Failed to add supplier record for Supplier ID: " + supplier.Id + ".");
+                return RedirectToAction("Suppliers");
+
             }
             else
             {
-                ViewData["duplicateMsg"] = duplicateMsg;
+                SetFlash(Enums.FlashMessageType.Error, "Supplier record for Supplier ID: " + supplier.Id + " not saved.");
+                return RedirectToAction("Suppliers");
             }
 
-            ViewData["saved"] = saved;
-            return View();
+            //else
+            //{
+            //    ViewData["duplicateMsg"] = duplicateMsg;
+            //}
+
+            //ViewData["saved"] = saved;
+            //return View();
         }
 
         public ActionResult EditSupplier(Supplier supp)
@@ -83,10 +106,17 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Role"] = "Role";
 
             bool updated = suppDAO.UpdateSupplier(supp);
+            if (updated)
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Successfully updated supplier record for Supplier ID: " + supp.Id + ".");
+                return RedirectToAction("Suppliers");
+            }
 
-            ViewData["updated"] = updated;
-            ViewData["supplier"] = supp;
-            return View();
+            SetFlash(Enums.FlashMessageType.Error, "Failed to update supplier record for Supplier ID: " + supp.Id + ".");
+            return RedirectToAction("Suppliers");
+            //ViewData["updated"] = updated;
+            //ViewData["supplier"] = supp;
+            //return View();
         }
 
         public ActionResult DeleteSupplier(string id)
@@ -96,10 +126,18 @@ namespace StationeryStore_ADTeam11.Controllers
             Session["Role"] = "Role";
 
             bool deleted = suppDAO.DeleteSupplier(id);
+            if (deleted)
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Supplier record for Ssupplier ID: " + id + " successfully deleted.");
+                return RedirectToAction("Suppliers");
+            }
 
-            ViewData["deleted"] = deleted;
-            ViewData["id"] =id;
-            return View();
+            SetFlash(Enums.FlashMessageType.Error, "Supplier record for Supplier ID: " + id + " was not deleted.");
+            return RedirectToAction("Suppliers");
+
+            //ViewData["deleted"] = deleted;
+            //ViewData["id"] =id;
+            //return View();
         }
 
         public ActionResult AdjustmentVouchers()
@@ -111,6 +149,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
+        
         public JsonResult FilterAdjustmentVouchers(string id) //Since we are using default route the parameter name must be id instead of status unless we wanna modify routes
         {
             AdjustmentVoucherDAO adjustment = new AdjustmentVoucherDAO();

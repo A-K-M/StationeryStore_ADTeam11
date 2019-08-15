@@ -14,7 +14,7 @@ using System.Net.Http;
 namespace StationeryStore_ADTeam11.Controllers
 {
     [LayoutFilter("_storeClerkLayout")]
-    public class StoreClerkController : Controller
+    public class StoreClerkController : BaseController
     {
         public ActionResult Index()
         {
@@ -59,6 +59,22 @@ namespace StationeryStore_ADTeam11.Controllers
             {
                 return Json("Something went wrong! Please try again later.", JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public ActionResult ApprovedRequests()
+        {
+            RequestDAO request = new RequestDAO();
+            ViewData["Requests"] = request.GetApprovedRequests();
+
+            return View();
+        }
+
+        public ActionResult ApprovedRequestDetails(int id)
+        {
+            RequestDAO request = new RequestDAO();
+            ViewData["RequestDetails"] = request.GetRequestDetail(id);
+
+            return View();
         }
 
         public ActionResult ViewStockCard()
@@ -130,6 +146,173 @@ namespace StationeryStore_ADTeam11.Controllers
 
             ViewData["lowstockitems"] = items;
             return View();
+        }
+
+        public ActionResult ItemSuppliers(String Id)
+        {
+            Session["Username"] = "Clerk User";
+            Session["Role"] = "Clerk";
+            List<Supplier> itemSuppliers = null;
+
+            if (Id != null)
+            {
+                itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
+            }
+
+            ViewData["suppliers"] = itemSuppliers;
+            return View();
+        }
+
+        public JsonResult GetSuppliersByItemId(string Id)
+        {
+            List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
+            return Json(itemSuppliers, JsonRequestBehavior.AllowGet);
+        }
+
+        public PartialViewResult ItemSupplierList(string Id)
+        {
+            List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
+            if (Id == null)
+            {
+                return PartialView("_noSupplierResults", Id);
+            }
+            else if (itemSuppliers != null)
+            {
+                return PartialView("_itemSupplier", itemSuppliers);
+            }
+            else
+            {
+                return PartialView("_noSupplierResults", Id);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult CreateRetrievalList()
+        {
+
+            RetrievalDAO retrieval = new RetrievalDAO();
+
+            RetrievalList retrievalList = new RetrievalList();
+            retrievalList.retrievals = retrieval.GetRetrievalList();
+            //foreach (var item in retrievalList.retrievals)
+            //{
+            //    if (retrieval.checkOutstandingList(item.ItemId))
+            //    {
+            //        int outstandingQty = retrieval.GetOutstandingQtyByItemId(item.ItemId);
+            //        item.Qty += outstandingQty;
+            //    }
+            //}
+            return View(retrievalList);
+        }
+
+        [HttpPost]
+        public ActionResult CreateRetrieval()
+        {
+            string username = Session["username"].ToString();
+            string ItemId;
+            int retrieved;
+            foreach (string key in Request.Form.AllKeys)
+            {
+                string out_ids = "";
+                string req_ids = "";
+                string ir_query = "";
+                ItemId = Convert.ToString(key);
+                retrieved = Convert.ToInt32(Request[key]);
+                RetrievalDAO retrieval = new RetrievalDAO();
+                retrieval.CreateRetrieval(username, ItemId, retrieved);
+
+                List<Outstanding> out_list = retrieval.GetPendingOutstandingsListByItemId(ItemId);
+                if (out_list != null)
+                {
+                    foreach (Outstanding row in out_list)
+                    {
+                        int real = 0;
+                        if (retrieved > 0)
+                        {
+                            real = retrieved;
+                        }
+                        retrieved -= row.RemainingQty;
+                        if (retrieved >= 0)
+                        {
+                            out_ids += row.Id.ToString() + ", ";
+                            real = retrieved;
+                        }
+                    }
+                    out_ids = out_ids.TrimEnd(',', ' ');
+                    if (out_ids != "")
+                        retrieval.UpdateOutstanding(out_ids);
+                }
+
+
+                List<ItemRequest> request_list = retrieval.GetReqDeptListByItemId(ItemId);
+                if (request_list != null && retrieved > 0)
+                {
+                    foreach (ItemRequest request in request_list)
+                    {
+                        int real = 0;
+                        if (retrieved > 0)
+                        {
+                            real = retrieved;
+                        }
+                        retrieved -= request.NeededQty;
+                        if (retrieved >= 0)
+                        {
+                            req_ids += request.RequestId.ToString() + ", ";
+                            real = retrieved;
+                            retrieval.UpdateItemRequest(request.Id, request.NeededQty);
+                        }
+                        else
+                        {
+                            ir_query += retrieval.CreateOutstandingQuery(request.Id, request.NeededQty - real);
+                            retrieval.UpdateItemRequest(request.Id, real);
+                        }
+                    }
+                    req_ids = req_ids.TrimEnd(',', ' ');
+                    if (req_ids != "")
+                        retrieval.UpdateRequestStatus(req_ids);
+                    if (ir_query != "")
+                        retrieval.CreateOutstanding(ir_query);
+                }
+
+            }
+            return RedirectToAction("ViewRetrievalList");
+        }
+
+        [HttpGet]
+        public ActionResult ViewRetrievalList()
+        {
+            List<RetrievalList> list = new List<RetrievalList>();
+            RetrievalList retrievalList = new RetrievalList();
+            RetrievalDAO retrieval = new RetrievalDAO();
+            retrievalList.retrievals = retrieval.GetItemsAndQty();
+            foreach (var item in retrievalList.retrievals)
+            {
+                if (retrieval.checkOutstandingList(item.ItemId))
+                {
+                    int outstandingQty = retrieval.GetOutstandingQtyByItemId(item.ItemId);
+                    item.Qty += outstandingQty;
+                }
+            }
+
+            foreach (var item in retrievalList.retrievals)
+            {
+                string itemId = item.ItemId;
+                RetrievalList r_list = new RetrievalList();
+
+                r_list.ItemId = itemId;
+                r_list.ItemDesc = retrieval.GetItemDescByItemId(itemId);
+                r_list.Total = item.Qty;
+                r_list.RetrievedQty = 0;
+                r_list.ItemReqList = retrieval.GetItemRequestAndDepts(itemId);
+                foreach (var row in r_list.ItemReqList)
+                {
+                    r_list.RetrievedQty += row.ActualQty;
+                }
+                list.Add(r_list);
+
+            }
+            return View(list);
+
         }
     }
 }

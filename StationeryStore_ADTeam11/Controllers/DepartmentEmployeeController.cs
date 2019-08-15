@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using StationeryStore_ADTeam11.Models;
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.Filters;
+using StationeryStore_ADTeam11.View_Models;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
@@ -37,7 +38,15 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             RequestDAO request = new RequestDAO();
 
-            ViewData["Requisitions"] = request.GetRequistionListByEmpId(11233);
+            ViewData["Requisitions"] = request.GetRequistionListByEmpId(11233); //PUT LOGIN EMP_ID HERE
+            return View();
+        }
+
+        public ActionResult RequestDetail(int id)
+        {
+            RequestDAO requestDAO = new RequestDAO();
+            ViewData["RequestDetail"] = requestDAO.GetRequestDetail(id);
+
             return View();
         }
 
@@ -45,7 +54,7 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             RequestDAO request = new RequestDAO();
 
-            switch (request.CancelRequest(id, 11233))
+            switch (request.CancelRequest(id, 11233)) //PUT LOGIN EMP_ID HERE
             {
                 case ("success"):
                     {
@@ -71,5 +80,55 @@ namespace StationeryStore_ADTeam11.Controllers
 
             return RedirectToAction("RequisitionList");
         }
+
+        //DELETE FROM HERE IF SOMETHING WRONG!
+        
+        public ActionResult CreateStationeryRequest()
+        {
+            CategoryDAO categoryDAO = new CategoryDAO();
+            ViewData["Categories"] = categoryDAO.GetAll();
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult AddStationeryRequest(List<RequestStationery> itemData)
+        {
+            if (itemData == null)
+            {
+                return Json("Your item list is empty!", JsonRequestBehavior.AllowGet);
+            }
+
+            // add itemid to array
+            int listLength = itemData.Count;
+            string[] itemid = new string[listLength];
+
+            for (int i = 0; i < listLength; i++)
+            {
+                itemid[i] = itemData[i].ItemId;
+            }
+            ////////////////////////////////////////////
+
+            ///////////////get employee//////////////
+            EmployeeDAO employeeDAO = new EmployeeDAO();
+            Employee emp = new Employee();
+            emp = employeeDAO.GetEmployeeByUsername(Session["username"].ToString());
+            int empId = emp.Id;
+            string deptId = emp.DepartmentId;
+            ///////////////////////////////////////////
+            RequestDAO req = new RequestDAO();
+            List<RequestStationery> reqStationery = new List<RequestStationery>();
+            reqStationery = itemData;
+            if (req.CreateRequest(empId, reqStationery))
+            {
+                return Json("Successfully Added", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("Something went wrong! Please try again later.", JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        //******************************************//
     }
 }

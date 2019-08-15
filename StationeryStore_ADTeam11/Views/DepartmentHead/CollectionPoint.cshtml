@@ -11,79 +11,84 @@
 
 }
 
-<div class="card">
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    @Html.Partial("FlashMessage")
+                    <h4>Collection Points</h4>
+                </div>
 
-    <div class="card-header">
-        <h4>Collection Points</h4>
-    </div>
+                <div class="card-body">
+                    <div class="row">
+                        <Label class="col-12">Representative - @Html.Label(representativeName)</Label>
+                        <Label class="col-12">Collection Point - @Html.Label(collectionPoint)</Label>
+                        @using (Html.BeginForm())
+                        {
 
-    <div class="card-body">
-        <div class="row">
-            <Label class="col-12">Representative - </Label>@Html.Label(representativeName)
-            <Label class="col-12">Collection Point - </Label>@Html.Label(collectionPoint)
-            @using (Html.BeginForm())
-            {
-                
-                    <div class="col-12 form-group">
-                        <div class="row">
-                            <div class="col-3"></div>
-                            <div class="col-10">
-                                <label class="from-control">Collection Points</label>
-                                <div>
-                                    @{
-                                        foreach (var cp in collectionPoints)
-                                        {
-                                            @Html.RadioButtonFor(model => model.CollectionPoinId, cp.Id) @Html.Label(cp.Name)<br>
-                                        }
-                                    }
+                            <div class="col-12 form-group">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label class="from-control">Collection Points</label>
+                                        <div>
+                                            @{
+                                                foreach (var cp in collectionPoints)
+                                                {
+                                                    @Html.RadioButtonFor(model => model.CollectionPoinId, cp.Id) @Html.Label(cp.Name)<br>
+                                                }
+                                            }
+                                        </div>
+
+                                    </div>
                                 </div>
-
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="col-12 form-group">
-                        <div class="row">
-                            <div class="col-3"></div>
-                            <div class="col-6">
-                                <label class="from-control">Representative</label>
-                                @*@{
+                            <div class="col-12 form-group">
+                                <div class="row">
+                                    <div class="col-3"></div>
+                                    <div class="col-6">
+                                        <label class="from-control">Representative</label>
+                                        @*@{
 
-                                    foreach (var emp in employees)
-                                    {
-                                        if (emp.Value == Request["employees"])
-                                        {
-                                            emp.Selected = true;
-                                            break;
+                                                foreach (var emp in employees)
+                                                {
+                                                    if (emp.Value == Request["employees"])
+                                                    {
+                                                        emp.Selected = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }*@
+                                        @{
+                                            var emps = new List<SelectListItem>{ new SelectListItem{ Text="Select Employee Name",
+                                                                        Value = "0" , Disabled = true, Selected = true}, };
+                                            foreach (var e in employees)
+                                            {
+                                                emps.Add(e);
+                                            }
                                         }
-                                    }
-                                }*@
-                                @{
-                                    var emps = new List<SelectListItem>{ new SelectListItem{ Text="Select Employee Name",
-                                            Value = "0" , Disabled = true, Selected = true}, };
-                                    foreach (var e in employees)
-                                    {
-                                        emps.Add(e);
-                                    }
-                                }
-                                @Html.DropDownListFor(model => model.RepName, emps, new { @class = "form-control" })
+                                        @Html.DropDownListFor(model => model.RepName, emps, new { @class = "form-control" })
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="col-12 form-group">
-                        <div class="row">
-                            <div class="col-4">
-                                <input type="reset" value="Cancel" class="btn btn-danger">
+                            <div class="col-12 form-group">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <input type="reset" value="Cancel" class="btn btn-danger">
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="submit" value="Update" class="btn btn-success">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-4">
-                                <input type="submit" value="Update" class="btn btn-success">
-                            </div>
-                        </div>
+                        }
+
                     </div>
-            }
+                </div>
+            </div>
 
         </div>
     </div>
 </div>
-

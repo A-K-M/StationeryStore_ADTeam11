@@ -14,7 +14,7 @@ namespace StationeryStore_ADTeam11.Controllers
     [AuthenticationFilter]
     [RoleFilter("Head")]
 
-    public class DepartmentHeadController : Controller
+    public class DepartmentHeadController : BaseController
     {
         DepartmentDAO departmentDAO = new DepartmentDAO();
 
@@ -78,6 +78,7 @@ namespace StationeryStore_ADTeam11.Controllers
             delegationDAO.CreateDelegation(delegation);
             departmentDAO.UpdateDepartmentDelegation(deptId, delegation.EmployeeId, status);
 
+
             return RedirectToAction("Delegation", "DepartmentHead");
         }
         public ActionResult CancelDelegation(int Id)
@@ -134,6 +135,15 @@ namespace StationeryStore_ADTeam11.Controllers
             departmentDAO.UpdateDepartmentCollectionPoint(deptId, point.CollectionPoinId);
             departmentDAO.UpdateDepartmentRepresentative(deptId, RepId);
 
+            if (!employeeDAO.UpdateUserRole(RepId))
+            {
+                SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
+                return RedirectToAction("Delegation", "DepartmentHead");
+            }
+
+            SetFlash(Enums.FlashMessageType.Success, "Operation Succeeded!");
+
+
             return RedirectToAction("CollectionPoint", "DepartmentHead");
         }
 
@@ -144,10 +154,15 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
-     
-       
+        public ActionResult ViewPendingRequestDetails(int id)
+        {
+            RequestDAO requestDAO = new RequestDAO();
+            ViewData["PendingRequests"] = requestDAO.ViewPendingRequestDetails(id);
 
-        public ActionResult ApproveRejectRequest(string status, string reqId)
+            return View();
+        }
+
+        public ActionResult ApproveRejectRequest(string status, int reqId)
         {
             RequestDAO chngStatus = new RequestDAO();
             chngStatus.UpdateStatus(status, reqId);

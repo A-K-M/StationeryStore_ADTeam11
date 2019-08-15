@@ -9,7 +9,7 @@ using System.Web.Mvc;
 namespace StationeryStore_ADTeam11.Controllers
 {
     [LayoutFilter("_storeSupervisorLayout")]
-    public class StoreSupervisorController : Controller
+    public class StoreSupervisorController : BaseController
     {
         // GET: StoreSupervisor
         public ActionResult Index()

@@ -119,6 +119,8 @@ namespace StationeryStore_ADTeam11.DAOs
                 {
                     Id = (int)reader["ID"],
                     EmployeeId = (int)reader["EmpID"],
+                    EmployeeName = (string)reader["UserName"],
+                    Email = (string)reader["Email"],
                     StartDate = (DateTime)reader["StartDate"],
                     EndDate = (DateTime)reader["EndDate"]
                 };

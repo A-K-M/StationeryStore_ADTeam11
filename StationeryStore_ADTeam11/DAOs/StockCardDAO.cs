@@ -48,36 +48,38 @@ namespace StationeryStore_ADTeam11.DAOs
         public List<StockCard> GetStockCardsByItemId(string Id)
         {
             List<StockCard> stockCards = new List<StockCard>();
+            SqlDataReader reader = null;
+                
             connection.Open();
-
-            string sql = @"SELECT * FROM Stockcard WHERE ItemId = '" + Id + "'";
+            try {
+                StockCard stockCard;
+            string sql = @"SELECT * FROM Stockcard WHERE ItemID = @itemId";
             SqlCommand cmd = new SqlCommand(sql, connection);
-            SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    StockCard stockCard;
-                    try
+            cmd.Parameters.AddWithValue("@itemId", Id);
+             reader = cmd.ExecuteReader();
+                while (reader.Read()) {
+                    stockCard = new StockCard()
                     {
-                        stockCard = new StockCard()
-                        {
-                            Id = (int)reader["Id"],
-                            ItemId = (string)reader["ItemID"],
-                            Date = (DateTime)reader["DateTime"],
-                            Qty = (int)reader["Qty"],
-                            Balance = (int)reader["Balance"],
-                            RefType = (string)reader["Reftype"]
-                        };
-                        stockCards.Add(stockCard);
-                    }
-                    catch
-                    {
-                        stockCards = null;
-                    }
+                        Id = (int) reader["Id"],
+                        ItemId = (string)reader["ItemID"],
+                        Date = (DateTime)reader["DateTime"],
+                        Qty = (int)reader["Qty"],
+                        Balance = (int)reader["Balance"],
+                        RefType = (string)reader["Reftype"]
+                    };
+                    stockCards.Add(stockCard);
                 }
-                reader.Close();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                if(reader!=null)reader.Close();
                 connection.Close();
-            
+            }
+
 
             if (stockCards != null)
             {

@@ -15,6 +15,7 @@ namespace StationeryStore_ADTeam11.Models
         private int _remainingQty;
         private string reqId;
         private string _itemId;
+        private string _dept;
 
         public int Id { get; set; }
         public int ItemReqId { get; set; }
@@ -24,6 +25,7 @@ namespace StationeryStore_ADTeam11.Models
         public int RemainingQty { get; set; }
         public string ReqId { get; set; }
         public string ItemId { get; set; }
+        public string Dept { get; set; }
 
     }
 }
