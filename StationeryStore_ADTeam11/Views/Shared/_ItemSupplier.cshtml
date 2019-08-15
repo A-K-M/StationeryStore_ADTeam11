@@ -81,16 +81,28 @@
                             <div class="card-header">
                                 <h4>
                                     @rank[i] - @supplier.Name
-                                    <a class="pull-right" style="padding:2px">
-                                        <div style="display:none">
-                                            <input id="ItemId" name="ItemId" placeholder="Item Code" type="text">
-                                        </div>
-                                        <div class="col-1">
-                                            <input type="submit" id="SearchBtn" value="Replace" class="btn btn-warning btn-sm form-group">
-                                        </div>
-                                    </a>
+                                    <button class="btn btn-warning btn-sm pull-right" data-toggle="modal" data-target="#myModal\@i"> Replace</button>
                                 </h4>
-
+                            </div>
+                            <div id="myModal\@i" tabindex="-1" role="dialog" class="modal fade text-left" aria-hidden="true" style="display: none;">
+                                <div role="document" class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 id="exampleModalLabel" class="modal-title">Replace @rank[i]</h5>
+                                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <div class="form-group" id="SupplierDropdown">
+                                                    
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="submit" id="Replace" value="Replace" class="btn btn-success pull-right">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -130,3 +142,28 @@
         }
     }
 }
+
+<script>
+    $(document).ready(function () {
+        $("#Replace").click(function () {
+            var Id = $("#myModal0").val();
+            var DetailsDiv = document.getElementById("supplierDrop");
+            var SuppList = $("#supplierDrodown");
+            //var NoResultsMsg = $("#NoResultsMsg");
+            //var NoData = "<div class=\"text-danger\">No Matching Item Code: " + Id + "</div>";
+            SuppList.html("");
+            $.ajax({
+                type: "post",
+                url: "@(Url.Action("ReplaceSupplierList", "StoreClerk", new { id = "----" }))/".replace("----", Id),
+                type: "POST",
+                cache: false,
+                async: true,
+                success: function (result) {
+                    DetailsDiv.style.display = '';
+                    SuppList.html(result);
+
+                }
+            })
+        });
+    });
+    </script>
