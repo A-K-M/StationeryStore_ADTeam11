@@ -1,12 +1,15 @@
 ﻿using StationeryStore_ADTeam11.Filters;
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.View_Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
@@ -92,8 +95,41 @@ namespace StationeryStore_ADTeam11.Controllers
                 Console.WriteLine("{0} is not an Id", Id);
             }
             return Json(itemStockCard, JsonRequestBehavior.AllowGet);
+        }
 
+        [HttpPost]
+        public async Task<ActionResult> ViewLowStockItems(String itemCategory)  //PredictReorderQuantity
+        {
+            using (var client = new HttpClient())
+            {
+                string year = Convert.ToString(DateTime.Today.Year);
 
+                string month = Convert.ToString(DateTime.Today.Month);
+
+                string item = itemCategory;
+
+                HttpResponseMessage res = await client.GetAsync("http://127.0.0.1:5000/model1?x=" + year + "&y=" + month + "&z=" + item);
+
+                if (res.IsSuccessStatusCode)
+                {
+                    ViewData["Message"] = res.Content.ReadAsStringAsync().Result;
+
+                    return View();
+                }
+                else
+                {
+                    return View("Error");
+                }
+
+            }
+        }
+        public ActionResult ViewLowStockItems()  //PredictReorderQuantity
+        {
+            ItemDAO itemDAO = new ItemDAO();
+            List<LowStockItemViewModel> items = itemDAO.GetLowStockItems();
+
+            ViewData["lowstockitems"] = items;
+            return View();
         }
     }
 }
