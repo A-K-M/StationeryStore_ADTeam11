@@ -57,7 +57,7 @@ namespace StationeryStore_ADTeam11.Controllers
                 case "Employee":
                     return RedirectToAction("Index", "DepartmentEmployee");
                 case "Representative":
-                    return RedirectToAction("Index", "DepartmentRepresentative");
+                    return RedirectToAction("Index", "DepartmentEmployee");
                 case "Manager":
                     return RedirectToAction("Index", "StoreManager");
                 case "Supervisor":
