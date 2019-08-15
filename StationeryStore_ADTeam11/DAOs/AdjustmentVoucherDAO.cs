@@ -466,7 +466,7 @@ namespace StationeryStore_ADTeam11.DAOs
                         stockCardSql += $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
                            $" VALUES ('{item.ItemID}','{DateTime.Today}','{-item.Quantity}'," +
                            $"(SELECT TOP 1 Balance FROM Stockcard WHERE ItemID='{item.ItemID}' ORDER BY ID DESC)-({item.Quantity})" +
-                           $",'ADJ-{id}-Rejected'); \n";
+                           $",'ADJ-{id}'); \n";
                     }
 
                     cmd = new SqlCommand(stockCardSql, connection, transaction);

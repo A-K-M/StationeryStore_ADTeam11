@@ -1,0 +1,58 @@
+﻿@using StationeryStore_ADTeam11.View_Models
+
+@model StationeryStore_ADTeam11.Models.PurchaseOrderItem
+
+@{
+    ViewBag.Title = "ViewLowStockItems";
+
+    var lowstockitems = (List<LowStockItemViewModel>)ViewData["lowstockitems"];
+}
+
+<h2>ViewLowStockItems</h2>
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            Re-order Stock Items
+            <a href="#" class="btn btn-outline-success pull-right">Request Re-order</a>
+        </h4>
+    </div>
+    <div class="card-body">
+        <table class="table  table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Item Number</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Reorder Level</th>
+                    <th>Quantity on hand</th>
+                    <th>Reorder Qty</th>
+                    <th>Suggested Reorder Qty</th>
+                    <th>Unit of Measure</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{
+                    foreach (var l in lowstockitems)
+                    {
+                        <tr>
+                            <td>@l.Id</td>
+                            <td>@l.CategoryName</td>
+                            <td>@l.Description</td>
+                            <td>@l.Threshold</td>
+                            <td>@l.Balance</td>
+                            <td>@Html.TextBoxFor(model=>model.Qty , new { @Value = l.ReorderQty })</td>
+                            <td>@l.SuggestedReorderQty</td>
+                            <td>@l.Uom</td>
+                        </tr>
+                    }
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

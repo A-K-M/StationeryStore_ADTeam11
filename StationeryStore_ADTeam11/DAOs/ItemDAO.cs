@@ -1,4 +1,5 @@
 ﻿using StationeryStore_ADTeam11.MobileModels;
+using StationeryStore_ADTeam11.View_Models;
 using StationeryStore_ADTeam11.Models;
 using System;
 using System.Collections.Generic;
@@ -69,6 +70,48 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             conn.Close();
             return itemDescription;
+        }
+
+        public List<LowStockItemViewModel> GetLowStockItems()
+        {
+            List<LowStockItemViewModel> items = new List<LowStockItemViewModel>();
+
+            string sql = @"select Top 1 i.ID,c.Name,i.CategoryID,i.Description,i.ThresholdValue,s.Balance, i.ReorderQty,i.UOM
+                            from Item as i, Stockcard as s, Category as c
+                            where i.ID=s.ItemID and s.Balance<i.ThresholdValue and c.ID=i.CategoryID
+                            order by s.Balance asc";
+
+            connection.Open();
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                try
+                {
+                    LowStockItemViewModel item = new LowStockItemViewModel()
+                    {
+                        Id = (string)reader["ID"],
+                        CategoryId = Convert.ToInt32(reader["CategoryID"]),
+                        CategoryName=reader["Name"].ToString(),
+                        Description = reader["Description"].ToString(),
+                        Threshold = Convert.ToInt32(reader["ThresholdValue"]),
+                        ReorderQty = Convert.ToInt32(reader["ReorderQty"]),
+                        Uom = reader["UOM"].ToString(),
+                        Balance= (int)reader["Balance"]
+                    };
+                    items.Add(item);
+
+                }
+                catch
+                {
+                    items = null;
+                }
+            }
+            reader.Close();
+            connection.Close();
+
+            return items;
         }
 
         public Item GetItemById(string id)

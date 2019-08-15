@@ -8,6 +8,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
@@ -109,8 +111,41 @@ namespace StationeryStore_ADTeam11.Controllers
                 Console.WriteLine("{0} is not an Id", Id);
             }
             return Json(itemStockCard, JsonRequestBehavior.AllowGet);
+        }
 
+        [HttpPost]
+        public async Task<ActionResult> ViewLowStockItems(String itemCategory)  //PredictReorderQuantity
+        {
+            using (var client = new HttpClient())
+            {
+                string year = Convert.ToString(DateTime.Today.Year);
 
+                string month = Convert.ToString(DateTime.Today.Month);
+
+                string item = itemCategory;
+
+                HttpResponseMessage res = await client.GetAsync("http://127.0.0.1:5000/model1?x=" + year + "&y=" + month + "&z=" + item);
+
+                if (res.IsSuccessStatusCode)
+                {
+                    ViewData["Message"] = res.Content.ReadAsStringAsync().Result;
+
+                    return View();
+                }
+                else
+                {
+                    return View("Error");
+                }
+
+            }
+        }
+        public ActionResult ViewLowStockItems()  //PredictReorderQuantity
+        {
+            ItemDAO itemDAO = new ItemDAO();
+            List<LowStockItemViewModel> items = itemDAO.GetLowStockItems();
+
+            ViewData["lowstockitems"] = items;
+            return View();
         }
 
         public ActionResult ItemSuppliers(String Id)
@@ -312,6 +347,32 @@ namespace StationeryStore_ADTeam11.Controllers
             }
             return View(list);
 
+        }
+        [HttpGet]
+        public ActionResult ViewDisbursementList()
+        {
+            string username = Session["username"].ToString();
+            EmployeeDAO e = new EmployeeDAO();
+            int clerk_id = e.GetEmployeeByUsername(username).Id;
+
+            DisbursementDAO d = new DisbursementDAO();
+            List<DisbursementVM> list = d.WebGetDisbursementsByClerk(clerk_id);
+
+            CollectionPointDAO c = new CollectionPointDAO();
+            List<CollectionPoint> c_list = c.GetCollectionPointsByClerk(clerk_id);
+            foreach (DisbursementVM row in list)
+            {
+                foreach (CollectionPoint col in c_list)
+                {
+                    if (col.Id == row.CollectionPointID)
+                    {
+                        row.CollectionPointName = col.Name;
+                    }
+                }
+            }
+
+            ViewData["c_list"] = c_list;
+            return View(list);
         }
     }
 }

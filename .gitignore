@@ -263,3 +263,5 @@ __pycache__/
 DatabaseConnection.cs
 /StationeryStore_ADTeam11/App_Data
 /StationeryStore_ADTeam11/Views/StoreSupervisor
+/StationeryStore_ADTeam11/Scripts
+/StationeryStore_ADTeam11/Views/StoreClerk/clerk_low_stock.html
