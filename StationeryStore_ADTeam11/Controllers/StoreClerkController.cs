@@ -314,5 +314,31 @@ namespace StationeryStore_ADTeam11.Controllers
             return View(list);
 
         }
+        [HttpGet]
+        public ActionResult ViewDisbursementList()
+        {
+            string username = Session["username"].ToString();
+            EmployeeDAO e = new EmployeeDAO();
+            int clerk_id = e.GetEmployeeByUsername(username).Id;
+
+            DisbursementDAO d = new DisbursementDAO();
+            List<DisbursementVM> list = d.WebGetDisbursementsByClerk(clerk_id);
+
+            CollectionPointDAO c = new CollectionPointDAO();
+            List<CollectionPoint> c_list = c.GetCollectionPointsByClerk(clerk_id);
+            foreach (DisbursementVM row in list)
+            {
+                foreach (CollectionPoint col in c_list)
+                {
+                    if (col.Id == row.CollectionPointID)
+                    {
+                        row.CollectionPointName = col.Name;
+                    }
+                }
+            }
+
+            ViewData["c_list"] = c_list;
+            return View(list);
+        }
     }
 }
