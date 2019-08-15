@@ -515,6 +515,8 @@
     <Content Include="Views\DepartmentRepresentative\CollectionPoint.cshtml" />
     <Content Include="Views\DepartmentRepresentative\Disbursement.cshtml" />
     <Content Include="Views\StoreSupervisor\ChartDataXML.cshtml" />
+    <Content Include="Views\StoreClerk\ItemSuppliers.cshtml" />
+    <Content Include="Views\Shared\_itemSupplier.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

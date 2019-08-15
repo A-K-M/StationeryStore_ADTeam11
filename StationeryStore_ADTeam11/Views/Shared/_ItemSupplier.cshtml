@@ -1,0 +1,123 @@
+﻿@model StationeryStore_ADTeam11.Models.Supplier
+
+<div>
+    <h4>Supplier</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GstNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GstNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fax)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fax)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+
+@{
+    foreach (var supplier in suppliers)
+    {
+        <div class="container-fluid">
+            <div class="row d-flex">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>
+                                @supplier.Name
+                                <a class="pull-right" style="padding:2px">
+                                    @using (Html.BeginForm("DeleteSupplier", "StoreManager", FormMethod.Post))
+                                    {
+                                        @Html.HiddenFor(supp => supp.Id, new { @readonly = "readonly", @Value = supplier.Id })
+                                        <input type="submit" value="Delete" class="btn btn-danger btn-sm" style='width:70px'>
+                                    }
+                                </a>
+                                <a class="pull-right" style="padding:2px">
+                                    @using (Html.BeginForm("EditSupplier", "StoreManager", FormMethod.Post))
+                                    {
+                                        @Html.HiddenFor(supp => supp.Id, new { @Value = supplier.Id })
+                                        <input type="submit" value="Edit" class="btn btn-warning btn-sm" style='width:70px'>
+                                    }
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="table table-striped table-hover">
+                                        <tr>
+                                            <td align="left">
+                                                Supplier Code
+                                                <br>Supplier Name
+                                                <br>GST Registration No
+                                                <br>Contact Name
+                                                <br>Phone No
+                                                <br>Fax No
+                                                <br>Address
+                                            </td>
+                                            <td>
+                                                : @supplier.Id
+                                                <br>: @supplier.Name
+                                                <br>: @supplier.GstNumber
+                                                <br>: @supplier.ContactName
+                                                <br>: @supplier.PhoneNo
+                                                <br>: @supplier.Fax
+                                                <br>: @supplier.Address
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    }
+}

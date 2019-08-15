@@ -95,5 +95,11 @@ namespace StationeryStore_ADTeam11.Controllers
 
 
         }
+
+        public JsonResult GetSuppliersByItemId(string Id)
+        {
+            List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
+            return Json(itemSuppliers, JsonRequestBehavior.AllowGet);
+        }
     }
 }
