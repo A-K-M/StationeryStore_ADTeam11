@@ -76,7 +76,10 @@ namespace StationeryStore_ADTeam11.DAOs
         {
             List<Item> itemList = new List<Item>();
 
-            string sql = @"select id,ThresholdValue from item";
+            string sql = @"select id,ThresholdValue from item
+                            where id not in (SELECT ItemID
+                            FROM PurchaseOrderItem where PurchaseID in (SELECT id
+                            FROM PurchaseOrder where Status = 'Pending')) ";
             SqlCommand cmd = new SqlCommand(sql, connection);
             connection.Open();
             SqlDataReader data = cmd.ExecuteReader();
@@ -105,6 +108,8 @@ namespace StationeryStore_ADTeam11.DAOs
             List<Item> itemList = new List<Item>();
 
             Item item = null;
+            if (ids == "")
+                ids = "'0'";
 
             string sql = @"select i.*, c.name as Category from Item i, Category c 
                     where i.CategoryID = c.ID and 

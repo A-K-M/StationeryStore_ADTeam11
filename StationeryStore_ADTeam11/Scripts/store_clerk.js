@@ -175,7 +175,7 @@ function requestReorderList() {
         success: function (result) {
 
             alert(result);
-            //location.href = "/StoreClerk/CreateAdjustmentVoucher";
+            location.href = "/StoreClerk/ViewLowStockItems";
         },
         error: function (errormessage) {
             alert(errormessage.responseText);
