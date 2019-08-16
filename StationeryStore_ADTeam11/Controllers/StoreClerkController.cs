@@ -64,6 +64,8 @@ namespace StationeryStore_ADTeam11.Controllers
         [HttpPost]
         public JsonResult RequestReorderList(List<PurchaseOrderItem> itemData)
         {
+            if (itemData == null) return Json("No item to reorder!", JsonRequestBehavior.AllowGet);
+
             ItemDAO itemDAO = new ItemDAO();
 
             if (itemDAO.RequestReorderItems(11236, itemData))
