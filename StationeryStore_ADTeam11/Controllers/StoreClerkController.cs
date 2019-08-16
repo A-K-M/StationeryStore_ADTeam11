@@ -61,6 +61,18 @@ namespace StationeryStore_ADTeam11.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult RequestReorderList(List<PurchaseOrderItem> itemData)
+        {
+            ItemDAO itemDAO = new ItemDAO();
+
+            if (itemDAO.RequestReorderItems(11236, itemData))
+            {
+                return Json("Successfully Requested", JsonRequestBehavior.AllowGet);
+            }
+            return Json("Something went wrong! Please try again later!", JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult ApprovedRequests()
         {
             RequestDAO request = new RequestDAO();
@@ -165,23 +177,6 @@ namespace StationeryStore_ADTeam11.Controllers
 
             ViewData["LowStockList"] = list;
             return View(list);
-
-
-
-            //ItemDAO itemDAO = new ItemDAO();
-            //List<LowStockItemViewModel> list = new List<LowStockItemViewModel>();
-            //List<Item> items = itemDAO.GetLowStockItems();
-
-            //foreach (var row in items)
-            //{
-            //    LowStockItemViewModel itemVM = new LowStockItemViewModel();
-            //    itemVM.Balance = itemDAO.GetBalanceByItemId(row.Id);
-            //    itemVM.ItemList = row;
-            //    list.Add(itemVM);                
-            //}
-
-            //ViewData["LowStockList"] = list;
-            //return View(list);
         }
 
         public ActionResult ItemSuppliers(String Id)

@@ -141,3 +141,44 @@ function createJSONList() {
 
     return jsonObj;
 }
+
+function requestReorderList() {
+
+    let table_rows = $("#ls-table > tr");
+
+    let jsonObj = [];
+
+    for (let i = 1; i <= table_rows.length; i++) {
+        let item = {};
+
+
+        item["itemId"] = $("#ls-id-" + i).text();
+        item["description"] = $("#ls-des-" + i).text();
+        item["qty"] = $("#ls-reorder-qty-" + i).val();
+
+        if (isNaN(item["qty"])) {
+            alert("Please enter valid data!");
+            return false;
+        } 
+
+        jsonObj.push(item);
+    }
+
+    console.log(jsonObj);
+
+    $.ajax({
+        url: "/StoreClerk/RequestReorderList",
+        type: "POST",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify(jsonObj),
+        success: function (result) {
+
+            alert(result);
+            //location.href = "/StoreClerk/CreateAdjustmentVoucher";
+        },
+        error: function (errormessage) {
+            alert(errormessage.responseText);
+        }
+    });
+}
