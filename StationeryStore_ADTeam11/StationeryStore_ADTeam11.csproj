@@ -165,6 +165,7 @@
     <Compile Include="DAOs\DAO.cs" />
     <Compile Include="DAOs\DatabaseConnection.cs" />
     <Compile Include="DAOs\DelegationDAO.cs" />
+    <Compile Include="DAOs\EmailDAO.cs" />
     <Compile Include="DAOs\EmployeeDAO.cs" />
     <Compile Include="DAOs\ItemDAO.cs" />
     <Compile Include="DAOs\ItemRequestDAO.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Models\StockCard.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Email.cs" />
     <Compile Include="View_Models\AdjustmentVoucherVM.cs" />
     <Compile Include="View_Models\DeligationStatus.cs" />
     <Compile Include="View_Models\DepartmentDelegation.cs" />
