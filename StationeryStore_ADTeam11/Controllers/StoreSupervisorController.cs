@@ -73,5 +73,14 @@ namespace StationeryStore_ADTeam11.Controllers
             SetFlash(Enums.FlashMessageType.Error, "Something went wrong. Please try again later!");
             return RedirectToAction("AdjustmentVouchers");
         }
+
+        public ActionResult ReorderStockList()
+        {
+            PurchaseOrderDAO purchaseOrder = new PurchaseOrderDAO();
+
+            ViewData["StockList"] = purchaseOrder.ReorderStockLists("Pending");
+
+            return View();
+        }
     }
 }

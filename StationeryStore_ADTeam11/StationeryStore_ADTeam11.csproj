@@ -170,6 +170,7 @@
     <Compile Include="DAOs\ItemDAO.cs" />
     <Compile Include="DAOs\ItemRequestDAO.cs" />
     <Compile Include="DAOs\OutstandingDAO.cs" />
+    <Compile Include="DAOs\PurchaseOrderDAO.cs" />
     <Compile Include="DAOs\RequestDAO.cs" />
     <Compile Include="DAOs\RetrievalDAO.cs" />
     <Compile Include="DAOs\StockCardDAO.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="View_Models\DepartmentDelegation.cs" />
     <Compile Include="View_Models\DisbursementVM.cs" />
     <Compile Include="View_Models\LowStockItemViewModel.cs" />
+    <Compile Include="View_Models\ReorderStockListVM.cs" />
     <Compile Include="View_Models\RequestDetailViewModel.cs" />
     <Compile Include="View_Models\RequestStationery.cs" />
     <Compile Include="View_Models\RequestViewModel.cs" />
