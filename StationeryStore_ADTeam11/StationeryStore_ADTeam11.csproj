@@ -533,6 +533,8 @@
     <Content Include="Views\StoreClerk\ViewLowStockItems.cshtml" />
     <Content Include="Views\StoreSupervisor\ReorderStockList.cshtml" />
     <Content Include="Views\StoreSupervisor\ReorderStockDetail.cshtml" />
+    <Content Include="Views\StoreClerk\ApprovedReorderList.cshtml" />
+    <Content Include="Views\StoreClerk\ApprovedReorderStockDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

@@ -111,5 +111,61 @@ namespace StationeryStore_ADTeam11.DAOs
             //cmd.Parameters.AddWithValue("@status", status);
 
         }
+
+        public List<ReorderStockListVM> ApprovedReorderStockList()
+        {
+            List<ReorderStockListVM> reorderStockLists = new List<ReorderStockListVM>();
+
+            string sql = @"SELECT * FROM PurchaseOrder WHERE Status = 'Approved'";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            ReorderStockListVM stocks = null;
+
+            while (data.Read())
+            {
+                stocks = new ReorderStockListVM()
+                {
+                    Id = Convert.ToInt32(data["ID"]),
+                    RequestedDate = Convert.ToDateTime(data["Date"]),
+                    Status = data["Status"].ToString()
+                };
+
+                reorderStockLists.Add(stocks);
+            }
+            data.Close();
+            connection.Close();
+
+            return reorderStockLists;
+        }
+
+        public bool OrderStockList(int id)
+        {
+            string sql = "UPDATE PurchaseOrder SET Status = 'Ordered' WHERE ID = " + id;
+
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand(sql, connection);
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                connection.Close();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+
+            }
+
+            return true;
+        }
     }
 }

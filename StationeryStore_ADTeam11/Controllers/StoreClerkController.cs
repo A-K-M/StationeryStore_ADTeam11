@@ -437,5 +437,37 @@ namespace StationeryStore_ADTeam11.Controllers
             ViewData["c_list"] = c_list;
             return View(list);
         }
+
+        public ActionResult ApprovedReorderList()
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            ViewData["Orders"] = purchaseOrderDAO.ApprovedReorderStockList();
+
+            return View();
+        }
+
+        public ActionResult ApprovedReorderStockDetail(int id)
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            ViewData["StockDetails"] = purchaseOrderDAO.ReorderStockDetail(id);
+
+            return View();
+        }
+
+        public ActionResult MakeOrder(int id)
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            if (purchaseOrderDAO.OrderStockList(id))
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Ordered!");
+                return RedirectToAction("ApprovedReorderList");
+            }
+
+            SetFlash(Enums.FlashMessageType.Error, "Something went wrong! Please try again later");
+            return RedirectToAction("ApprovedReorderList");
+        }
     }
 }
