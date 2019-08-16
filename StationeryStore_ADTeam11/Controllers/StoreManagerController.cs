@@ -9,8 +9,8 @@ using StationeryStore_ADTeam11.DAOs;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
-    //[AuthenticationFilter]
-    //[RoleFilter("Manager")]
+    [AuthenticationFilter]
+    [RoleFilter("Manager")]
     [LayoutFilter("_storeManagerLayout")]
     public class StoreManagerController : BaseController
     {

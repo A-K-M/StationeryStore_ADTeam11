@@ -13,8 +13,8 @@ using System.Net.Http;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
-    //[AuthenticationFilter]
-    //[RoleFilter("Clerk")]
+    [AuthenticationFilter]
+    [RoleFilter("Clerk")]
     [LayoutFilter("_storeClerkLayout")]
     public class StoreClerkController : BaseController
     {
