@@ -57,6 +57,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 if (cmd2.ExecuteNonQuery() == 0) throw new Exception();
 
                 transaction.Commit();
+
             }
             catch (Exception e)
             {
@@ -219,6 +220,7 @@ namespace StationeryStore_ADTeam11.DAOs
             SqlCommand command = new SqlCommand(sql, conn);
             command.ExecuteNonQuery();
             conn.Close();
+            //Email
 
         }
         public void CancelDelegation(int delegationId)

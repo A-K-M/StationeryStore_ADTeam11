@@ -74,15 +74,7 @@ namespace StationeryStore_ADTeam11.Controllers
        
         }
 
-        [Route("collectionpoints/{pointId}")]
-        [HttpPut]
-        public MResponse UpdateCollectionPoint(int pointId)
-        {
-            bool success = new CollectionPointDAO().UpdateCollectionPoint(pointId, "COMM");
-            MResponse response = new MResponse(success);
-
-            return response;
-        }
+       
 
         [Route("requests")]
         [HttpGet]

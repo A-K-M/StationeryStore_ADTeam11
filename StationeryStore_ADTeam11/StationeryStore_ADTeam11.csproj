@@ -150,6 +150,7 @@
     <Compile Include="Controllers\DepartmentEmployeeController.cs" />
     <Compile Include="Controllers\DepartmentHeadApiController.cs" />
     <Compile Include="Controllers\DepartmentHeadController.cs" />
+    <Compile Include="Controllers\DepartmentRepController.cs" />
     <Compile Include="Controllers\DepartmentRepresentativeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StoreClerkApiController.cs" />
@@ -180,6 +181,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="MobileModels\Constant.cs" />
+    <Compile Include="MobileModels\DateTimeExtensions.cs" />
     <Compile Include="MobileModels\JsonParser.cs" />
     <Compile Include="MobileModels\MAdjustmentItem.cs" />
     <Compile Include="MobileModels\MAdjVoucher.cs" />
@@ -192,6 +194,7 @@
     <Compile Include="MobileModels\MResponseObj.cs" />
     <Compile Include="MobileModels\MResponse.cs" />
     <Compile Include="MobileModels\MResponseListAndObj.cs" />
+    <Compile Include="MobileModels\MResponseTwoObject.cs" />
     <Compile Include="MobileModels\MStockCard.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
     <Compile Include="Models\Category.cs" />
