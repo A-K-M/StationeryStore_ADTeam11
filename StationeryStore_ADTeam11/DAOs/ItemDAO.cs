@@ -72,46 +72,92 @@ namespace StationeryStore_ADTeam11.DAOs
             return itemDescription;
         }
 
-        public List<LowStockItemViewModel> GetLowStockItems()
+        public List<Item> GetItemIdsAndThresholdValue()
         {
-            List<LowStockItemViewModel> items = new List<LowStockItemViewModel>();
+            List<Item> itemList = new List<Item>();
 
-            string sql = @"select Top 1 i.ID,c.Name,i.CategoryID,i.Description,i.ThresholdValue,s.Balance, i.ReorderQty,i.UOM
-                            from Item as i, Stockcard as s, Category as c
-                            where i.ID=s.ItemID and s.Balance<i.ThresholdValue and c.ID=i.CategoryID
-                            order by s.Balance asc";
-
-            connection.Open();
+            string sql = @"select id,ThresholdValue from item";
             SqlCommand cmd = new SqlCommand(sql, connection);
-            SqlDataReader reader = cmd.ExecuteReader();
+            connection.Open();
+            SqlDataReader data = cmd.ExecuteReader();
 
-            while (reader.Read())
+            Item item = null;
+
+            while (data.Read())
             {
-                try
+                item = new Item()
                 {
-                    LowStockItemViewModel item = new LowStockItemViewModel()
-                    {
-                        Id = (string)reader["ID"],
-                        CategoryId = Convert.ToInt32(reader["CategoryID"]),
-                        CategoryName=reader["Name"].ToString(),
-                        Description = reader["Description"].ToString(),
-                        Threshold = Convert.ToInt32(reader["ThresholdValue"]),
-                        ReorderQty = Convert.ToInt32(reader["ReorderQty"]),
-                        Uom = reader["UOM"].ToString(),
-                        Balance= (int)reader["Balance"]
-                    };
-                    items.Add(item);
+                    Id = data["ID"].ToString(),
+                    ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
+                };
 
-                }
-                catch
-                {
-                    items = null;
-                }
+                itemList.Add(item);
             }
-            reader.Close();
+            data.Close();
             connection.Close();
 
-            return items;
+            return itemList;
+
+        }
+
+        public List<Item> GetLowStockItems(string ids)
+        {
+            List<Item> itemList = new List<Item>();
+
+            Item item = null;
+
+            string sql = @"select i.*, c.name as Category from Item i, Category c 
+                    where i.CategoryID = c.ID and 
+                    i.ID in (" + ids + ")";
+
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                item = new Item()
+                {
+                    Id = data["ID"].ToString(),
+                    CategoryId = Convert.ToInt32(data["CategoryID"]),
+                    Description = data["Description"].ToString(),
+                    ReorderQty = Convert.ToInt32(data["ReorderQty"]),
+                    ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
+                    Uom = data["UOM"].ToString(),
+                    BinNo = data["BinNo"].ToString(),
+                    CategoryName = data["Category"].ToString()
+                };
+
+                itemList.Add(item);
+            }
+            data.Close();
+            connection.Close();
+
+            return itemList;
+        }
+
+        public int GetBalanceByItemId(string itemId)
+        {
+            string sql = "select top 1 balance from " +
+                         "Stockcard where ItemID = '"+ itemId + "' order by id desc; ";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            int balance = 0;
+
+            while (data.Read())
+            {
+                balance = Convert.ToInt32(data["balance"]);
+            }
+
+            data.Close();
+            connection.Close();
+
+            return balance;
         }
 
         public Item GetItemById(string id)
