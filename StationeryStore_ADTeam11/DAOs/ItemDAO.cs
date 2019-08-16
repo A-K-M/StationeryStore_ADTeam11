@@ -192,6 +192,45 @@ namespace StationeryStore_ADTeam11.DAOs
             return itemList;
         }
 
+        public bool UpdateItemSupplier(Item updItem, int suppOrder)
+        {
+            bool success;
+            string sqlUpdateItemSupp = null;
+
+            if (suppOrder == 1)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET FirstSupplier = '" + updItem.FirstSupplier + "', "
+                    + "FirstPrice = " + updItem.FirstPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+            else if (suppOrder == 2)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET SecondSupplier = '" + updItem.SecondSupplier + "', "
+                    + "SecondPrice = " + updItem.SecondPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+            else if (suppOrder == 3)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET ThirdSupplier = '" + updItem.ThirdSupplier + "', "
+                    + "ThirdPrice = " + updItem.ThirdPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+
+            try
+            {
+                connection.Open();
+
+                SqlCommand cmd = new SqlCommand(sqlUpdateItemSupp, connection);
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+
+                success = true;
+            }
+            catch(Exception e)
+            {
+                success = false;
+            }
+
+            return success;
+        }
 
     }
 }

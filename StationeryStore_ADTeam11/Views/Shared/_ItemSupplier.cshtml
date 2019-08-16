@@ -1,90 +1,49 @@
-﻿@model List<StationeryStore_ADTeam11.Models.Supplier>
-@using StationeryStore_ADTeam11.Models
+﻿@using StationeryStore_ADTeam11.Models
 
 @{
-    var suppliers = (List<Supplier>)@Model;
-    //var rank = ViewData["rank"];
-}
+        var itemSuppliers = ViewBag.itemSuppliers;
+        var allSuppliers = ViewBag.allSuppliers;
+        var item = ViewBag.item;
 
-@*<div>
-        <h4>Supplier</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
+        var rank = new string[] {"1st Supplier", "2nd Supplier", "3rd Supplier"};
+        var suppOrder = new string[] {"FirstSupplier", "SecondSupplier", "ThirdSupplier"};
+        var suppPrice = new string[] {"FirstPrice", "SecondPrice", "ThirdPrice"};
 
-            <dd>
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.GstNumber)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.GstNumber)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.ContactName)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.ContactName)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.PhoneNo)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.PhoneNo)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Fax)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Fax)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Address)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Address)
-            </dd>
-
-        </dl>
-    </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>*@
+        var itemPrice = "0.00";
+    }
 
 
 @{
-    if (suppliers != null)
+    if (itemSuppliers != null)
     {
         int i = 0;
-        string[] rank = new string[] {"1st Supplier", "2nd Supplier", "3rd Supplier"};
-        foreach (Supplier supplier in suppliers)
+
+        foreach (Supplier supplier in itemSuppliers)
         {
-            
+
+            if(i == 0)
+            {
+                itemPrice = String.Format("{0:0.00}", item.FirstPrice);
+            }
+            else if(i == 1)
+            {
+                itemPrice = String.Format("{0:0.00}", item.SecondPrice);
+            }
+            else if(i == 2)
+            {
+                itemPrice = String.Format("{0:0.00}", item.ThirdPrice);
+            }
             <div class="container-fluid">
                 <div class="row d-flex">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <h4>
-                                    @rank[i] - @supplier.Name
-                                    <button class="btn btn-warning btn-sm pull-right" data-toggle="modal" data-target="#myModal\@i"> Replace</button>
+                                    @rank[i] - @supplier.Name - $@itemPrice / unit
+                                    <button class="btn btn-warning btn-sm pull-right" data-toggle="modal" data-target="#@suppOrder[i]"> Replace</button>
                                 </h4>
                             </div>
-                            <div id="myModal\@i" tabindex="-1" role="dialog" class="modal fade text-left" aria-hidden="true" style="display: none;">
+                            <div id="@suppOrder[i]" tabindex="-1" role="dialog" class="modal fade text-left" aria-hidden="true" style="display: none;">
                                 <div role="document" class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -92,12 +51,26 @@
                                             <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form>
-                                                <div class="form-group" id="SupplierDropdown">
-                                                    
+                                            <form action="/StoreClerk/ReplaceSupplier" method="post">
+                                                <input value="@item.Id" name="itemId" type="hidden">
+                                                <input value="@suppOrder[i]" name="supplierOrder" type="hidden">
+                                                <div class="form-group">
+                                                    <select name="supplierId" class="form-control" type="text">
+                                                        @foreach (Supplier supp in allSuppliers)
+                                                        {
+                                                            if (supp.Id != supplier.Id)
+                                                            {
+                                                                <option value="@supp.Id">@supp.Id - @supp.Name</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <br />
+                                                    <h6>Price/unit:</h6>
+                                                    <input value="@suppPrice[i]" name="suppPrice" type="hidden">
+                                                    <input type="number" name="Price" class="form-control" min="0.01" max="10000.00" step="0.01" required />
                                                 </div>
                                                 <div class="form-group">
-                                                    <input type="submit" id="Replace" value="Replace" class="btn btn-success pull-right">
+                                                    <input type="submit" value="Replace" class="btn btn-outline-success pull-right">
                                                 </div>
                                             </form>
                                         </div>

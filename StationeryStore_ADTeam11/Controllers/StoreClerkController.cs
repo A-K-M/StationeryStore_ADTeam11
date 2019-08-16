@@ -152,14 +152,15 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             Session["Username"] = "Clerk User";
             Session["Role"] = "Clerk";
-            List<Supplier> itemSuppliers = null;
+            List<Supplier> itemSuppliers = new List<Supplier>();
 
             if (Id != null)
             {
                 itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
+                ViewData["itemSuppliers"] = itemSuppliers;
+                ViewData["itemId"] = Id;
             }
 
-            ViewData["suppliers"] = itemSuppliers;
             return View();
         }
 
@@ -172,13 +173,19 @@ namespace StationeryStore_ADTeam11.Controllers
         public PartialViewResult ItemSupplierList(string Id)
         {
             List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
+            List<Supplier> allSuppliers = new SupplierDAO().GetAllSuppliers();
+            Item item = new ItemDAO().GetItemById(Id);
+            ViewBag.item = item;
+            ViewBag.itemSuppliers = itemSuppliers;
+            ViewBag.allSuppliers = allSuppliers;
+
             if (Id == null)
             {
                 return PartialView("_noSupplierResults", Id);
             }
             else if (itemSuppliers != null)
             {
-                return PartialView("_itemSupplier", itemSuppliers);
+                return PartialView("_itemSupplier", ViewBag);
             }
             else
             {
@@ -186,21 +193,48 @@ namespace StationeryStore_ADTeam11.Controllers
             }
         }
 
-        public PartialViewResult ReplaceSupplierList(string Id)
+        public ActionResult ReplaceSupplier(string itemId, string supplierOrder, string supplierId, double price)
         {
-            List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersExceptId(Id);
-            if (Id == null)
+            Item item = new ItemDAO().GetItemById(itemId);
+            int order = 0;
+            string suppOrder = null;
+            
+            if (supplierOrder == "FirstSupplier")
             {
-                return PartialView("_noSupplierResults", Id);
+                item.FirstSupplier = supplierId;
+                item.FirstPrice = price;
+                order = 1;
+                suppOrder = "First Supplier";
             }
-            else if (itemSuppliers != null)
+            else if(supplierOrder == "SecondSupplier")
             {
-                return PartialView("_replaceSupplierList", itemSuppliers);
+                item.SecondSupplier = supplierId;
+                item.SecondPrice = price;
+                order = 2;
+                suppOrder = "Second Supplier";
+            }
+            else if(supplierOrder == "ThirdSupplier")
+            {
+                item.ThirdSupplier = supplierId;
+                item.ThirdPrice = price;
+                order = 3;
+                suppOrder = "Third Supplier";
+            }
+
+            bool success = new ItemDAO().UpdateItemSupplier(item, order);
+
+            if(success)
+            {
+                SetFlash(Enums.FlashMessageType.Success, "" + suppOrder + " of Item " 
+                    + itemId + " has been changed to supplier code " + supplierId + " and price of $" + String.Format("{0:0.00}", price) + "/unit successfully!");
+                return RedirectToAction("ItemSuppliers","StoreClerk", itemId);
             }
             else
             {
-                return PartialView("_noSupplierResults", Id);
+                SetFlash(Enums.FlashMessageType.Error, "Error in updating uspplier information for Item Id: " + itemId);
+                return RedirectToAction("ItemSuppliers", "StoreClerk", itemId);
             }
+
         }
 
         public JsonResult ReplaceSupplierList2(string Id)
