@@ -214,6 +214,8 @@
     <Compile Include="View_Models\AdjustmentVoucherVM.cs" />
     <Compile Include="View_Models\DeligationStatus.cs" />
     <Compile Include="View_Models\DepartmentDelegation.cs" />
+    <Compile Include="View_Models\DisbursementVM.cs" />
+    <Compile Include="View_Models\LowStockItemViewModel.cs" />
     <Compile Include="View_Models\RequestDetailViewModel.cs" />
     <Compile Include="View_Models\RequestStationery.cs" />
     <Compile Include="View_Models\RequestViewModel.cs" />
@@ -521,6 +523,11 @@
     <Content Include="Views\Shared\_noSupplierResults.cshtml" />
     <Content Include="Views\StoreClerk\CreateRetrievalList.cshtml" />
     <Content Include="Views\StoreClerk\ViewRetrievalList.cshtml" />
+    <Content Include="Views\Shared\_replaceSupplierList.cshtml" />
+    <Content Include="Views\Shared\FlashMessage.cshtml" />
+    <Content Include="Views\StoreManager\AdjustmentVouchers.cshtml" />
+    <Content Include="Views\StoreManager\VoucherItems.cshtml" />
+    <Content Include="Views\StoreClerk\ViewDisbursementList.cshtml" />
     <Content Include="Views\DepartmentEmployee\RequestDetail.cshtml" />
     <Content Include="Views\DepartmentEmployee\CreateStationeryRequest.cshtml" />
     <Content Include="Views\DepartmentEmployee\RequisitionList.cshtml" />
