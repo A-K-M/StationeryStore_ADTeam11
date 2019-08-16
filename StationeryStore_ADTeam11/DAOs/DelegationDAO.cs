@@ -105,28 +105,68 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return true;
         }
-        public List<Delegation> GetDelegations()
+        public List<Delegation> GetDelegations(string deptId)
         {
             List<Delegation> delegations = new List<Delegation>();
-            SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select * from Delegation";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            SqlDataReader reader = null;
+            try
             {
-                Delegation delegation = new Delegation()
+                connection.Open();
+                string sql = @"SELECT e.UserName,e.Email,d.ID,d.EmpID,d.StartDate,d.EndDate FROM Delegation d,Employee e
+                           WHERE d.EmpID = e.ID AND e.DeptID = @deptId
+                           ORDER BY d.ID DESC";
+                SqlCommand command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@deptId", deptId);
+                 reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    Id = (int)reader["ID"],
-                    EmployeeId = (int)reader["EmpID"],
-                    EmployeeName = (string)reader["UserName"],
-                    Email = (string)reader["Email"],
-                    StartDate = (DateTime)reader["StartDate"],
-                    EndDate = (DateTime)reader["EndDate"]
-                };
-                delegations.Add(delegation);
+                    Delegation delegation = new Delegation()
+                    {
+                        Id = (int)reader["ID"],
+                        EmployeeId = (int)reader["EmpID"],
+                        EmployeeName = (string)reader["UserName"],
+                        Email = (string)reader["Email"],
+                        StartDate = (DateTime)reader["StartDate"],
+                        EndDate = (DateTime)reader["EndDate"]
+                    };
+                    delegations.Add(delegation);
+                }
+                reader.Close();
+                sql = @"SELECT de.ID delegateId,de.EndDate FROM Delegation de,Department d
+                        WHERE d.DelegateID = de.ID AND d.ID = @deptId";
+                command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@deptId", deptId);
+                reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    int currentDelegate = (int)reader["delegateId"];
+                    DateTime endDate = (DateTime)reader["EndDate"];
+                    reader.Close();
+                    if (DateTime.Today.CompareTo(endDate) > 0) {
+                        sql = "UPDATE Department SET DelegateID = 0 WHERE ID = @Id";
+                        SqlCommand cmd = new SqlCommand(sql, connection);
+                        cmd.Parameters.AddWithValue("@Id", deptId);
+                        int row = cmd.ExecuteNonQuery();
+                        if (row == 0) throw new Exception();
+                    }
+                    else
+                    {
+                        int index = delegations.FindIndex(d => d.Id == currentDelegate);
+                        delegations[index].Status = true;
+                    }
+
+
+
+                }
             }
-            conn.Close();
+            catch
+            {
+                return null;
+            }
+            finally {
+                if (reader != null && !reader.IsClosed) reader.Close();
+                connection.Close();
+            }
             return delegations;
         }
         public Delegation GetDelegationById(int id)

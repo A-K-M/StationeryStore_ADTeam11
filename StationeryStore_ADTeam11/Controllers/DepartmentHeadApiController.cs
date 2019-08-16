@@ -32,7 +32,7 @@ namespace StationeryStore_ADTeam11.Controllers
             DelegationDAO delegationDAO = new DelegationDAO();
             MResponseList<Delegation> respone = new MResponseList<Delegation>()
             {
-                ResList = delegationDAO.GetDelegations(),
+                ResList = delegationDAO.GetDelegations(deptId),
              };
             return respone;
         }
@@ -43,6 +43,8 @@ namespace StationeryStore_ADTeam11.Controllers
         {
 
             bool success = new DelegationDAO().CancelDelegation("COMM",delegationId);
+
+            
             MResponse response = new MResponse(success);
 
             return response;
@@ -54,12 +56,11 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             CollectionPointDAO dao = new CollectionPointDAO();
             MCollectionAndRep collectionAndRep = dao.GetCollecitonPointAndRep("COMM");
-            MResponseListAndObj<CollectionPoint, MCollectionAndRep> response
-                = new MResponseListAndObj<CollectionPoint, MCollectionAndRep>()
+            MResponseObj<MCollectionAndRep> response
+                = new MResponseObj<MCollectionAndRep>()
                 {
-                    Success = collectionAndRep != null,
-                    ResList = dao.GetCollectionPoints(),
-                    ResObj = collectionAndRep
+                    ResObj = collectionAndRep,
+                    Success = collectionAndRep != null
                 };
             return response;
         }

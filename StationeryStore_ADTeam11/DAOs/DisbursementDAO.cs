@@ -52,7 +52,7 @@ namespace StationeryStore_ADTeam11.DAOs
                         Description = reader["Description"].ToString(),
                         ItemId = reader["ItemID"].ToString(),
                         NeededQty = (int)reader["Total"],
-                        ActualQty = (int)reader["Actual"]
+                        ActualQty = (int)reader["Total"]
                     };
                     deptId = reader["deptID"].ToString();
                     System.Diagnostics.Debug.WriteLine("Dept Reader  " + deptId);

@@ -65,7 +65,7 @@ namespace StationeryStore_ADTeam11.DAOs
             try
             {
                 connection.Open();
-                string sql = @"SELECT e.ID repId,e.Name repName,c.ID pointId,c.Name pointName FROM Department d 
+                string sql = @"SELECT e.ID repId,e.Name repName,c.ID pointId,c.Name pointName,c.CollectionTime time FROM Department d 
                                 JOIN CollectionPoint c ON d.CollectionPointID = c.ID
 						        JOIN Employee e ON d.RepID = e.ID WHERE d.ID = @deptId";
                 SqlCommand cmd = new SqlCommand(sql, connection);
@@ -78,7 +78,8 @@ namespace StationeryStore_ADTeam11.DAOs
                         RepId = (int)reader["repId"],
                         RepName = reader["repName"].ToString(),
                         PointId = (int)reader["pointId"],
-                        PointName = reader["pointName"].ToString()
+                        PointName = reader["pointName"].ToString(),
+                        ColTime = reader["time"].ToString()
                     };
                 }
 
