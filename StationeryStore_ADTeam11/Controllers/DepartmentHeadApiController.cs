@@ -21,6 +21,9 @@ namespace StationeryStore_ADTeam11.Controllers
         public MResponse PostDelegate(Delegation delegation) {
             
             bool success = new DelegationDAO().InsertDelegation(delegation,"COMM");
+            if (success) {
+ 
+            }
             MResponse response = new MResponse(success);
             
             return response;

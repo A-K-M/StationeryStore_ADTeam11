@@ -19,9 +19,9 @@ namespace StationeryStore_ADTeam11.Controllers
         public MResponse GetEmployees(string deptId)
         {
             EmployeeDAO empDao = new EmployeeDAO();
-            MResponseList<MEmployee> response = new MResponseList<MEmployee>()
+            MResponseList<Employee> response = new MResponseList<Employee>()
             {
-                ResList = empDao.GetEmployeeByDepartment(deptId),
+                ResList = empDao.GetEmployeeByDeptId(deptId),
                 Success = true
             };
             return response;

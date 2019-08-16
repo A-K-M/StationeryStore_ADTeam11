@@ -187,7 +187,6 @@
     <Compile Include="MobileModels\MAdjVoucher.cs" />
     <Compile Include="MobileModels\MCollectionAndRep.cs" />
     <Compile Include="MobileModels\MDisbursement.cs" />
-    <Compile Include="MobileModels\MEmployee.cs" />
     <Compile Include="MobileModels\MItemSpinner.cs" />
     <Compile Include="MobileModels\MRequestItem.cs" />
     <Compile Include="MobileModels\MResponseList.cs" />

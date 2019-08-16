@@ -15,27 +15,72 @@ namespace StationeryStore_ADTeam11.DAOs
         public Employee GetEmployeeByUsername(string username)
         {
             Employee employee = null;
-            SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select id,DeptID,Name,UserName,Password,Email,Role from employee where UserName = '" + username + "'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
+            SqlDataReader reader = null;
+            try
             {
-                employee = new Employee()
+                connection.Open();
+                string sql = @"select id,DeptID,Name,UserName,Password,Email,Role from employee where UserName = @userName";
+                SqlCommand command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@userName", username);
+                reader = command.ExecuteReader();
+                if (reader.Read())
                 {
-                    Id = (int)reader["id"],
-                    DepartmentId = (string)reader["DeptID"],
-                    Name = (string)reader["Name"],
-                    UserName = (string)reader["UserName"],
-                    Password = (string)reader["Password"],
-                    Email = (string)reader["Email"],
-                    Role = (string)reader["Role"]
-                };
-                
+                    employee = new Employee()
+                    {
+                        Id = (int)reader["id"],
+                        DepartmentId = (string)reader["DeptID"],
+                        Name = (string)reader["Name"],
+                        UserName = (string)reader["UserName"],
+                        Password = (string)reader["Password"],
+                        Email = (string)reader["Email"],
+                        Role = (string)reader["Role"]
+                    };
+                }
+              
             }
-            conn.Close();
+            catch {
+            }
+            finally
+            {
+                if (reader != null) { reader.Close(); }
+                connection.Close();
+            }
+
+            if (employee.Role.Equals(Constant.ROLE_EMPLOYEE)) {
+                if (isRepresentative(employee)) employee.Role = Constant.ROLE_REPRESENTATIVE;
+            }
             return employee;
+        }
+
+        public bool isRepresentative(Employee emp) {
+            SqlDataReader reader = null;
+            try
+            {
+                connection.Open();
+                string sql = @"";
+                sql = @"SELECT RepID FROM Department WHERE ID = @deptId";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@deptId", emp.DepartmentId);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int RepID = (int)reader["RepID"];
+                    if (RepID == emp.Id)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
+            return false;
         }
         public Employee GetEmployeeById(int Id)
         {
@@ -60,6 +105,9 @@ namespace StationeryStore_ADTeam11.DAOs
 
             }
             conn.Close();
+            if (employee.Role.Equals(Constant.ROLE_EMPLOYEE)) {
+                if (isRepresentative(employee)) employee.Role = Constant.ROLE_REPRESENTATIVE;
+            }
             return employee;
 
         }
@@ -151,57 +199,6 @@ namespace StationeryStore_ADTeam11.DAOs
             conn.Close();
             return employee;
 
-        }
-
-        public List<MDisbursement> GetRepresentativeForDisbursement(int clerkID) {
-            List<MDisbursement> disbursements = new List<MDisbursement>();
-
-            SqlDataReader reader = null;
-            MDisbursement dis = null;
-            try
-            {
-                connection.Open();
-                string sql = "spGetDeptRepresentative";
-            SqlCommand cmd = new SqlCommand(sql, connection);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@ClerkID", clerkID);
-            reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                dis = new MDisbursement()
-                {
-                    DeptId = reader["ID"].ToString(),
-                    RepName = reader["RepName"].ToString(),
-                    DeptName = reader["DeptName"].ToString()
-                };
-                disbursements.Add(dis);
-            }
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-            finally
-            {
-                if (reader != null) reader.Close();
-                connection.Close();
-            }
-            return disbursements;
-
-        }
-        public List<MEmployee> GetEmployeeByDepartment(string deptId)
-        {
-            List<MEmployee> mEmployees = new List<MEmployee>();
-            SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"SELECT id,DeptID,Name,Email FROM employee where DeptID = @deptId";
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@deptId", deptId);
-            SqlDataReader reader = cmd.ExecuteReader();
-            mEmployees = MEmployee.MapToList(reader);
-            reader.Close();
-            conn.Close();
-            return mEmployees;
         }
         public bool checkEmployeeExist(int empId, string deptId) {
 
