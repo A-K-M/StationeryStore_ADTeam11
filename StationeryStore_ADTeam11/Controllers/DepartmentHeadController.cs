@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.Util;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
@@ -31,15 +32,15 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
-        public string GetDeptId(string username)
+        public string GetDeptId()
         {
-            string deptId = employeeDAO.GetDepartmentIdByDepartmentHeadUsername(username);
+            string deptId = employeeDAO.GetDepartmentIdByDepartmentHeadUsername(Session["username"].ToString());
 
             return deptId;
         }
         public ActionResult Delegation()
         {
-            deptId = GetDeptId("helen");
+            deptId = GetDeptId();
 
             List<Employee> employees = employeeDAO.GetEmployeeByDeptId(deptId);
             IEnumerable<Delegation> Delegations = null;
@@ -70,20 +71,20 @@ namespace StationeryStore_ADTeam11.Controllers
         [HttpPost]
         public ActionResult Delegation(Delegation delegation)
         {
-            deptId = GetDeptId("helen");
+            deptId = GetDeptId();
             status = "ongoing";
 
             delegation.EmployeeId = employeeDAO.GetEmployeeByName(deptId, delegation.EmployeeName).Id;
 
             delegationDAO.CreateDelegation(delegation);
-            departmentDAO.UpdateDepartmentDelegation(deptId, delegation.EmployeeId, status);
 
+            departmentDAO.UpdateDepartmentDelegation(deptId, delegation.EmployeeId, status);
 
             return RedirectToAction("Delegation", "DepartmentHead");
         }
         public ActionResult CancelDelegation(int Id)
         {
-            deptId = GetDeptId("helen");
+            deptId = GetDeptId();
             status = "completed";
 
             departmentDAO.UpdateDepartmentDelegation(deptId, delegationDAO.GetDelegationById(Id).EmployeeId, status);
@@ -99,8 +100,7 @@ namespace StationeryStore_ADTeam11.Controllers
             collectionPoints = collectionPointDAO.GetCollectionPoints(); //Getting all 6 collection point locations
             ViewData["collectionPoints"] = collectionPoints;
 
-            //hardcoded DeptHeadUsername ="helen"
-            deptId = GetDeptId("helen");// departmentID of current logined DepartmentHead
+            deptId = GetDeptId();// departmentID of current logined DepartmentHead
 
             List<Employee> employees = new List<Employee>();
             employees = employeeDAO.GetEmployeeByDeptId(deptId);
@@ -125,26 +125,48 @@ namespace StationeryStore_ADTeam11.Controllers
         }
         [HttpPost]
         public ActionResult CollectionPoint(Department point)
-        {
-            EmployeeDAO employeeDAO = new EmployeeDAO();
-            string deptId = employeeDAO.GetDepartmentIdByDepartmentHeadUsername("helen");
-            int RepId = employeeDAO.GetEmployeeByName(deptId, point.RepName).Id;
-
-            DepartmentDAO departmentDAO = new DepartmentDAO();
-
-            departmentDAO.UpdateDepartmentCollectionPoint(deptId, point.CollectionPoinId);
-            departmentDAO.UpdateDepartmentRepresentative(deptId, RepId);
-
-            if (!employeeDAO.UpdateUserRole(RepId))
+        {            
+            string deptId = employeeDAO.GetDepartmentIdByDepartmentHeadUsername(Session["username"].ToString());
+            
+            if (point.CollectionPoinId==0 || point.RepName == null)
             {
-                SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
-                return RedirectToAction("Delegation", "DepartmentHead");
+                SetFlash(Enums.FlashMessageType.Error, "Please select both category!");
+
+                return RedirectToAction("CollectionPoint", "DepartmentHead");
             }
+            else
+            {
+                int RepId = employeeDAO.GetEmployeeByName(deptId, point.RepName).Id;
 
-            SetFlash(Enums.FlashMessageType.Success, "Operation Succeeded!");
+                //departmentDAO.UpdateDepartmentCollectionPoint(deptId, point.CollectionPoinId);
 
+                //if (!departmentDAO.UpdateDepartmentRepresentative(deptId, RepId))
+                //{
+                //    SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
 
-            return RedirectToAction("CollectionPoint", "DepartmentHead");
+                //    return RedirectToAction("CollectionPoint", "DepartmentHead");
+                //}
+
+                if (!departmentDAO.UpdateDeptRepAndColPt(deptId, RepId, point.CollectionPoinId))
+                {
+                    SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
+
+                    return RedirectToAction("CollectionPoint", "DepartmentHead");
+                }
+
+                ///// Email start ////////
+                EmailDAO emailDAO = new EmailDAO();
+                Employee employee = emailDAO.EmailUpdateDepartmentRep(point.CollectionPoinId);
+                Email email = new Email();
+                string message = "Dear " + employee.Name + ", Please Check for Updated department Representative";
+                email.SendEmail(employee.Email, "New Stationery Request", message);
+                //////////////////////////
+                
+                SetFlash(Enums.FlashMessageType.Success, "Operation Succeeded!");
+
+                return RedirectToAction("CollectionPoint", "DepartmentHead");
+            }            
+            
         }
 
         public ActionResult ReviewStationeryRequest()
@@ -166,6 +188,11 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             RequestDAO chngStatus = new RequestDAO();
             chngStatus.UpdateStatus(status, reqId);
+            EmailDAO emailDAO = new EmailDAO();
+            Employee employee =emailDAO.EmailRequestStatus(reqId);
+            string sender = Session["username"].ToString();
+            Email email = new Email();
+            email.SendEmail(employee.Email, "Requesation Status", "Dear" + employee.Name + ",   \n Please check for Requestsation status. Regards,\n" + sender);
             return RedirectToAction("ReviewStationeryRequest", "DepartmentHead");
 
         }

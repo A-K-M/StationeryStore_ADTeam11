@@ -92,15 +92,21 @@ namespace StationeryStore_ADTeam11.DAOs
             command.ExecuteNonQuery();
             conn.Close();
         }
-        public void UpdateDepartmentRepresentative(string deptId, int repId)
+        public bool UpdateDeptRepAndColPt(string deptId, int repId, int cpId)
         {
-            Department department = new Department();
+            //Department department = new Department();
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"UPDATE Department SET RepID ='" + repId + "' WHERE  ID='" + deptId + "'";
+            string sql = @"UPDATE Department SET RepID ='" + repId + "', CollectionPointID ='" + cpId + "' WHERE  ID='" + deptId + "'";
             SqlCommand command = new SqlCommand(sql, conn);
-            command.ExecuteNonQuery();
-            conn.Close();
+            if (command.ExecuteNonQuery() == 0)
+            {
+                connection.Close();
+                return false;
+            }
+
+            connection.Close();
+            return true;
         }
         public void UpdateDepartmentDelegation(string deptId, int empId,string status)
         {

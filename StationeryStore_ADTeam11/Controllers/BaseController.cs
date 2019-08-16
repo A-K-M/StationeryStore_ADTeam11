@@ -48,7 +48,9 @@ namespace StationeryStore_ADTeam11.Controllers
             string sessionID = Guid.NewGuid().ToString();
             Session["sessionID"] = sessionID;
             Session["username"] = employee.UserName;
+            Session["userid"] = employee.Id;
             Session["role"] = employee.Role;
+            Session["deptID"] = employee.DepartmentId;
             ViewData["error"] = error;
             switch (employee.Role)
             {
