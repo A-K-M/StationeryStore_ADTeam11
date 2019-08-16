@@ -1,11 +1,11 @@
-﻿@using StationeryStore_ADTeam11.View_Models
+﻿@*@model IEnumerable<StationeryStore_ADTeam11.View_Models.LowStockItemViewModel>*@
+@model IEnumerable<StationeryStore_ADTeam11.View_Models.LowStockItemViewModel>
 
-@model StationeryStore_ADTeam11.Models.PurchaseOrderItem
 
 @{
     ViewBag.Title = "ViewLowStockItems";
 
-    var lowstockitems = (List<LowStockItemViewModel>)ViewData["lowstockitems"];
+    //List<LowStockItemViewModel> items = (List<LowStockItemViewModel>)ViewData["LowStockList"];
 }
 
 <h2>ViewLowStockItems</h2>
@@ -33,22 +33,42 @@
             </thead>
 
             <tbody>
-                @{
-                    foreach (var l in lowstockitems)
-                    {
+                @foreach (var row in Model)
+                {
+                   
                         <tr>
-                            <td>@l.Id</td>
-                            <td>@l.CategoryName</td>
-                            <td>@l.Description</td>
-                            <td>@l.Threshold</td>
-                            <td>@l.Balance</td>
-                            <td>@Html.TextBoxFor(model=>model.Qty , new { @Value = l.ReorderQty })</td>
-                            <td>@l.SuggestedReorderQty</td>
-                            <td>@l.Uom</td>
+                            <td>@row.ItemList.Id</td>
+                            <td>@row.ItemList.CategoryName</td>
+                            <td>@row.ItemList.Description</td>
+                            <td>@row.ItemList.ThresholdValue</td>
+                            <td>@row.Balance</td>
+                            <td><input type="text" value="@row.ItemList.ReorderQty"></td>
+                            <td>0</td>
+                            <td>@row.ItemList.Uom</td>
                         </tr>
+                }
+
+
+
+                @*@{
+                    foreach (var row in Model)
+                    {
+                        foreach (var item in row.ItemList)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.CategoryId</td>
+                                <td>@item.Description</td>
+                                <td>@item.ThresholdValue</td>
+                                <td>@row.Balance</td>
+                                <td><input type="text" value="@item.ReorderQty"></td>
+                                <td>0</td>
+                                <td>@item.Uom</td>
+                            </tr>
+                        }
                     }
 
-                }
+                }*@
 
             </tbody>
         </table>

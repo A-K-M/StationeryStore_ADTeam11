@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Web;
 
-namespace StationeryStore_ADTeam11.Views.Utililties
+namespace StationeryStore_ADTeam11.Util
 {
     public class Email
     {
@@ -18,7 +18,6 @@ namespace StationeryStore_ADTeam11.Views.Utililties
         {
             try
             {
-
                 {
                     var senderEmail = new MailAddress("isslaps.hr@gmail.com", "ISS Laps");
                     var receiverEmail = new MailAddress(receiver, "Receiver");

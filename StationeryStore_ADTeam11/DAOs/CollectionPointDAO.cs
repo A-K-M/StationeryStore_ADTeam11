@@ -27,22 +27,7 @@ namespace StationeryStore_ADTeam11.DAOs
             return points;
         }
 
-        public List<CollectionPoint> GetMCollectionPointsByClerk(int clerkID)
-        {
-            CollectionPoint p = null;
 
-            string sql = "SELECT * FROM CollectionPoint WHERE EmpID = @clerkID";
-        
-            connection.Open();
-
-            SqlCommand cmd = new SqlCommand(sql, connection);
-            cmd.Parameters.AddWithValue("@clerkID",clerkID);
-
-            List<CollectionPoint> points = CollectionPoint.MapToList(cmd.ExecuteReader());
-
-            connection.Close();
-            return points;
-        }
         public List<CollectionPoint> GetCollectionPointsByClerk(int clerkId)
         {
             CollectionPoint p = null;
@@ -65,7 +50,7 @@ namespace StationeryStore_ADTeam11.DAOs
             try
             {
                 connection.Open();
-                string sql = @"SELECT e.ID repId,e.Name repName,c.ID pointId,c.Name pointName FROM Department d 
+                string sql = @"SELECT e.ID repId,e.Name repName,c.ID pointId,c.Name pointName,c.CollectionTime time FROM Department d 
                                 JOIN CollectionPoint c ON d.CollectionPointID = c.ID
 						        JOIN Employee e ON d.RepID = e.ID WHERE d.ID = @deptId";
                 SqlCommand cmd = new SqlCommand(sql, connection);
@@ -78,7 +63,8 @@ namespace StationeryStore_ADTeam11.DAOs
                         RepId = (int)reader["repId"],
                         RepName = reader["repName"].ToString(),
                         PointId = (int)reader["pointId"],
-                        PointName = reader["pointName"].ToString()
+                        PointName = reader["pointName"].ToString(),
+                        ColTime = reader["time"].ToString()
                     };
                 }
 
@@ -232,6 +218,41 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             conn.Close();
             return collectionPoints;
+        }
+        public CollectionPoint GetCollectionPointByDeptID(string deptId)
+        {
+            string sql = @"SELECT cp.Name,cp.CollectionTime,cp.Address 
+                            FROM CollectionPoint cp,Department d
+                            WHERE cp.ID = d.CollectionPointID AND d.ID = @deptId ";
+            SqlDataReader reader = null;
+            CollectionPoint collectionPoint = null;
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@deptId", deptId);
+                reader = cmd.ExecuteReader();
+
+                if (reader.Read()) { 
+                    collectionPoint = new CollectionPoint()
+                    {
+                        Name = (string)reader["Name"],
+                        CollectionTime = (string)reader["CollectionTime"],
+                        Address = (string)reader["Address"]
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
+
+            return collectionPoint;
         }
         public CollectionPoint GetCollectionPointById(int Id) //NZCK
         {

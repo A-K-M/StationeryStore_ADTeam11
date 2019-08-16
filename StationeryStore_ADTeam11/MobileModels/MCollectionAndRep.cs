@@ -10,10 +10,12 @@ namespace StationeryStore_ADTeam11.MobileModels
         private int _pointId;
         private int _repId;
         private string _pointName;
+        private string _colTime;
         private string _repName;
 
         public int PointId { get; set; }
         public string PointName { get; set; }
+        public string ColTime { get; set; }
         public int RepId { get; set; }
         public string RepName { get; set; }
     }

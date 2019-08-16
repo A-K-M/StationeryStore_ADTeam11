@@ -567,10 +567,10 @@ namespace StationeryStore_ADTeam11.DAOs
                 }
 
                cmd = new SqlCommand(sql, connection,transaction);
-                if (cmd.ExecuteNonQuery() == adjItems.Count()) throw new Exception();
+                if (cmd.ExecuteNonQuery() != adjItems.Count()) throw new Exception();
 
                 cmd = new SqlCommand(sqlStockCard, connection, transaction);
-                if (cmd.ExecuteNonQuery() == adjItems.Count()) throw new Exception();
+                if (cmd.ExecuteNonQuery() != adjItems.Count()) throw new Exception();
 
                 transaction.Commit();
 
