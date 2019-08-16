@@ -32,9 +32,8 @@ namespace StationeryStore_ADTeam11.Controllers
             bool showApproveButton = false;
             if (list.Count() > 0)
             {
-                showApproveButton = DateTime.Today.DayOfWeek == DayOfWeek.Tuesday;
+                showApproveButton = DateTime.Today.DayOfWeek == DayOfWeek.Monday;
             }
-
 
             return new MResponseListAndObj<ItemRequest, CollectionPoint>() {
                 ResObj = point,

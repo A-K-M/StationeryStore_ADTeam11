@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Web;
+using StationeryStore_ADTeam11.Models;
 
 namespace StationeryStore_ADTeam11.Util
 {
@@ -50,6 +51,20 @@ namespace StationeryStore_ADTeam11.Util
 
             }
 
+        }
+
+        internal string CreateMsgBody(Delegation d,string name)
+        {
+            string startDate = d.StartDate.ToString("yyyy-MM-dd");
+            string endDate = d.StartDate.ToString("yyyy-MM-yy");
+            return  string.Format("Dear {0} , \n   I delegate my authority to you from {1} to {2}. \n \nBest Regards,\n{3}",d.EmployeeName,startDate,endDate,name);
+        }
+
+        internal string CancelMsgBody(Delegation d, string name)
+        {
+            string startDate = d.StartDate.ToString("yyyy-MM-dd");
+            string endDate = d.StartDate.ToString("yyyy-MM-yy");
+            return string.Format("Dear {0} , \n   I cancel my authority delegation from {1} to {2}. \n \nBest Regards,\n{3}", d.EmployeeName, startDate, endDate, name);
         }
     }
 }

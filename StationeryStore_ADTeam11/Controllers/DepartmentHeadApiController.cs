@@ -2,6 +2,7 @@
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.Util;
 using StationeryStore_ADTeam11.View_Models;
 using System;
 using System.Collections.Generic;
@@ -16,20 +17,22 @@ namespace StationeryStore_ADTeam11.Controllers
     public class DepartmentHeadApiController : ApiController
     {
 
-        [Route("delegate")]
+        [Route("{headId}/delegates")]
         [HttpPost]
-        public MResponse PostDelegate(Delegation delegation) {
+        public MResponse PostDelegate(Delegation delegation,int headId) {
             
-            bool success = new DelegationDAO().InsertDelegation(delegation,"COMM");
+            bool success = new DelegationDAO().InsertDelegation(delegation,headId);
             if (success) {
- 
+                Email email = new Email();
+                Employee e = new EmployeeDAO().GetEmployeeById(headId);
+                email.SendEmail(delegation.Email, "Authority Delegation",email.CreateMsgBody(delegation,e.Name));
             }
             MResponse response = new MResponse(success);
             
             return response;
         }
 
-        [Route("delegates/{deptId}")]
+        [Route("{deptId}/delegates")]
         [HttpGet]
         public MResponseList<Delegation> getDelegates(string deptId) {
             DelegationDAO delegationDAO = new DelegationDAO();
@@ -40,14 +43,18 @@ namespace StationeryStore_ADTeam11.Controllers
             return respone;
         }
 
-        [Route("delegates/cancel/{delegationId}")]
+        [Route("{headId}/delegates/cancel")]
         [HttpPut]
-        public MResponse CancelDelegate(int delegationId)
+        public MResponse CancelDelegate(int headId,Delegation delegation)
         {
 
-            bool success = new DelegationDAO().CancelDelegation("COMM",delegationId);
-
-            
+            bool success = new DelegationDAO().CancelDelegation(headId,delegation.Id);
+            if (success)
+            {
+                Email email = new Email();
+                Employee e = new EmployeeDAO().GetEmployeeById(headId);
+                email.SendEmail(delegation.Email, "Authority Delegation Cancel", email.CancelMsgBody(delegation, e.Name));
+            }
             MResponse response = new MResponse(success);
 
             return response;

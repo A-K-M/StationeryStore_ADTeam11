@@ -181,7 +181,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="MobileModels\Constant.cs" />
+    <Compile Include="Util\Constant.cs" />
     <Compile Include="MobileModels\DateTimeExtensions.cs" />
     <Compile Include="MobileModels\JsonParser.cs" />
     <Compile Include="MobileModels\MAdjustmentItem.cs" />
