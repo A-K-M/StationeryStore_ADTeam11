@@ -93,11 +93,7 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult ViewStockCard()
         {
-            Session["Username"] = "Clerk User";
-            Session["Role"] = "Clerk";
-
             List<StockCard> stockCards = new StockCardDAO().GetAllStockCards();
-
 
             ViewData["stockCards"] = stockCards;
             return View();
@@ -183,8 +179,6 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult ItemSuppliers(String Id)
         {
-            Session["Username"] = "Clerk User";
-            Session["Role"] = "Clerk";
             List<Supplier> itemSuppliers = new List<Supplier>();
 
             if (Id != null)
