@@ -531,6 +531,8 @@
     <Content Include="Views\DepartmentEmployee\CreateStationeryRequest.cshtml" />
     <Content Include="Views\DepartmentEmployee\RequisitionList.cshtml" />
     <Content Include="Views\StoreClerk\ViewLowStockItems.cshtml" />
+    <Content Include="Views\StoreSupervisor\ReorderStockList.cshtml" />
+    <Content Include="Views\StoreSupervisor\ReorderStockDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

@@ -14,6 +14,8 @@ namespace StationeryStore_ADTeam11.Models
         private int _qty;
         private double _price;
         private double _amount;
+        private string _status;
+        private string _supplier;
 
         public int Id { get; set; }
         public int PurchaseId { get; set; }
@@ -22,6 +24,7 @@ namespace StationeryStore_ADTeam11.Models
         public int Qty { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
-
+        public string Status { get; set; }
+        public string Supplier { get; set; }
     }
 }
