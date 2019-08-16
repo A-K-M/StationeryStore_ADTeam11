@@ -7,6 +7,7 @@ using StationeryStore_ADTeam11.Models;
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.Filters;
 using StationeryStore_ADTeam11.View_Models;
+using StationeryStore_ADTeam11.Util;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
@@ -120,6 +121,11 @@ namespace StationeryStore_ADTeam11.Controllers
             reqStationery = itemData;
             if (req.CreateRequest(empId, reqStationery))
             {
+                EmailDAO emailDAO = new EmailDAO();
+                string mgrEmail = emailDAO.EmailReviewStationeryRequest(empId);
+                Email email = new Email();
+                string message = "Please check for new stationery Request. Do not reply this is system generated message.Thanks " + emp.Name;
+                email.SendEmail(mgrEmail, "New Stationery Request", message);
                 return Json("Successfully Added", JsonRequestBehavior.AllowGet);
             }
             else

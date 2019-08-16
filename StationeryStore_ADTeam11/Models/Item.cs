@@ -21,6 +21,7 @@ namespace StationeryStore_ADTeam11.Models
         private double _secondPrice;
         private string _thirdSupplier;
         private double _thirdPrice;
+        private string _categoryName;
 
         public string Id { get; set; }
         public int CategoryId { get; set; }
@@ -35,6 +36,7 @@ namespace StationeryStore_ADTeam11.Models
         public double SecondPrice { get; set; }
         public string ThirdSupplier { get; set; }
         public double ThirdPrice { get; set; }
+        public string CategoryName { get; set; }
  
     }
 }

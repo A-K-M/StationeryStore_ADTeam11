@@ -61,6 +61,18 @@ namespace StationeryStore_ADTeam11.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult RequestReorderList(List<PurchaseOrderItem> itemData)
+        {
+            ItemDAO itemDAO = new ItemDAO();
+
+            if (itemDAO.RequestReorderItems(11236, itemData))
+            {
+                return Json("Successfully Requested", JsonRequestBehavior.AllowGet);
+            }
+            return Json("Something went wrong! Please try again later!", JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult ApprovedRequests()
         {
             RequestDAO request = new RequestDAO();
@@ -142,10 +154,29 @@ namespace StationeryStore_ADTeam11.Controllers
         public ActionResult ViewLowStockItems()  //PredictReorderQuantity
         {
             ItemDAO itemDAO = new ItemDAO();
-            List<LowStockItemViewModel> items = itemDAO.GetLowStockItems();
+            List<LowStockItemViewModel> list = new List<LowStockItemViewModel>();
+            List<Item> ItemIdsAndThresholdValue = itemDAO.GetItemIdsAndThresholdValue();
+            string ids = "";
+            foreach (var i in ItemIdsAndThresholdValue)
+            {
+                if (i.ThresholdValue>itemDAO.GetBalanceByItemId(i.Id))
+                {
+                    ids += "'"+i.Id.ToString()+"', ";
+                }
+            }
+            ids = ids.TrimEnd(',', ' ');
+            List<Item> items = itemDAO.GetLowStockItems(ids);
 
-            ViewData["lowstockitems"] = items;
-            return View();
+            foreach (var row in items)
+            {
+                LowStockItemViewModel itemVM = new LowStockItemViewModel();
+                itemVM.Balance = itemDAO.GetBalanceByItemId(row.Id);
+                itemVM.ItemList = row;
+                list.Add(itemVM);
+            }
+
+            ViewData["LowStockList"] = list;
+            return View(list);
         }
 
         public ActionResult ItemSuppliers(String Id)

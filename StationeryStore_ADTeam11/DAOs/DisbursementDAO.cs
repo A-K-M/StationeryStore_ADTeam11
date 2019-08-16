@@ -71,8 +71,7 @@ namespace StationeryStore_ADTeam11.DAOs
                         disbursements[index].CollectionPointID = (int)reader["CollectionPointID"];
                         prev = index;
                     }
-                   
-
+      
                 }
 
 
@@ -89,6 +88,42 @@ namespace StationeryStore_ADTeam11.DAOs
                 connection.Close();
             }
             return disbursements;
+
+        }
+        public List<ItemRequest> GetDisburseItemsForRep(string deptId) {
+            List<ItemRequest> items = new List<ItemRequest>();
+            SqlDataReader reader = null;
+            ItemRequest itemRequest = null;
+            try
+            {
+                connection.Open();
+                string sql = "spDisburseItemsForRep";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@DeptID", deptId);
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    itemRequest = new ItemRequest()
+                    {
+                        Description = reader["Description"].ToString(),
+                        ItemId = reader["ID"].ToString(),
+                        NeededQty = (int)reader["Needed"],
+                        ActualQty = (int)reader["Actual"]
+                    };
+                    items.Add(itemRequest);
+                }
+
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return items;
 
         }
 

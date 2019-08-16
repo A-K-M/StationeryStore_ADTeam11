@@ -72,46 +72,97 @@ namespace StationeryStore_ADTeam11.DAOs
             return itemDescription;
         }
 
-        public List<LowStockItemViewModel> GetLowStockItems()
+        public List<Item> GetItemIdsAndThresholdValue()
         {
-            List<LowStockItemViewModel> items = new List<LowStockItemViewModel>();
+            List<Item> itemList = new List<Item>();
 
-            string sql = @"select Top 1 i.ID,c.Name,i.CategoryID,i.Description,i.ThresholdValue,s.Balance, i.ReorderQty,i.UOM
-                            from Item as i, Stockcard as s, Category as c
-                            where i.ID=s.ItemID and s.Balance<i.ThresholdValue and c.ID=i.CategoryID
-                            order by s.Balance asc";
-
-            connection.Open();
+            string sql = @"select id,ThresholdValue from item
+                            where id not in (SELECT ItemID
+                            FROM PurchaseOrderItem where PurchaseID in (SELECT id
+                            FROM PurchaseOrder where Status = 'Pending')) ";
             SqlCommand cmd = new SqlCommand(sql, connection);
-            SqlDataReader reader = cmd.ExecuteReader();
+            connection.Open();
+            SqlDataReader data = cmd.ExecuteReader();
 
-            while (reader.Read())
+            Item item = null;
+
+            while (data.Read())
             {
-                try
+                item = new Item()
                 {
-                    LowStockItemViewModel item = new LowStockItemViewModel()
-                    {
-                        Id = (string)reader["ID"],
-                        CategoryId = Convert.ToInt32(reader["CategoryID"]),
-                        CategoryName=reader["Name"].ToString(),
-                        Description = reader["Description"].ToString(),
-                        Threshold = Convert.ToInt32(reader["ThresholdValue"]),
-                        ReorderQty = Convert.ToInt32(reader["ReorderQty"]),
-                        Uom = reader["UOM"].ToString(),
-                        Balance= (int)reader["Balance"]
-                    };
-                    items.Add(item);
+                    Id = data["ID"].ToString(),
+                    ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
+                };
 
-                }
-                catch
-                {
-                    items = null;
-                }
+                itemList.Add(item);
             }
-            reader.Close();
+            data.Close();
             connection.Close();
 
-            return items;
+            return itemList;
+
+        }
+
+        public List<Item> GetLowStockItems(string ids)
+        {
+            List<Item> itemList = new List<Item>();
+
+            Item item = null;
+            if (ids == "")
+                ids = "'0'";
+
+            string sql = @"select i.*, c.name as Category from Item i, Category c 
+                    where i.CategoryID = c.ID and 
+                    i.ID in (" + ids + ")";
+
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                item = new Item()
+                {
+                    Id = data["ID"].ToString(),
+                    CategoryId = Convert.ToInt32(data["CategoryID"]),
+                    Description = data["Description"].ToString(),
+                    ReorderQty = Convert.ToInt32(data["ReorderQty"]),
+                    ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
+                    Uom = data["UOM"].ToString(),
+                    BinNo = data["BinNo"].ToString(),
+                    CategoryName = data["Category"].ToString()
+                };
+
+                itemList.Add(item);
+            }
+            data.Close();
+            connection.Close();
+
+            return itemList;
+        }
+
+        public int GetBalanceByItemId(string itemId)
+        {
+            string sql = "select top 1 balance from " +
+                         "Stockcard where ItemID = '"+ itemId + "' order by id desc; ";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            int balance = 0;
+
+            while (data.Read())
+            {
+                balance = Convert.ToInt32(data["balance"]);
+            }
+
+            data.Close();
+            connection.Close();
+
+            return balance;
         }
 
         public Item GetItemById(string id)
@@ -192,45 +243,55 @@ namespace StationeryStore_ADTeam11.DAOs
             return itemList;
         }
 
-        public bool UpdateItemSupplier(Item updItem, int suppOrder)
+        public bool RequestReorderItems(int empId, List<PurchaseOrderItem> items)
         {
-            bool success;
-            string sqlUpdateItemSupp = null;
+            SqlTransaction transaction = null;
 
-            if (suppOrder == 1)
-            {
-                sqlUpdateItemSupp = @"UPDATE Item SET FirstSupplier = '" + updItem.FirstSupplier + "', "
-                    + "FirstPrice = " + updItem.FirstPrice + " WHERE Item.ID = '" + updItem.Id + "'";
-            }
-            else if (suppOrder == 2)
-            {
-                sqlUpdateItemSupp = @"UPDATE Item SET SecondSupplier = '" + updItem.SecondSupplier + "', "
-                    + "SecondPrice = " + updItem.SecondPrice + " WHERE Item.ID = '" + updItem.Id + "'";
-            }
-            else if (suppOrder == 3)
-            {
-                sqlUpdateItemSupp = @"UPDATE Item SET ThirdSupplier = '" + updItem.ThirdSupplier + "', "
-                    + "ThirdPrice = " + updItem.ThirdPrice + " WHERE Item.ID = '" + updItem.Id + "'";
-            }
+            string status = Constant.STATUS_PENDING;
 
             try
             {
                 connection.Open();
+                transaction = connection.BeginTransaction();
 
-                SqlCommand cmd = new SqlCommand(sqlUpdateItemSupp, connection);
-                cmd.ExecuteNonQuery();
+                string purchaseOrderSql = "INSERT INTO PurchaseOrder " +
+                                           "(EmpID, Date, Status) OUTPUT INSERTED.ID " +
+                                            "VALUES (@empId, @date, @status)";
 
-                connection.Close();
+                SqlCommand cmd = new SqlCommand(purchaseOrderSql, connection, transaction);
 
-                success = true;
+                cmd.Parameters.AddWithValue("@empId", empId);
+                cmd.Parameters.AddWithValue("@date", DateTime.Now);
+                cmd.Parameters.AddWithValue("@status", status);
+
+                int purchaseOrderId = Convert.ToInt32(cmd.ExecuteScalar());
+
+                string purchaseOrderDetailSql = "";
+
+                foreach (PurchaseOrderItem item in items)
+                {
+                    purchaseOrderDetailSql += "INSERT INTO PurchaseOrderItem " +
+                                                "(PurchaseID, ItemID, Description, Qty) " +
+                                                $" VALUES ({purchaseOrderId}, '{item.ItemId}', '{item.Description}', {item.Qty});";
+                }
+
+                cmd = new SqlCommand(purchaseOrderDetailSql, connection, transaction);
+
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                success = false;
+                transaction.Rollback();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
             }
 
-            return success;
+            return true;
         }
-
     }
 }

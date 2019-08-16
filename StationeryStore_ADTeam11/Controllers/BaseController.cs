@@ -7,6 +7,7 @@ using StationeryStore_ADTeam11.Filters;
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.Models;
 using StationeryStore_ADTeam11.Enums;
+using StationeryStore_ADTeam11.MobileModels;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
@@ -48,22 +49,30 @@ namespace StationeryStore_ADTeam11.Controllers
             string sessionID = Guid.NewGuid().ToString();
             Session["sessionID"] = sessionID;
             Session["username"] = employee.UserName;
+            Session["userid"] = employee.Id;
             Session["role"] = employee.Role;
+            Session["deptID"] = employee.DepartmentId;
             ViewData["error"] = error;
             switch (employee.Role)
             {
-                case "Head":
+                case Constant.ROLE_HEAD:
                     return RedirectToAction("Index", "DepartmentHead");
-                case "Employee":
+
+                case Constant.ROLE_EMPLOYEE:
                     return RedirectToAction("Index", "DepartmentEmployee");
-                case "Representative":
+
+                case Constant.ROLE_REPRESENTATIVE:
                     return RedirectToAction("Index", "DepartmentEmployee");
-                case "Manager":
+
+                case Constant.ROLE_MANAGER:
                     return RedirectToAction("Index", "StoreManager");
-                case "Supervisor":
+
+                case Constant.ROLE_SUPERVISOR:
                     return RedirectToAction("Index", "StoreSupervisor");
-                case "Clerk":
+
+                case Constant.ROLE_CLERK:
                     return RedirectToAction("Index", "StoreClerk");
+
                 default:
                     break;
             }

@@ -33,7 +33,7 @@ namespace StationeryStore_ADTeam11.DAOs
         }
 
       
-        public bool InsertDelegation(Delegation del, string deptId) {
+        public bool InsertDelegation(Delegation del, int headId) {
 
             SqlTransaction transaction = null;
             int newDelegationId = 0;
@@ -50,13 +50,14 @@ namespace StationeryStore_ADTeam11.DAOs
                 newDelegationId =(Int32) cmd1.ExecuteScalar() ;
                 if (newDelegationId == 0) throw new Exception();
 
-                SqlCommand cmd2 = new SqlCommand("UPDATE Department SET DelegateID = @delegateId WHERE ID = @id", connection, transaction);
+                SqlCommand cmd2 = new SqlCommand("UPDATE Department SET DelegateID = @delegateId WHERE HeadID = @id", connection, transaction);
                 //cmd2.Parameters.AddWithValue("@status", Constant.STATUS_PENDING);
                 cmd2.Parameters.AddWithValue("@delegateId",newDelegationId);
-                cmd2.Parameters.AddWithValue("@id", deptId);
+                cmd2.Parameters.AddWithValue("@id", headId);
                 if (cmd2.ExecuteNonQuery() == 0) throw new Exception();
 
                 transaction.Commit();
+
             }
             catch (Exception e)
             {
@@ -71,7 +72,7 @@ namespace StationeryStore_ADTeam11.DAOs
             return true;
 
         }
-        public bool CancelDelegation(string deptId,int delegationId)
+        public bool CancelDelegation(int headId,int delegationId)
         {
             SqlTransaction transaction = null;
                  
@@ -80,9 +81,9 @@ namespace StationeryStore_ADTeam11.DAOs
                 connection.Open();
                 transaction = connection.BeginTransaction();
 
-                string sql = @"UPDATE Department SET DelegateID = 0 WHERE ID = @deptId";
+                string sql = @"UPDATE Department SET DelegateID = 0 WHERE HeadID = @headId";
                 SqlCommand cmd = new SqlCommand(sql, connection, transaction);
-                cmd.Parameters.AddWithValue("@deptId", deptId);
+                cmd.Parameters.AddWithValue("@headId", headId);
 
                 if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
@@ -112,7 +113,7 @@ namespace StationeryStore_ADTeam11.DAOs
             try
             {
                 connection.Open();
-                string sql = @"SELECT e.UserName,e.Email,d.ID,d.EmpID,d.StartDate,d.EndDate FROM Delegation d,Employee e
+                string sql = @"SELECT e.Name,e.Email,d.ID,d.EmpID,d.StartDate,d.EndDate FROM Delegation d,Employee e
                            WHERE d.EmpID = e.ID AND e.DeptID = @deptId
                            ORDER BY d.ID DESC";
                 SqlCommand command = new SqlCommand(sql, connection);
@@ -124,7 +125,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     {
                         Id = (int)reader["ID"],
                         EmployeeId = (int)reader["EmpID"],
-                        EmployeeName = (string)reader["UserName"],
+                        EmployeeName = (string)reader["Name"],
                         Email = (string)reader["Email"],
                         StartDate = (DateTime)reader["StartDate"],
                         EndDate = (DateTime)reader["EndDate"]
@@ -219,6 +220,7 @@ namespace StationeryStore_ADTeam11.DAOs
             SqlCommand command = new SqlCommand(sql, conn);
             command.ExecuteNonQuery();
             conn.Close();
+            //Email
 
         }
         public void CancelDelegation(int delegationId)

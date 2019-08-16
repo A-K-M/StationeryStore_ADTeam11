@@ -1,11 +1,18 @@
-﻿@using StationeryStore_ADTeam11.View_Models
+﻿@*@model IEnumerable<StationeryStore_ADTeam11.View_Models.LowStockItemViewModel>*@
+@model IEnumerable<StationeryStore_ADTeam11.View_Models.LowStockItemViewModel>
 
-@model StationeryStore_ADTeam11.Models.PurchaseOrderItem
 
 @{
     ViewBag.Title = "ViewLowStockItems";
 
-    var lowstockitems = (List<LowStockItemViewModel>)ViewData["lowstockitems"];
+    //List<LowStockItemViewModel> items = (List<LowStockItemViewModel>)ViewData["LowStockList"];
+}
+
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/store_clerk.js")">
+
+    </script>
 }
 
 <h2>ViewLowStockItems</h2>
@@ -14,7 +21,7 @@
     <div class="card-header">
         <h4>
             Re-order Stock Items
-            <a href="#" class="btn btn-outline-success pull-right">Request Re-order</a>
+            <button onclick="requestReorderList()" class="btn btn-outline-success pull-right">Request Re-order</button>
         </h4>
     </div>
     <div class="card-body">
@@ -32,22 +39,25 @@
                 </tr>
             </thead>
 
-            <tbody>
-                @{
-                    foreach (var l in lowstockitems)
-                    {
-                        <tr>
-                            <td>@l.Id</td>
-                            <td>@l.CategoryName</td>
-                            <td>@l.Description</td>
-                            <td>@l.Threshold</td>
-                            <td>@l.Balance</td>
-                            <td>@Html.TextBoxFor(model=>model.Qty , new { @Value = l.ReorderQty })</td>
-                            <td>@l.SuggestedReorderQty</td>
-                            <td>@l.Uom</td>
-                        </tr>
-                    }
+            <tbody id="ls-table">
 
+                @{ 
+                    int counter = 0;
+                }
+
+                @foreach (var row in Model)
+                {
+                    counter += 1;
+                    <tr id="ls-row-@counter">
+                        <td id="ls-id-@counter">@row.ItemList.Id</td>
+                        <td id="ls-cat-@counter">@row.ItemList.CategoryName</td>
+                        <td id="ls-des-@counter">@row.ItemList.Description</td>
+                        <td id="ls-threshold-@counter">@row.ItemList.ThresholdValue</td>
+                        <td id="ls-balance-@counter">@row.Balance</td>
+                        <td><input id="ls-reorder-qty-@counter" type="text" value="@row.ItemList.ReorderQty"></td>
+                        <td>0</td>
+                        <td>@row.ItemList.Uom</td>
+                    </tr>
                 }
 
             </tbody>

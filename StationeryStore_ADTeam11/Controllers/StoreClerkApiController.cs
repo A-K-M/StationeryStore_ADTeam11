@@ -70,7 +70,7 @@ namespace StationeryStore_ADTeam11.Controllers
         [HttpGet]
         public MResponse GetCollectionPoints(int clerkId)
         {
-            List<CollectionPoint> points = new CollectionPointDAO().GetMCollectionPointsByClerk(clerkId);
+            List<CollectionPoint> points = new CollectionPointDAO().GetCollectionPointsByClerk(clerkId);
             return new MResponseList<CollectionPoint>() { ResList = points };
         }
     }
