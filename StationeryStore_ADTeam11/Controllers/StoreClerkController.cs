@@ -13,6 +13,8 @@ using System.Net.Http;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
+    [AuthenticationFilter]
+    [RoleFilter("Clerk")]
     [LayoutFilter("_storeClerkLayout")]
     public class StoreClerkController : BaseController
     {
@@ -51,7 +53,7 @@ namespace StationeryStore_ADTeam11.Controllers
 
             AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
 
-            if (adjustmentVoucherDAO.Add(11233, itemData))
+            if (adjustmentVoucherDAO.Add(Convert.ToInt32(Session["userid"].ToString()), itemData))
             {
                 return Json("Successfully Added", JsonRequestBehavior.AllowGet);
             }
@@ -64,9 +66,11 @@ namespace StationeryStore_ADTeam11.Controllers
         [HttpPost]
         public JsonResult RequestReorderList(List<PurchaseOrderItem> itemData)
         {
+            if (itemData == null) return Json("No item to reorder!", JsonRequestBehavior.AllowGet);
+
             ItemDAO itemDAO = new ItemDAO();
 
-            if (itemDAO.RequestReorderItems(11236, itemData))
+            if (itemDAO.RequestReorderItems(Convert.ToInt32(Session["userid"].ToString()), itemData))
             {
                 return Json("Successfully Requested", JsonRequestBehavior.AllowGet);
             }
@@ -91,11 +95,7 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult ViewStockCard()
         {
-            Session["Username"] = "Clerk User";
-            Session["Role"] = "Clerk";
-
             List<StockCard> stockCards = new StockCardDAO().GetAllStockCards();
-
 
             ViewData["stockCards"] = stockCards;
             return View();
@@ -181,16 +181,15 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult ItemSuppliers(String Id)
         {
-            Session["Username"] = "Clerk User";
-            Session["Role"] = "Clerk";
-            List<Supplier> itemSuppliers = null;
+            List<Supplier> itemSuppliers = new List<Supplier>();
 
             if (Id != null)
             {
                 itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
+                ViewData["itemSuppliers"] = itemSuppliers;
+                ViewData["itemId"] = Id;
             }
 
-            ViewData["suppliers"] = itemSuppliers;
             return View();
         }
 
@@ -203,13 +202,19 @@ namespace StationeryStore_ADTeam11.Controllers
         public PartialViewResult ItemSupplierList(string Id)
         {
             List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersByItemId(Id);
+            List<Supplier> allSuppliers = new SupplierDAO().GetAllSuppliers();
+            Item item = new ItemDAO().GetItemById(Id);
+            ViewBag.item = item;
+            ViewBag.itemSuppliers = itemSuppliers;
+            ViewBag.allSuppliers = allSuppliers;
+
             if (Id == null)
             {
                 return PartialView("_noSupplierResults", Id);
             }
             else if (itemSuppliers != null)
             {
-                return PartialView("_itemSupplier", itemSuppliers);
+                return PartialView("_itemSupplier", ViewBag);
             }
             else
             {
@@ -217,21 +222,48 @@ namespace StationeryStore_ADTeam11.Controllers
             }
         }
 
-        public PartialViewResult ReplaceSupplierList(string Id)
+        public ActionResult ReplaceSupplier(string itemId, string supplierOrder, string supplierId, double price)
         {
-            List<Supplier> itemSuppliers = new SupplierDAO().FindSuppliersExceptId(Id);
-            if (Id == null)
+            Item item = new ItemDAO().GetItemById(itemId);
+            int order = 0;
+            string suppOrder = null;
+            
+            if (supplierOrder == "FirstSupplier")
             {
-                return PartialView("_noSupplierResults", Id);
+                item.FirstSupplier = supplierId;
+                item.FirstPrice = price;
+                order = 1;
+                suppOrder = "First Supplier";
             }
-            else if (itemSuppliers != null)
+            else if(supplierOrder == "SecondSupplier")
             {
-                return PartialView("_replaceSupplierList", itemSuppliers);
+                item.SecondSupplier = supplierId;
+                item.SecondPrice = price;
+                order = 2;
+                suppOrder = "Second Supplier";
+            }
+            else if(supplierOrder == "ThirdSupplier")
+            {
+                item.ThirdSupplier = supplierId;
+                item.ThirdPrice = price;
+                order = 3;
+                suppOrder = "Third Supplier";
+            }
+
+            bool success = new ItemDAO().UpdateItemSupplier(item, order);
+
+            if(success)
+            {
+                SetFlash(Enums.FlashMessageType.Success, "" + suppOrder + " of Item " 
+                    + itemId + " has been changed to supplier code " + supplierId + " and price of $" + String.Format("{0:0.00}", price) + "/unit successfully!");
+                return RedirectToAction("ItemSuppliers","StoreClerk", itemId);
             }
             else
             {
-                return PartialView("_noSupplierResults", Id);
+                SetFlash(Enums.FlashMessageType.Error, "Error in updating uspplier information for Item Id: " + itemId);
+                return RedirectToAction("ItemSuppliers", "StoreClerk", itemId);
             }
+
         }
 
         public JsonResult ReplaceSupplierList2(string Id)
@@ -404,6 +436,70 @@ namespace StationeryStore_ADTeam11.Controllers
 
             ViewData["c_list"] = c_list;
             return View(list);
+        }
+
+        public ActionResult ApprovedReorderList()
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            ViewData["Orders"] = purchaseOrderDAO.ApprovedReorderStockList();
+
+            return View();
+        }
+
+        public ActionResult ApprovedReorderStockDetail(int id)
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            ViewData["StockDetails"] = purchaseOrderDAO.ReorderStockDetail(id);
+
+            return View();
+        }
+
+        public ActionResult MakeOrder(int id)
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            if (purchaseOrderDAO.OrderStockList(id))
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Ordered!");
+                return RedirectToAction("ApprovedReorderList");
+            }
+
+            SetFlash(Enums.FlashMessageType.Error, "Something went wrong! Please try again later");
+            return RedirectToAction("ApprovedReorderList");
+        }
+
+        public ActionResult PurchaseOrderHistory()
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            ViewData["PurchaseOrders"] = purchaseOrderDAO.PurchaseOrderHistory();
+
+            return View();
+        }
+
+        public ActionResult PurchaseOrderDetail(int id)
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            ViewData["Details"] = purchaseOrderDAO.ReorderStockDetail(id);
+
+            return View();
+        }
+
+        public ActionResult ManageItems(int pid, string id)
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            if (purchaseOrderDAO.MarkItems(pid, id))
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Marked as Delivered!");
+                return RedirectToAction("PurchaseOrderDetail", new { id = pid });
+            }
+
+            SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
+            return RedirectToAction("PurchaseOrderDetail", new { id = pid });
         }
     }
 }

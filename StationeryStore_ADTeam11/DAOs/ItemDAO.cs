@@ -271,8 +271,8 @@ namespace StationeryStore_ADTeam11.DAOs
                 foreach (PurchaseOrderItem item in items)
                 {
                     purchaseOrderDetailSql += "INSERT INTO PurchaseOrderItem " +
-                                                "(PurchaseID, ItemID, Description, Qty) " +
-                                                $" VALUES ({purchaseOrderId}, '{item.ItemId}', '{item.Description}', {item.Qty});";
+                                                "(PurchaseID, ItemID, Description, Qty, Status) " +
+                                                $" VALUES ({purchaseOrderId}, '{item.ItemId}', '{item.Description}', {item.Qty}, 'Pending');";
                 }
 
                 cmd = new SqlCommand(purchaseOrderDetailSql, connection, transaction);
@@ -292,6 +292,46 @@ namespace StationeryStore_ADTeam11.DAOs
             }
 
             return true;
+        }
+
+        public bool UpdateItemSupplier(Item updItem, int suppOrder)
+        {
+            bool success;
+            string sqlUpdateItemSupp = null;
+
+            if (suppOrder == 1)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET FirstSupplier = '" + updItem.FirstSupplier + "', "
+                    + "FirstPrice = " + updItem.FirstPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+            else if (suppOrder == 2)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET SecondSupplier = '" + updItem.SecondSupplier + "', "
+                    + "SecondPrice = " + updItem.SecondPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+            else if (suppOrder == 3)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET ThirdSupplier = '" + updItem.ThirdSupplier + "', "
+                    + "ThirdPrice = " + updItem.ThirdPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+
+            try
+            {
+                connection.Open();
+
+                SqlCommand cmd = new SqlCommand(sqlUpdateItemSupp, connection);
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+
+                success = true;
+            }
+            catch (Exception e)
+            {
+                success = false;
+            }
+
+            return success;
         }
     }
 }

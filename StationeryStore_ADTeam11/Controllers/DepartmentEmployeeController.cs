@@ -39,7 +39,7 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             RequestDAO request = new RequestDAO();
 
-            ViewData["Requisitions"] = request.GetRequistionListByEmpId(11233); //PUT LOGIN EMP_ID HERE
+            ViewData["Requisitions"] = request.GetRequistionListByEmpId(Convert.ToInt32(Session["userid"].ToString())); //PUT LOGIN EMP_ID HERE
             return View();
         }
 
@@ -55,7 +55,7 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             RequestDAO request = new RequestDAO();
 
-            switch (request.CancelRequest(id, 11233)) //PUT LOGIN EMP_ID HERE
+            switch (request.CancelRequest(id, Convert.ToInt32(Session["userid"].ToString()))) //PUT LOGIN EMP_ID HERE
             {
                 case ("success"):
                     {

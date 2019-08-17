@@ -62,14 +62,14 @@
                     <strong class="text-success">Create Retrieval Form</strong>
                     <p></p>
                     <hr>
-                    <a href="clerk_retrieval_category.html" class="btn btn-success btn-sm">View</a>
+                    <a href="@Url.Action("CreateRetrievalList","StoreClerk")" class="btn btn-success btn-sm">View</a>
                 </div>
             </div>
             <div class="col-lg-4">
                 <!-- Income-->
                 <div class="card income text-center">
                     <div class="icon"><i class="icon-bill"></i></div>
-                    <strong class="text-success">Disbursment List</strong>
+                    <strong class="text-success">Disbursement List</strong>
                     <p></p>
                     <hr>
                     <a href="clerk_disbursment.html" class="btn btn-success btn-sm">View</a>
@@ -89,7 +89,7 @@
                     <strong class="text-success">Adjustment Voucher</strong>
                     <p></p>
                     <hr>
-                    <a href="adjustmant.html" class="btn btn-success btn-sm">View</a>
+                    <a href="@Url.Action( "CreateAdjustmentVoucher", "StoreClerk")" class="btn btn-success btn-sm">View</a>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -109,7 +109,7 @@
                     <strong class="text-success">Stock Card</strong>
                     <p></p>
                     <hr>
-                    <a href="stock_card.html" class="btn btn-success btn-sm">View</a>
+                    <a href="@Url.Action( "ViewStockCard", "StoreClerk")" class="btn btn-success btn-sm">View</a>
                 </div>
             </div>
 
@@ -123,10 +123,10 @@
                 <!-- Income-->
                 <div class="card income text-center">
                     <div class="icon"><i class="icon-user"></i></div>
-                    <strong class="text-success">Suppliers</strong>
+                    <strong class="text-success">Item Suppliers</strong>
                     <p></p>
                     <hr>
-                    <a href="clerk_suppliers.html" class="btn btn-success btn-sm">View</a>
+                    <a href="@Url.Action( "ItemSuppliers", "StoreClerk")" class="btn btn-success btn-sm">View</a>
                 </div>
             </div>
             <div class="col-lg-4">

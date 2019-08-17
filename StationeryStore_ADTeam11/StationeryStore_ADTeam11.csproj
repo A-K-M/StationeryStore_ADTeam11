@@ -170,6 +170,7 @@
     <Compile Include="DAOs\ItemDAO.cs" />
     <Compile Include="DAOs\ItemRequestDAO.cs" />
     <Compile Include="DAOs\OutstandingDAO.cs" />
+    <Compile Include="DAOs\PurchaseOrderDAO.cs" />
     <Compile Include="DAOs\RequestDAO.cs" />
     <Compile Include="DAOs\RetrievalDAO.cs" />
     <Compile Include="DAOs\StockCardDAO.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="View_Models\DepartmentDelegation.cs" />
     <Compile Include="View_Models\DisbursementVM.cs" />
     <Compile Include="View_Models\LowStockItemViewModel.cs" />
+    <Compile Include="View_Models\ReorderStockListVM.cs" />
     <Compile Include="View_Models\RequestDetailViewModel.cs" />
     <Compile Include="View_Models\RequestStationery.cs" />
     <Compile Include="View_Models\RequestViewModel.cs" />
@@ -492,13 +494,10 @@
     <Content Include="Statics\webfonts\fa-solid-900.woff" />
     <Content Include="Statics\webfonts\fa-solid-900.woff2" />
     <Content Include="Views\StoreManager\AddSupplier.cshtml" />
-    <Content Include="Views\StoreManager\Suppliers unformatted.cshtml" />
     <Content Include="Views\StoreClerk\CreateAdjustmentVoucher.cshtml" />
     <Content Include="Views\DepartmentHead\Index.cshtml" />
     <Content Include="Views\StoreManager\UpdateSupplier.cshtml" />
-    <Content Include="Views\StoreManager\EditSupplierORI.cshtml" />
     <Content Include="Views\StoreManager\DeleteSupplier.cshtml" />
-    <Content Include="Views\StoreManager\CreateSupplierOld.cshtml" />
     <Content Include="Views\StoreManager\CreateSupplier.cshtml" />
     <Content Include="Views\DepartmentEmployee\Index.cshtml" />
     <Content Include="Views\DepartmentRepresentative\Index.cshtml" />
@@ -508,11 +507,8 @@
     <Content Include="Views\DepartmentHead\ReviewStationeryRequest.cshtml" />
     <Content Include="Views\DepartmentHead\ViewPendingRequestDetails.cshtml" />
     <Content Include="Views\DepartmentEmployee\ViewDelegationStatus.cshtml" />
-    <Content Include="Views\StoreManager\EditSupplierNew.cshtml" />
     <Content Include="Views\StoreManager\EditSupplier.cshtml" />
     <Content Include="Views\StoreSupervisor\AdjustmentVouchers.cshtml" />
-    <Content Include="Views\StoreManager\SupplierList.cshtml" />
-    <Content Include="Views\StoreClerk\ViewStockCard - old.cshtml" />
     <Content Include="Views\StoreClerk\ViewStockCard.cshtml" />
     <Content Include="Views\StoreSupervisor\VoucherItems.cshtml" />
     <Content Include="Views\StoreManager\Suppliers.cshtml" />
@@ -528,7 +524,6 @@
     <Content Include="Views\Shared\_noSupplierResults.cshtml" />
     <Content Include="Views\StoreClerk\CreateRetrievalList.cshtml" />
     <Content Include="Views\StoreClerk\ViewRetrievalList.cshtml" />
-    <Content Include="Views\Shared\_replaceSupplierList.cshtml" />
     <Content Include="Views\Shared\FlashMessage.cshtml" />
     <Content Include="Views\StoreManager\AdjustmentVouchers.cshtml" />
     <Content Include="Views\StoreManager\VoucherItems.cshtml" />
@@ -537,6 +532,12 @@
     <Content Include="Views\DepartmentEmployee\CreateStationeryRequest.cshtml" />
     <Content Include="Views\DepartmentEmployee\RequisitionList.cshtml" />
     <Content Include="Views\StoreClerk\ViewLowStockItems.cshtml" />
+    <Content Include="Views\StoreSupervisor\ReorderStockList.cshtml" />
+    <Content Include="Views\StoreSupervisor\ReorderStockDetail.cshtml" />
+    <Content Include="Views\StoreClerk\ApprovedReorderList.cshtml" />
+    <Content Include="Views\StoreClerk\ApprovedReorderStockDetail.cshtml" />
+    <Content Include="Views\StoreClerk\PurchaseOrderHistory.cshtml" />
+    <Content Include="Views\StoreClerk\PurchaseOrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

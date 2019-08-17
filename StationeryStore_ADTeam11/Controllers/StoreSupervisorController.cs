@@ -73,5 +73,55 @@ namespace StationeryStore_ADTeam11.Controllers
             SetFlash(Enums.FlashMessageType.Error, "Something went wrong. Please try again later!");
             return RedirectToAction("AdjustmentVouchers");
         }
+
+        public ActionResult ReorderStockList()
+        {
+            PurchaseOrderDAO purchaseOrder = new PurchaseOrderDAO();
+
+            ViewData["StockList"] = purchaseOrder.ReorderStockLists("Pending");
+
+            return View();
+        }
+
+        public ActionResult ReorderStockDetail(int id)
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            ViewData["Items"] = purchaseOrderDAO.ReorderStockDetail(id);
+
+            return View();
+        }
+
+        public ActionResult ApproveReorderStock(int id)
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            bool result = purchaseOrderDAO.ReviewReorderStock(id, "Approved");
+
+            if (result)
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Approved!");
+                return RedirectToAction("ReorderStockList");
+            }
+
+            SetFlash(Enums.FlashMessageType.Error, "Something went wrong please try again later!");
+            return RedirectToAction("ReorderStockList");
+        }
+
+        public ActionResult RejectReorderStock(int id)
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            bool result = purchaseOrderDAO.ReviewReorderStock(id, "Rejected");
+
+            if (result)
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Rejected!");
+                return RedirectToAction("ReorderStockList");
+            }
+
+            SetFlash(Enums.FlashMessageType.Error, "Something went wrong please try again later!");
+            return RedirectToAction("ReorderStockList");
+        }
     }
 }
