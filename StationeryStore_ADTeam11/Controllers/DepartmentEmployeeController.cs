@@ -35,6 +35,13 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
+        public JsonResult GetItemByCategory(int id)
+        {
+            ItemDAO itemDAO = new ItemDAO();
+
+            return Json(itemDAO.GetItems(id), JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult RequisitionList()
         {
             RequestDAO request = new RequestDAO();
