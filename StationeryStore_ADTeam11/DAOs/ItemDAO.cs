@@ -76,7 +76,10 @@ namespace StationeryStore_ADTeam11.DAOs
         {
             List<Item> itemList = new List<Item>();
 
-            string sql = @"select id,ThresholdValue from item";
+            string sql = @"select id,ThresholdValue from item
+                            where id not in (SELECT ItemID
+                            FROM PurchaseOrderItem where PurchaseID in (SELECT id
+                            FROM PurchaseOrder where Status = 'Pending')) ";
             SqlCommand cmd = new SqlCommand(sql, connection);
             connection.Open();
             SqlDataReader data = cmd.ExecuteReader();
@@ -105,6 +108,8 @@ namespace StationeryStore_ADTeam11.DAOs
             List<Item> itemList = new List<Item>();
 
             Item item = null;
+            if (ids == "")
+                ids = "'0'";
 
             string sql = @"select i.*, c.name as Category from Item i, Category c 
                     where i.CategoryID = c.ID and 
@@ -238,6 +243,95 @@ namespace StationeryStore_ADTeam11.DAOs
             return itemList;
         }
 
+        public bool RequestReorderItems(int empId, List<PurchaseOrderItem> items)
+        {
+            SqlTransaction transaction = null;
 
+            string status = Constant.STATUS_PENDING;
+
+            try
+            {
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                string purchaseOrderSql = "INSERT INTO PurchaseOrder " +
+                                           "(EmpID, Date, Status) OUTPUT INSERTED.ID " +
+                                            "VALUES (@empId, @date, @status)";
+
+                SqlCommand cmd = new SqlCommand(purchaseOrderSql, connection, transaction);
+
+                cmd.Parameters.AddWithValue("@empId", empId);
+                cmd.Parameters.AddWithValue("@date", DateTime.Now);
+                cmd.Parameters.AddWithValue("@status", status);
+
+                int purchaseOrderId = Convert.ToInt32(cmd.ExecuteScalar());
+
+                string purchaseOrderDetailSql = "";
+
+                foreach (PurchaseOrderItem item in items)
+                {
+                    purchaseOrderDetailSql += "INSERT INTO PurchaseOrderItem " +
+                                                "(PurchaseID, ItemID, Description, Qty, Status) " +
+                                                $" VALUES ({purchaseOrderId}, '{item.ItemId}', '{item.Description}', {item.Qty}, 'Pending');";
+                }
+
+                cmd = new SqlCommand(purchaseOrderDetailSql, connection, transaction);
+
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return true;
+        }
+
+        public bool UpdateItemSupplier(Item updItem, int suppOrder)
+        {
+            bool success;
+            string sqlUpdateItemSupp = null;
+
+            if (suppOrder == 1)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET FirstSupplier = '" + updItem.FirstSupplier + "', "
+                    + "FirstPrice = " + updItem.FirstPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+            else if (suppOrder == 2)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET SecondSupplier = '" + updItem.SecondSupplier + "', "
+                    + "SecondPrice = " + updItem.SecondPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+            else if (suppOrder == 3)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET ThirdSupplier = '" + updItem.ThirdSupplier + "', "
+                    + "ThirdPrice = " + updItem.ThirdPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+
+            try
+            {
+                connection.Open();
+
+                SqlCommand cmd = new SqlCommand(sqlUpdateItemSupp, connection);
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+
+                success = true;
+            }
+            catch (Exception e)
+            {
+                success = false;
+            }
+
+            return success;
+        }
     }
 }

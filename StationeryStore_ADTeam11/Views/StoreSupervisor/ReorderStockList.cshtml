@@ -1,0 +1,44 @@
+﻿@using StationeryStore_ADTeam11.View_Models
+@{
+    ViewBag.Title = "ReorderStockList";
+}
+
+@{ 
+    List<ReorderStockListVM> stockLists = (List<ReorderStockListVM>)ViewData["StockList"];
+}
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    @Html.Partial("FlashMessage")
+                    <h3>Reorder Requests</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table  table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Requested By</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ReorderStockListVM list in stockLists)
+                            {
+                                <tr>
+                                    <td>@list.EmpName</td>
+                                    <td>@list.RequestedDate</td>
+                                    <td class="text-success">@list.Status</td>
+                                    <td><a href="/StoreSupervisor/ReorderStockDetail/@list.Id" class="btn btn-info">View</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

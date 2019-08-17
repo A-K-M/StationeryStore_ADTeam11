@@ -21,6 +21,7 @@ namespace StationeryStore_ADTeam11.Models
         public DateTime Date { get; set; }
         public int Qty { get; set; }
         public int Balance { get; set; }
+        [Display(Name = "Dept/Supplier/Reason")]
         public string RefType { get; set; }
 
 

@@ -2,6 +2,7 @@
 using StationeryStore_ADTeam11.DAOs;
 using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.Util;
 using StationeryStore_ADTeam11.View_Models;
 using System;
 using System.Collections.Generic;
@@ -12,21 +13,26 @@ using System.Web.Http;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
-    [RoutePrefix("api/departments")]
+    [RoutePrefix("api/head")]
     public class DepartmentHeadApiController : ApiController
     {
 
-        [Route("delegate")]
+        [Route("{headId}/delegates")]
         [HttpPost]
-        public MResponse PostDelegate(Delegation delegation) {
+        public MResponse PostDelegate(Delegation delegation,int headId) {
             
-            bool success = new DelegationDAO().InsertDelegation(delegation,"COMM");
+            bool success = new DelegationDAO().InsertDelegation(delegation,headId);
+            if (success) {
+                Email email = new Email();
+                Employee e = new EmployeeDAO().GetEmployeeById(headId);
+                email.SendEmail(delegation.Email, "Authority Delegation",email.CreateMsgBody(delegation,e.Name));
+            }
             MResponse response = new MResponse(success);
             
             return response;
         }
 
-        [Route("delegates/{deptId}")]
+        [Route("{deptId}/delegates")]
         [HttpGet]
         public MResponseList<Delegation> getDelegates(string deptId) {
             DelegationDAO delegationDAO = new DelegationDAO();
@@ -37,25 +43,29 @@ namespace StationeryStore_ADTeam11.Controllers
             return respone;
         }
 
-        [Route("delegates/cancel/{delegationId}")]
+        [Route("{headId}/delegates/cancel")]
         [HttpPut]
-        public MResponse CancelDelegate(int delegationId)
+        public MResponse CancelDelegate(int headId,Delegation delegation)
         {
 
-            bool success = new DelegationDAO().CancelDelegation("COMM",delegationId);
-
-            
+            bool success = new DelegationDAO().CancelDelegation(headId,delegation.Id);
+            if (success)
+            {
+                Email email = new Email();
+                Employee e = new EmployeeDAO().GetEmployeeById(headId);
+                email.SendEmail(delegation.Email, "Authority Delegation Cancel", email.CancelMsgBody(delegation, e.Name));
+            }
             MResponse response = new MResponse(success);
 
             return response;
         }
 
-        [Route("collectionpoints/representative")]
+        [Route("dept/{deptId}/collectionpoints/representative")]
         [HttpGet]
-        public MResponse GetCollectionPointAndRep()
+        public MResponse GetCollectionPointAndRep(string deptId)
         {
             CollectionPointDAO dao = new CollectionPointDAO();
-            MCollectionAndRep collectionAndRep = dao.GetCollecitonPointAndRep("COMM");
+            MCollectionAndRep collectionAndRep = dao.GetCollecitonPointAndRep(deptId);
             MResponseObj<MCollectionAndRep> response
                 = new MResponseObj<MCollectionAndRep>()
                 {
@@ -66,22 +76,22 @@ namespace StationeryStore_ADTeam11.Controllers
         }
 
 
-        [Route("collectionpoints/{pointId}/representative/{repId}")]
+        [Route("{deptId}/collectionpoints/{pointId}/representative/{repId}")]
         [HttpPut]
-        public MResponse UpdatePointAndRep(int pointId, int repId) {
+        public MResponse UpdatePointAndRep(int pointId, int repId,string deptId) {
 
-           return new CollectionPointDAO().UpdateCollectionPointAndRep(pointId,repId,"COMM");
+           return new CollectionPointDAO().UpdateCollectionPointAndRep(pointId,repId,deptId);
        
         }
 
        
 
-        [Route("requests")]
+        [Route("{deptId}/requests")]
         [HttpGet]
-        public MResponse GetRequestHistory()
+        public MResponse GetRequestHistory(string deptId)
         {
             RequestDAO dao = new RequestDAO();
-            return new MResponseList<RequisitionVM>() { ResList = dao.GetReqListByDepartment("COMM") };
+            return new MResponseList<RequisitionVM>() { ResList = dao.GetReqListByDepartment(deptId) };
         }
 
         [Route("requests/{reqId}/detail")]

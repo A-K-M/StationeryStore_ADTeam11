@@ -15,51 +15,106 @@ namespace StationeryStore_ADTeam11.DAOs
         public Employee GetEmployeeByUsername(string username)
         {
             Employee employee = null;
-            SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select id,DeptID,Name,UserName,Password,Email,Role from employee where UserName = '" + username + "'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
+            try
             {
-                employee = new Employee()
-                {
-                    Id = (int)reader["id"],
-                    DepartmentId = (string)reader["DeptID"],
-                    Name = (string)reader["Name"],
-                    UserName = (string)reader["UserName"],
-                    Password = (string)reader["Password"],
-                    Email = (string)reader["Email"],
-                    Role = (string)reader["Role"]
-                };
-                
+                connection.Open();
+                string sql = @"select id,DeptID,Name,UserName,Password,Email,Role from employee where UserName = @userName";
+                SqlCommand command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@userName", username);
+                employee = Employee.mapToOBj(command.ExecuteReader());
             }
-            conn.Close();
+            catch {
+                return null;
+            }
+            finally {
+                connection.Close();
+            }
+
+            if (employee.Role.Equals(Constant.ROLE_EMPLOYEE)) {
+                if (isRepresentative(employee)) employee.Role = Constant.ROLE_REPRESENTATIVE;
+            }
             return employee;
+        }
+
+        public bool isRepresentative(Employee emp) {
+            SqlDataReader reader = null;
+            try
+            {
+                connection.Open();
+                string sql = @"SELECT RepID FROM Department WHERE ID = @deptId";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@deptId", emp.DepartmentId);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int RepID = (int)reader["RepID"];
+                    if (RepID == emp.Id)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
+            return false;
+        }
+        public Employee login(string userName,string password)
+        {
+            Employee employee = null;
+            SqlConnection conn = connection;
+
+            try
+            {
+                conn.Open();
+                string sql = "spMobileLogin";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@userName", userName);
+                cmd.Parameters.AddWithValue("@password", password);
+                employee = Employee.mapToOBj(cmd.ExecuteReader());
+            }
+            catch
+            {
+                return null;
+            }
+            finally {
+                conn.Close();
+            }
+
+            if (employee != null && employee.Role.Equals(Constant.ROLE_EMPLOYEE))
+            {
+                if (isRepresentative(employee)) employee.Role = Constant.ROLE_REPRESENTATIVE;
+            }
+            return employee;
+
         }
         public Employee GetEmployeeById(int Id)
         {
             Employee employee = null;
             SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select * from employee where ID = '" + Id + "'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
-            {
-                employee = new Employee()
-                {
-                    Id = (int)reader["id"],
-                    DepartmentId = (string)reader["DeptID"],
-                    Name = (string)reader["Name"],
-                    UserName = (string)reader["UserName"],
-                    Password = (string)reader["Password"],
-                    Email = (string)reader["Email"],
-                    Role = (string)reader["Role"]
-                };
-
+            try  {
+                conn.Open();
+                string sql = @"select * from employee where ID = '" + Id + "'";
+                SqlCommand command = new SqlCommand(sql, conn);
+                employee = Employee.mapToOBj(command.ExecuteReader());
             }
-            conn.Close();
+            catch{
+                return null;
+            }
+            finally {
+                conn.Close();
+            }
+
+            if (employee.Role.Equals(Constant.ROLE_EMPLOYEE)) {
+                if (isRepresentative(employee)) employee.Role = Constant.ROLE_REPRESENTATIVE;
+            }
             return employee;
 
         }
@@ -152,57 +207,6 @@ namespace StationeryStore_ADTeam11.DAOs
             return employee;
 
         }
-
-        public List<MDisbursement> GetRepresentativeForDisbursement(int clerkID) {
-            List<MDisbursement> disbursements = new List<MDisbursement>();
-
-            SqlDataReader reader = null;
-            MDisbursement dis = null;
-            try
-            {
-                connection.Open();
-                string sql = "spGetDeptRepresentative";
-            SqlCommand cmd = new SqlCommand(sql, connection);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@ClerkID", clerkID);
-            reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                dis = new MDisbursement()
-                {
-                    DeptId = reader["ID"].ToString(),
-                    RepName = reader["RepName"].ToString(),
-                    DeptName = reader["DeptName"].ToString()
-                };
-                disbursements.Add(dis);
-            }
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-            finally
-            {
-                if (reader != null) reader.Close();
-                connection.Close();
-            }
-            return disbursements;
-
-        }
-        public List<MEmployee> GetEmployeeByDepartment(string deptId)
-        {
-            List<MEmployee> mEmployees = new List<MEmployee>();
-            SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"SELECT id,DeptID,Name,Email FROM employee where DeptID = @deptId";
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@deptId", deptId);
-            SqlDataReader reader = cmd.ExecuteReader();
-            mEmployees = MEmployee.MapToList(reader);
-            reader.Close();
-            conn.Close();
-            return mEmployees;
-        }
         public bool checkEmployeeExist(int empId, string deptId) {
 
             try
@@ -224,29 +228,7 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             return true;
         }
-        public bool checkDelegation(int empId)
-        {
-            try
-            {
-                connection.Open();
-                string sql = @"select count(*) from Delegation where EmpID = " + empId + @"
-                        and (CONVERT(date,getdate()) > StartDate or CONVERT(date,getdate()) = StartDate) 
-                        and (CONVERT(date,getdate()) < EndDate or CONVERT(date,getdate()) = EndDate) ";
-                SqlCommand cmd = new SqlCommand(sql, connection);
-                if ((int)cmd.ExecuteScalar() == 0) throw new Exception();
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-            return true;
-        }
-
-
+        
         //public async Task<List<MEmployee>> GetEmployees()
         //{
 
