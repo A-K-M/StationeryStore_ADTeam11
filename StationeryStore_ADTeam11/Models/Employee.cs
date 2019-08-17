@@ -25,7 +25,34 @@ namespace StationeryStore_ADTeam11.Models
         public string Email { get; set; }
         public string Role { get; set; }
 
-       
+        internal static Employee mapToOBj(SqlDataReader reader)
+        {
+            Employee employee = null;
+            try
+            {
+                if (reader.Read())
+                {
+                    employee = new Employee()
+                    {
+                        Id = (int)reader["id"],
+                        DepartmentId = (string)reader["DeptID"],
+                        Name = (string)reader["Name"],
+                        UserName = (string)reader["UserName"],
+                        Password = (string)reader["Password"],
+                        Email = (string)reader["Email"],
+                        Role = (string)reader["Role"]
+                    };
+                }
+            }
+            catch
+            {
+                return null;
+            }
+            finally {
+               if(reader != null) reader.Close();
+            }
+            return employee;
+        }
     }
 
 

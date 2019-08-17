@@ -150,7 +150,7 @@
     <Compile Include="Controllers\DepartmentEmployeeController.cs" />
     <Compile Include="Controllers\DepartmentHeadApiController.cs" />
     <Compile Include="Controllers\DepartmentHeadController.cs" />
-    <Compile Include="Controllers\DepartmentRepController.cs" />
+    <Compile Include="Controllers\DepartmentRepApiController.cs" />
     <Compile Include="Controllers\DepartmentRepresentativeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StoreClerkApiController.cs" />
@@ -181,6 +181,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="MobileModels\MLogin.cs" />
     <Compile Include="Util\Constant.cs" />
     <Compile Include="MobileModels\DateTimeExtensions.cs" />
     <Compile Include="MobileModels\JsonParser.cs" />

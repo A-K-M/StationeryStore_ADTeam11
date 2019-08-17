@@ -13,7 +13,7 @@ using System.Web.Http;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
-    [RoutePrefix("api/departments")]
+    [RoutePrefix("api/head")]
     public class DepartmentHeadApiController : ApiController
     {
 
@@ -60,12 +60,12 @@ namespace StationeryStore_ADTeam11.Controllers
             return response;
         }
 
-        [Route("collectionpoints/representative")]
+        [Route("dept/{deptId}/collectionpoints/representative")]
         [HttpGet]
-        public MResponse GetCollectionPointAndRep()
+        public MResponse GetCollectionPointAndRep(string deptId)
         {
             CollectionPointDAO dao = new CollectionPointDAO();
-            MCollectionAndRep collectionAndRep = dao.GetCollecitonPointAndRep("COMM");
+            MCollectionAndRep collectionAndRep = dao.GetCollecitonPointAndRep(deptId);
             MResponseObj<MCollectionAndRep> response
                 = new MResponseObj<MCollectionAndRep>()
                 {
@@ -76,22 +76,22 @@ namespace StationeryStore_ADTeam11.Controllers
         }
 
 
-        [Route("collectionpoints/{pointId}/representative/{repId}")]
+        [Route("{deptId}/collectionpoints/{pointId}/representative/{repId}")]
         [HttpPut]
-        public MResponse UpdatePointAndRep(int pointId, int repId) {
+        public MResponse UpdatePointAndRep(int pointId, int repId,string deptId) {
 
-           return new CollectionPointDAO().UpdateCollectionPointAndRep(pointId,repId,"COMM");
+           return new CollectionPointDAO().UpdateCollectionPointAndRep(pointId,repId,deptId);
        
         }
 
        
 
-        [Route("requests")]
+        [Route("{deptId}/requests")]
         [HttpGet]
-        public MResponse GetRequestHistory()
+        public MResponse GetRequestHistory(string deptId)
         {
             RequestDAO dao = new RequestDAO();
-            return new MResponseList<RequisitionVM>() { ResList = dao.GetReqListByDepartment("COMM") };
+            return new MResponseList<RequisitionVM>() { ResList = dao.GetReqListByDepartment(deptId) };
         }
 
         [Route("requests/{reqId}/detail")]

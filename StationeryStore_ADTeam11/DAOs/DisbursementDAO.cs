@@ -90,6 +90,7 @@ namespace StationeryStore_ADTeam11.DAOs
             return disbursements;
 
         }
+
         public List<ItemRequest> GetDisburseItemsForRep(string deptId) {
             List<ItemRequest> items = new List<ItemRequest>();
             SqlDataReader reader = null;
@@ -125,6 +126,27 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             return items;
 
+        }
+        public bool ApproveDisbursement(string deptId)
+        {
+            try
+            {
+                connection.Open();
+                string sql = "spApproveDisbursement";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@DeptID", deptId);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return true;
         }
 
         public List<DisbursementVM> WebGetDisbursementsByClerk(int clerkID)
