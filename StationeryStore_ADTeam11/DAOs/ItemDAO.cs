@@ -29,7 +29,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             SqlDataReader data = cmd.ExecuteReader();
 
-            if (data.Read())
+            while (data.Read())
             {
                 item = new Item()
                 {
