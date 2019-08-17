@@ -79,8 +79,6 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult ViewStockCard()
         {
-            Session["Username"] = "Clerk User";
-            Session["Role"] = "Clerk";
 
             List<StockCard> stockCards = new StockCardDAO().GetAllStockCards();
 
@@ -186,8 +184,6 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult ItemSuppliers(String Id)
         {
-            Session["Username"] = "Clerk User";
-            Session["Role"] = "Clerk";
             List<Supplier> itemSuppliers = null;
 
             if (Id != null)
@@ -409,6 +405,23 @@ namespace StationeryStore_ADTeam11.Controllers
 
             ViewData["c_list"] = c_list;
             return View(list);
+        }
+
+        public ActionResult EditDisbursementList (string dept_id, string dept_name)
+        {
+            DisbursementDAO disbursementDAO = new DisbursementDAO();
+            CollectionPointDAO collectionPointDAO = new CollectionPointDAO();
+            CollectionPoint collectionPoint = collectionPointDAO.GetCollectionPointByDeptID(dept_id);
+
+
+            List<ItemRequest> itemList =  disbursementDAO.GetDisburseItemsForRep(dept_id);
+
+            DisbursementVM disbursement = new DisbursementVM();
+            disbursement.DeptName = dept_name;
+            disbursement.CollectionPointName = collectionPoint.Name;
+            disbursement.ItemList = itemList;
+
+            return View(disbursement);
         }
     }
 }

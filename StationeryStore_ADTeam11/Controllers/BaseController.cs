@@ -33,6 +33,7 @@ namespace StationeryStore_ADTeam11.Controllers
             EmployeeDAO employeeDAO = new EmployeeDAO();
             Employee employee = employeeDAO.GetEmployeeByUsername(username);
 
+
             if(employee == null || employee.Role == null)
             {
                 error = "No Employee with this name.";
@@ -46,11 +47,18 @@ namespace StationeryStore_ADTeam11.Controllers
                 return View(); 
             }
             string sessionID = Guid.NewGuid().ToString();
+            string delegation = "No";
+            if (employeeDAO.checkDelegation(employee.Id))
+            {
+                delegation = "Yes";
+            }
+
+
             Session["sessionID"] = sessionID;
             Session["username"] = employee.UserName;
             Session["userid"] = employee.Id;
             Session["role"] = employee.Role;
-            Session["deptID"] = employee.DepartmentId;
+            Session["delegation"] = delegation;
             ViewData["error"] = error;
             switch (employee.Role)
             {
