@@ -265,6 +265,21 @@ namespace StationeryStore_ADTeam11.DAOs
 
                 if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
+                string updateStockcardSql = $@"INSERT INTO Stockcard
+                                            (ItemID, DateTime, Qty, Balance, RefType)
+                                            VALUES ('{itemId}', GETDATE(), 
+			                                            (SELECT Qty FROM PurchaseOrderItem 
+			                                            WHERE PurchaseID = {pid} AND ItemID = '{itemId}'),
+			                                            (SELECT TOP 1 Balance 
+			                                            FROM Stockcard WHERE ItemID = '{itemId}'
+			                                            ORDER BY ID DESC) + (SELECT Qty FROM PurchaseOrderItem 
+			                                            WHERE PurchaseID = {pid} AND ItemID = '{itemId}'),
+			                                            'ORD-{pid}')";
+
+                cmd = new SqlCommand(updateStockcardSql, connection, transaction);
+
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
                 transaction.Commit();
             }
             catch (Exception e)
