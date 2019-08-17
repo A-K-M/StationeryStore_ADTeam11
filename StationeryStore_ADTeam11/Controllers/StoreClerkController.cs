@@ -469,5 +469,28 @@ namespace StationeryStore_ADTeam11.Controllers
             SetFlash(Enums.FlashMessageType.Error, "Something went wrong! Please try again later");
             return RedirectToAction("ApprovedReorderList");
         }
+
+        public ActionResult PurchaseOrderHistory()
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            ViewData["PurchaseOrders"] = purchaseOrderDAO.PurchaseOrderHistory();
+
+            return View();
+        }
+
+        public ActionResult PurchaseOrderDetail(int id)
+        {
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            ViewData["Details"] = purchaseOrderDAO.ReorderStockDetail(id);
+
+            return View();
+        }
+
+        public ActionResult ManageItems(int pid, string id)
+        {
+            return null;
+        }
     }
 }

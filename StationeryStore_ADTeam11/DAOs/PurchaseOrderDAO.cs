@@ -167,5 +167,38 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return true;
         }
+
+        public List<ReorderStockListVM> PurchaseOrderHistory()
+        {
+            List<ReorderStockListVM> purchaseOrders = new List<ReorderStockListVM>();
+
+            ReorderStockListVM purchaseOrder = null;
+
+            string sql = @"SELECT *
+                        FROM PurchaseOrder
+                        WHERE Status IN ('Ordered', 'Delivered', 'Processing')";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                purchaseOrder = new ReorderStockListVM()
+                {
+                    Id = Convert.ToInt32(data["ID"]),
+                    RequestedDate = Convert.ToDateTime(data["Date"]),
+                    Status = data["Status"].ToString()
+                };
+
+                purchaseOrders.Add(purchaseOrder);
+            }
+            data.Close();
+            connection.Close();
+
+            return purchaseOrders;
+        }
+
+
     }
 }

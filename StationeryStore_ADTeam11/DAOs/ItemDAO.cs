@@ -271,8 +271,8 @@ namespace StationeryStore_ADTeam11.DAOs
                 foreach (PurchaseOrderItem item in items)
                 {
                     purchaseOrderDetailSql += "INSERT INTO PurchaseOrderItem " +
-                                                "(PurchaseID, ItemID, Description, Qty) " +
-                                                $" VALUES ({purchaseOrderId}, '{item.ItemId}', '{item.Description}', {item.Qty});";
+                                                "(PurchaseID, ItemID, Description, Qty, Status) " +
+                                                $" VALUES ({purchaseOrderId}, '{item.ItemId}', '{item.Description}', {item.Qty}, 'Pending');";
                 }
 
                 cmd = new SqlCommand(purchaseOrderDetailSql, connection, transaction);

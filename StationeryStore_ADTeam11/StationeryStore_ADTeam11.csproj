@@ -535,6 +535,8 @@
     <Content Include="Views\StoreSupervisor\ReorderStockDetail.cshtml" />
     <Content Include="Views\StoreClerk\ApprovedReorderList.cshtml" />
     <Content Include="Views\StoreClerk\ApprovedReorderStockDetail.cshtml" />
+    <Content Include="Views\StoreClerk\PurchaseOrderHistory.cshtml" />
+    <Content Include="Views\StoreClerk\PurchaseOrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />
