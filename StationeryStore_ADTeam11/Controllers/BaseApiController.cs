@@ -14,6 +14,15 @@ namespace StationeryStore_ADTeam11.Controllers
     [RoutePrefix("api")]
     public class BaseApiController : ApiController
     {
+        [Route("login")]
+        [HttpPost]
+        public MResponse Login(MLogin e) {
+            EmployeeDAO dao = new EmployeeDAO();
+            Employee res =  dao.login(e.UserName, e.Password);
+            
+            return new MResponseObj<Employee>() { ResObj = res, Success = (res != null) };
+        }
+
         [Route("employees/{deptId}")]
         [HttpGet]
         public MResponse GetEmployees(string deptId)
