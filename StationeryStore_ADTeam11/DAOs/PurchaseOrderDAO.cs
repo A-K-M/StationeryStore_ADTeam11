@@ -199,6 +199,35 @@ namespace StationeryStore_ADTeam11.DAOs
             return purchaseOrders;
         }
 
+        public bool MarkItems(int pid, string itemId)
+        {
+            string sql = @"UPDATE PurchaseOrderItem
+                        SET Status = 'Delivered'
+                        WHERE PurchaseID = @pid
+                        AND ItemID = @itemId";
 
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand(sql, connection);
+
+                cmd.Parameters.AddWithValue("@pid", pid);
+                cmd.Parameters.AddWithValue("@itemId", itemId);
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                connection.Close();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+
+            }
+
+            return true;
+        }
     }
 }

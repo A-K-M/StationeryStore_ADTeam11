@@ -490,7 +490,16 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult ManageItems(int pid, string id)
         {
-            return null;
+            PurchaseOrderDAO purchaseOrderDAO = new PurchaseOrderDAO();
+
+            if (purchaseOrderDAO.MarkItems(pid, id))
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Marked as Delivered!");
+                return RedirectToAction("PurchaseOrderDetail", new { id = pid });
+            }
+
+            SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
+            return RedirectToAction("PurchaseOrderDetail", new { id = pid });
         }
     }
 }

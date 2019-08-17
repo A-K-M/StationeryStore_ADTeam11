@@ -12,6 +12,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
+                    @Html.Partial("FlashMessage")
                     <h4>Purchase Order Detail</h4>
                 </div>
                 <div class="card-body">
@@ -45,7 +46,13 @@
                                             }
                                             else
                                             {
-                                                <td><a href="/StoreClerk/ManageItems/@item.Id/@item.ItemId" class="btn btn-info">Mark as Delivered</a></td>
+                                                @*<td><a href="/StoreClerk/ManageItems/@item.Id/@item.ItemId" class="btn btn-info">Mark as Delivered</a></td>*@
+                                                <td>
+                                                    @Html.ActionLink("Mark as Delivered", "ManageItems", "StoreClerk",
+                                                                       new {pid = item.Id, id= item.ItemId}, 
+                                                                       new { @class = "btn btn-info" }
+                                                    )
+                                                </td>
                                             }
                                         }
 
