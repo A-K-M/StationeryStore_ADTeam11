@@ -539,6 +539,7 @@
     <Content Include="Views\StoreClerk\ApprovedReorderStockDetail.cshtml" />
     <Content Include="Views\StoreClerk\PurchaseOrderHistory.cshtml" />
     <Content Include="Views\StoreClerk\PurchaseOrderDetail.cshtml" />
+    <Content Include="Views\StoreClerk\EditDisbursementList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

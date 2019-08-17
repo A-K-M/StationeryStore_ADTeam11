@@ -228,7 +228,28 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             return true;
         }
-        
+        public bool checkDelegation(int empId)
+        {
+            try
+            {
+                connection.Open();
+                string sql = @"select count(*) from Delegation where EmpID = " + empId + @"
+                        and (CONVERT(date,getdate()) > StartDate or CONVERT(date,getdate()) = StartDate) 
+                        and (CONVERT(date,getdate()) < EndDate or CONVERT(date,getdate()) = EndDate) ";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                if ((int)cmd.ExecuteScalar() == 0) throw new Exception();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return true;
+        }
+
         //public async Task<List<MEmployee>> GetEmployees()
         //{
 

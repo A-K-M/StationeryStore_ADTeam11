@@ -159,9 +159,9 @@ namespace StationeryStore_ADTeam11.Controllers
             string ids = "";
             foreach (var i in ItemIdsAndThresholdValue)
             {
-                if (i.ThresholdValue>itemDAO.GetBalanceByItemId(i.Id))
+                if (i.ThresholdValue > itemDAO.GetBalanceByItemId(i.Id))
                 {
-                    ids += "'"+i.Id.ToString()+"', ";
+                    ids += "'" + i.Id.ToString() + "', ";
                 }
             }
             ids = ids.TrimEnd(',', ' ');
@@ -227,7 +227,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Item item = new ItemDAO().GetItemById(itemId);
             int order = 0;
             string suppOrder = null;
-            
+
             if (supplierOrder == "FirstSupplier")
             {
                 item.FirstSupplier = supplierId;
@@ -235,14 +235,14 @@ namespace StationeryStore_ADTeam11.Controllers
                 order = 1;
                 suppOrder = "First Supplier";
             }
-            else if(supplierOrder == "SecondSupplier")
+            else if (supplierOrder == "SecondSupplier")
             {
                 item.SecondSupplier = supplierId;
                 item.SecondPrice = price;
                 order = 2;
                 suppOrder = "Second Supplier";
             }
-            else if(supplierOrder == "ThirdSupplier")
+            else if (supplierOrder == "ThirdSupplier")
             {
                 item.ThirdSupplier = supplierId;
                 item.ThirdPrice = price;
@@ -252,11 +252,11 @@ namespace StationeryStore_ADTeam11.Controllers
 
             bool success = new ItemDAO().UpdateItemSupplier(item, order);
 
-            if(success)
+            if (success)
             {
-                SetFlash(Enums.FlashMessageType.Success, "" + suppOrder + " of Item " 
+                SetFlash(Enums.FlashMessageType.Success, "" + suppOrder + " of Item "
                     + itemId + " has been changed to supplier code " + supplierId + " and price of $" + String.Format("{0:0.00}", price) + "/unit successfully!");
-                return RedirectToAction("ItemSuppliers","StoreClerk", itemId);
+                return RedirectToAction("ItemSuppliers", "StoreClerk", itemId);
             }
             else
             {
@@ -500,6 +500,22 @@ namespace StationeryStore_ADTeam11.Controllers
 
             SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
             return RedirectToAction("PurchaseOrderDetail", new { id = pid });
+        }
+        public ActionResult EditDisbursementList(string dept_id, string dept_name)
+        {
+            DisbursementDAO disbursementDAO = new DisbursementDAO();
+            CollectionPointDAO collectionPointDAO = new CollectionPointDAO();
+            CollectionPoint collectionPoint = collectionPointDAO.GetCollectionPointByDeptID(dept_id);
+
+
+            List<ItemRequest> itemList = disbursementDAO.GetDisburseItemsForRep(dept_id);
+
+            DisbursementVM disbursement = new DisbursementVM();
+            disbursement.DeptName = dept_name;
+            disbursement.CollectionPointName = collectionPoint.Name;
+            disbursement.ItemList = itemList;
+
+            return View(disbursement);
         }
     }
 }
