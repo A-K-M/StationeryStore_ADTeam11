@@ -53,7 +53,7 @@ namespace StationeryStore_ADTeam11.Controllers
 
             AdjustmentVoucherDAO adjustmentVoucherDAO = new AdjustmentVoucherDAO();
 
-            if (adjustmentVoucherDAO.Add(11233, itemData))
+            if (adjustmentVoucherDAO.Add(Convert.ToInt32(Session["userid"].ToString()), itemData))
             {
                 return Json("Successfully Added", JsonRequestBehavior.AllowGet);
             }
@@ -70,7 +70,7 @@ namespace StationeryStore_ADTeam11.Controllers
 
             ItemDAO itemDAO = new ItemDAO();
 
-            if (itemDAO.RequestReorderItems(11236, itemData))
+            if (itemDAO.RequestReorderItems(Convert.ToInt32(Session["userid"].ToString()), itemData))
             {
                 return Json("Successfully Requested", JsonRequestBehavior.AllowGet);
             }
