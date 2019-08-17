@@ -206,27 +206,133 @@ namespace StationeryStore_ADTeam11.DAOs
                         WHERE PurchaseID = @pid
                         AND ItemID = @itemId";
 
+            SqlTransaction transaction = null;
+
             try
             {
                 connection.Open();
-                SqlCommand cmd = new SqlCommand(sql, connection);
+
+                transaction = connection.BeginTransaction();
+
+                SqlCommand cmd = new SqlCommand(sql, connection, transaction);
 
                 cmd.Parameters.AddWithValue("@pid", pid);
                 cmd.Parameters.AddWithValue("@itemId", itemId);
 
-                cmd.ExecuteNonQuery();
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                string status = "Ordered";
+
+                string statusSql = @"SELECT Status
+                                FROM PurchaseOrderItem
+                                where PurchaseID = @id";
+
+                cmd = new SqlCommand(statusSql, connection, transaction);
+                cmd.Parameters.AddWithValue("@id", pid);
+
+                SqlDataReader data = cmd.ExecuteReader();
+
+
+                List<string> item_status = new List<string>();
+
+                while (data.Read())
+                {
+                    item_status.Add(data["Status"].ToString());
+                }
+
+                data.Close();
+
+                int d_count = 0;
+                foreach (string s in item_status)
+                {
+                    if (s == "Delivered")
+                    {
+                        status = "Processing";
+                        d_count++;
+                    }
+                }
+                if (d_count == item_status.Count())
+                    status = "Delivered";
+
+                string updateStatusSql = @"UPDATE PurchaseOrder SET
+                                    Status = @status
+                                    WHERE ID = @id";
+
+                cmd = new SqlCommand(updateStatusSql, connection, transaction);
+
+                cmd.Parameters.AddWithValue("@id", pid);
+                cmd.Parameters.AddWithValue("@status", status);
+
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
             }
-            catch (SqlException e)
+            catch (Exception e)
             {
-                connection.Close();
+                transaction.Rollback();
                 return false;
             }
             finally
             {
                 connection.Close();
-
             }
 
+            return true;
+        }
+
+        public bool UpdatePurchaseOrderStatus(int id)
+        {
+            string status = "Ordered";
+
+            string sql = @"SELECT Status
+                        FROM PurchaseOrderItem
+                        where PurchaseID = @id";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            cmd.Parameters.AddWithValue("@id", id);
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+
+            List<string> item_status = new List<string>();
+
+            while (data.Read())
+            {
+                item_status.Add(data["Status"].ToString());
+            }
+
+            data.Close();
+
+            int d_count = 0;
+            foreach (string s in item_status)
+            {
+                if (s == "Delivered")
+                {
+                    status = "Processing";
+                    d_count++;
+                }
+            }
+            if(d_count==item_status.Count())
+                status = "Delivered";
+
+            string updateStatusSql = @"UPDATE PurchaseOrderItem SET
+                                    Status = @status
+                                    WHERE PurchaseID = @id";
+
+            cmd = new SqlCommand(updateStatusSql, connection);
+
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@status", status);
+
+            if (cmd.ExecuteNonQuery() == 0)
+            {
+                connection.Close();
+                return false;
+            }
+
+            connection.Close();
             return true;
         }
     }
