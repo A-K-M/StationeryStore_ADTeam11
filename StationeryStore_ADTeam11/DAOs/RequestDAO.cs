@@ -12,7 +12,7 @@ namespace StationeryStore_ADTeam11.DAOs
 {
     public class RequestDAO : DatabaseConnection
     {
-        public List<StationeryRequest> GetRequestList()
+        public List<StationeryRequest> GetRequestList(string deptID)
         {
             List<StationeryRequest> requestlist = new List<StationeryRequest>();
             
@@ -20,6 +20,7 @@ namespace StationeryStore_ADTeam11.DAOs
             string sql = "SELECT R.Status as Status,E.Name as Name,R.DateTime as Date,R.Id as RequestId , SUM(IR.NeededQty) AS [TotalQuantity] " +
                         "FROM Request R,Employee E, ItemRequest IR " +
                         "WHERE E.ID = R.EmployeeID " +
+                        "AND E.DeptID = '" + deptID +"' " +
                         "AND R.ID = IR.RequestID " +
                         "GROUP BY R.Status ,E.Name,R.DateTime,R.Id; ";
 
@@ -342,7 +343,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 string sql = " SELECT e.UserName,req.DateTime,req.Status,req.ID,SUM(ireq.NEEDEDQTY) Quantity " +
                               " FROM Request req,Employee e,ItemRequest ireq " +
                               " WHERE req.EmployeeID = e.ID AND ireq.RequestID=req.id AND " +
-                                "req.EmployeeID IN(SELECT e.ID FROM Employee e WHERE e.DeptID = 'COMM') " +
+                                "req.EmployeeID IN(SELECT e.ID FROM Employee e WHERE e.DeptID = @deptId) " +
                               " GROUP BY req.ID,e.UserName,req.DateTime,req.Status";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@deptId", deptId);
