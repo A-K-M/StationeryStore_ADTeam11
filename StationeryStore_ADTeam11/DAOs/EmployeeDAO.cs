@@ -22,6 +22,10 @@ namespace StationeryStore_ADTeam11.DAOs
                 SqlCommand command = new SqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@userName", username);
                 employee = Employee.mapToOBj(command.ExecuteReader());
+                if (employee == null)
+                {
+                    throw new Exception();
+                }
             }
             catch {
                 return null;
