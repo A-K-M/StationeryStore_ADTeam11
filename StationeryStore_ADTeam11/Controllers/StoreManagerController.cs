@@ -215,7 +215,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return monthlySales;
 
         }
-        public ActionResult ViewChart()
+        public ActionResult ViewCharts()
         {
             int month = 8;
             int[] salesReport=ExtractSalesReports(month).ToArray();

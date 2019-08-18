@@ -548,6 +548,7 @@
     <Content Include="Views\StoreClerk\UpdateItem.cshtml" />
     <Content Include="Views\StoreClerk\ViewCategories.cshtml" />
     <Content Include="Views\StoreClerk\ViewItems.cshtml" />
+    <Content Include="Views\StoreManager\ViewCharts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />
