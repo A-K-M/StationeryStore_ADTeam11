@@ -164,7 +164,7 @@ function requestReorderList() {
         jsonObj.push(item);
     }
 
-    console.log(jsonObj);
+    
 
     $.ajax({
         url: "/StoreClerk/RequestReorderList",

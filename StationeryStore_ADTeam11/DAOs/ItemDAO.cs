@@ -418,22 +418,49 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return item;
         }
-        public void AddItem(Item itm)
+
+        public bool AddItem(Item itm)
         {
-            Item item = new Item();
-            item = itm;
-            string sql = "INSERT INTO Item (ID,CategoryID,Description,ThresholdValue,ReorderQty,UOM,BinNo,FirstSupplier,FirstPrice,SecondSupplier,SecondPrice,ThirdSupplier,ThirdPrice) VALUES ('" +
-                  item.Id + "'," + item.CategoryId + ",'" + item.Description +
-                  "'," + item.ThresholdValue + "," + item.ReorderQty +
-                  ",'" + item.Uom + "','" + item.BinNo + "','" + item.FirstSupplier + "',"
-                  + item.FirstPrice + ",'" + item.SecondSupplier + "'," + item.SecondPrice + ",'"
-                  + item.ThirdSupplier + "'," + item.ThirdPrice + ")";
+            SqlTransaction transaction = null;
 
+            try
+            {
+                connection.Open();
+                transaction = connection.BeginTransaction();
 
-            SqlCommand cmd = new SqlCommand(sql, connection);
-            connection.Open();
-            cmd.ExecuteNonQuery();
-            connection.Close();
+                Item item = new Item();
+                item = itm;
+                string sql = "INSERT INTO Item (ID,CategoryID,Description,ThresholdValue,ReorderQty,UOM,BinNo,FirstSupplier,FirstPrice,SecondSupplier,SecondPrice,ThirdSupplier,ThirdPrice) OUTPUT INSERTED.ID VALUES ('" +
+                      item.Id + "'," + item.CategoryId + ",'" + item.Description +
+                      "'," + item.ThresholdValue + "," + item.ReorderQty +
+                      ",'" + item.Uom + "','" + item.BinNo + "','" + item.FirstSupplier + "',"
+                      + item.FirstPrice + ",'" + item.SecondSupplier + "'," + item.SecondPrice + ",'"
+                      + item.ThirdSupplier + "'," + item.ThirdPrice + ")";
+
+                SqlCommand cmd = new SqlCommand(sql, connection, transaction);
+
+                string itemId = Convert.ToString(cmd.ExecuteScalar());
+
+                string stockcardSql = $"INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType) VALUES ('{itemId}', '{DateTime.Now}', 0, 0, 'Initial insert')";
+
+                cmd = new SqlCommand(stockcardSql, connection, transaction);
+
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
+
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return true;
         }
 
         public void EditItem(Item item, string id)

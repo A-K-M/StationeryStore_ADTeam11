@@ -491,5 +491,19 @@ namespace StationeryStore_ADTeam11.DAOs
             return requestReports;
         }
 
+
+
+        public int getTodayReqCount()
+        {
+
+            int count = 0;
+                connection.Open();
+                string sql = @"select Count(*) from Request where  CONVERT(date,DateTime)= CONVERT(date,getdate());";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+            count = (int)cmd.ExecuteScalar();
+            
+            return count;
+        }
+
     }
 }

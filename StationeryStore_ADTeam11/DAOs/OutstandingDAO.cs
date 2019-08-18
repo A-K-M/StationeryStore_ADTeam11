@@ -21,5 +21,18 @@ namespace StationeryStore_ADTeam11.DAOs
             command.ExecuteNonQuery();
             conn.Close();
         }
+
+
+         public int GetPendingOutstandingCount()
+        {
+
+            int count = 0;
+            connection.Open();
+            string sql = @"select count(*) from Outstanding where status = 'Pending'";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            count = (int)cmd.ExecuteScalar();
+
+            return count;
+        }
     }
 }

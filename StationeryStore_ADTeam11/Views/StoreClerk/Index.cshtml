@@ -2,6 +2,9 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_storeClerkLayout.cshtml";
+    string today = ViewData["todayCount"].ToString();
+    string lowstock = ViewData["lowstock"].ToString();
+    string outcount = ViewData["outCount"].ToString();
 }
 <section class="dashboard-counts section-padding">
     <div class="container-fluid">
@@ -12,7 +15,7 @@
                     <div class="icon"><i class="far fa-file-alt"></i></div>
                     <div class="name">
                         <strong class="text-uppercase">New Orders</strong>
-                        <div class="count-number">5</div>
+                        <div class="count-number">@today</div>
                     </div>
                 </div>
             </div>
@@ -21,8 +24,8 @@
                 <div class="wrapper count-title d-flex">
                     <div class="icon"><i class="far fa-file-alt"></i></div>
                     <div class="name">
-                        <strong class="text-uppercase">Weekly Orders</strong>
-                        <div class="count-number">25</div>
+                        <strong class="text-uppercase">Outstanding Requests</strong>
+                        <div class="count-number">@outcount</div>
                     </div>
                 </div>
             </div>
@@ -31,8 +34,8 @@
                 <div class="wrapper count-title d-flex">
                     <div class="icon"><i class="far fa-file-alt"></i></div>
                     <div class="name">
-                        <strong class="text-uppercase">Low Qty Items</strong>
-                        <div class="count-number">13</div>
+                        <strong class="text-uppercase">Low Stock Items</strong>
+                        <div class="count-number">@lowstock</div>
                     </div>
                 </div>
             </div>
@@ -69,7 +72,7 @@
                 <!-- Income-->
                 <div class="card income text-center">
                     <div class="icon"><i class="icon-bill"></i></div>
-                    <strong class="text-success">Disbursment List</strong>
+                    <strong class="text-success">Disbursement List</strong>
                     <p></p>
                     <hr>
                     <a href="@Url.Action("ViewDisbursementList", "StoreClerk")" class="btn btn-success btn-sm">View</a>
@@ -136,7 +139,7 @@
                     <strong class="text-success">Items</strong>
                     <p></p>
                     <hr>
-                    <a href="@Url.Action("Index", "StoreClerk")" class="btn btn-success btn-sm">View</a>
+                    <a href="@Url.Action("ViewItems", "StoreClerk")" class="btn btn-success btn-sm">View</a>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -146,7 +149,7 @@
                     <strong class="text-success">Categories</strong>
                     <p></p>
                     <hr>
-                    <a href="@Url.Action("Index", "StoreClerk")" class="btn btn-success btn-sm">View</a>
+                    <a href="@Url.Action("ViewCategories", "StoreClerk")" class="btn btn-success btn-sm">View</a>
                 </div>
             </div>
         </div>
