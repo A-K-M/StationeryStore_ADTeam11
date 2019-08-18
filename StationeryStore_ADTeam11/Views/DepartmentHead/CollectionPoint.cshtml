@@ -53,7 +53,7 @@
             }*@
                                                 @{
                                                     var emps = new List<SelectListItem>{ new SelectListItem{ Text="Select Employee Name",
-                                                                                                                                                                                Value = "0" , Disabled = true, Selected = true}, };
+                                                              Value = "0" , Disabled = true, Selected = true}, };
                                                     foreach (var e in employees)
                                                     {
                                                         emps.Add(e);
@@ -75,6 +75,9 @@
                             <div class="col-12 form-group">
                                 <div class="row">
                                     <div class="col-4">
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="reset" value="Cancel" class="btn btn-danger">
                                     </div>
                                     <div class="col-4">
                                         <input type="submit" value="Update" class="btn btn-success">
