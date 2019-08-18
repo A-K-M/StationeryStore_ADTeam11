@@ -8,6 +8,8 @@ using System.Web.Mvc;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
+    [AuthenticationFilter]
+    [RoleFilter("Supervisor")]
     [LayoutFilter("_storeSupervisorLayout")]
     public class StoreSupervisorController : BaseController
     {

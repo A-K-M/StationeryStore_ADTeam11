@@ -48,14 +48,13 @@
                 <h5 class="sidenav-heading">Main</h5>
                 <ul id="side-main-menu" class="side-menu list-unstyled">
                     <li><a href="@Url.Action("Index", "StoreSupervisor")"> <i class="icon-home"></i>Home </a></li>
-                    <li><a href="@Url.Action("Index", "StoreSupervisor")"> <i class="fas fa-user"></i>Purchase Orders </a></li>
+                    <li><a href="@Url.Action("ReorderStockList", "StoreSupervisor")"> <i class="icon-bill"></i>Reorder Stock List</a></li>
                     <li><a href="@Url.Action("AdjustmentVouchers", "StoreSupervisor")"> <i class="fa fa-file-alt"></i>Adjustment Vouchers </a></li>
                     <li>
-                        <a href="store_supervisor_create_barcharts.html">
-                            <i class="fa fa-map-marker-alt"></i>Create Barchart
+                        <a href="@Url.Action("AdjustmentVouchers", "StoreSupervisor")">
+                            <i class="icon-presentation"></i>Create Barchart
                         </a>
                     </li>
-                    <li><a href="view_barcharts.html"> <i class="fa fa-map-marker-alt"></i>View Barcharts </a></li>
                 </ul>
             </div>
             <div class="admin-menu">

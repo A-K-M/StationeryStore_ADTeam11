@@ -11,6 +11,8 @@ using StationeryStore_ADTeam11.Filters;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
+    [AuthenticationFilter]
+    [RoleFilter("Employee")]
     [LayoutFilter("_deptartmentEmployeeLayout")]
     public class DepartmentRepresentativeController : DepartmentEmployeeController // Dept Rep is inherited from Dept Employee
     {
