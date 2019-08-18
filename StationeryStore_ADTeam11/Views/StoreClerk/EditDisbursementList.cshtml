@@ -1,0 +1,70 @@
+﻿@model StationeryStore_ADTeam11.View_Models.DisbursementVM
+
+@{
+    ViewBag.Title = "EditDisbursementList";
+    Layout = "~/Views/Shared/_storeClerkLayout.cshtml";
+}
+
+
+<section class="statistics">
+    <div class="container-fluid">
+        <div class="row d-flex">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Edit Disbursement List</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            <input type="hidden" name="dept" value="@Model.DeptName" />
+                            <div class="row">
+                                <Label class="col-12">Collection Point - @Model.CollectionPointName</Label>
+                                <Label class="col-12">Department - @Model.DeptName</Label>
+                                <div class="col-12">
+                                    <table class="table  table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Item Name</th>
+                                                <th>Needed</th>
+                                                <th>Actual</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var row in Model.ItemList)
+                                            {
+                                                <tr>
+                                                    <td>@row.Description</td>
+                                                    <td>@row.NeededQty</td>
+                                                    <td><input type="number" value="@row.ActualQty" onchange="if(this.value > @row.ActualQty) warning()"></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-6"></div>
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col-6"></div>
+                                        <div class="col-3">
+                                            <a href="@Url.Action("ViewDisbursementList","StoreClerk")" class="btn btn-danger">Go Back</a>
+                                        </div>
+                                        <div class="col-3">
+                                            <input type="submit" value="Update" class="btn btn-success" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+
+                </div>
+    </section>
+    <script>
+    function warning() {
+        alert("Invalid Quantity  .")
+    }
+
+    </script>
+

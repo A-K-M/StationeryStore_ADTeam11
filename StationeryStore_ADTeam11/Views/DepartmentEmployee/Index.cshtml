@@ -15,24 +15,9 @@
                     <strong class="text-success">Request Stationaries</strong>
                     <p></p>
                     <hr>
-                    <a href="past_req_list.html" class="btn btn-success btn-sm">View</a>
+                    <a href="@Url.Action("RequisitionList", "DepartmentEmployee")" class="btn btn-success btn-sm">View</a>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <!-- Income-->
-                <div class="card income text-center">
-                    <div class="icon"><i class="icon-list"></i></div>
-                    <strong class="text-success">Disbursement List</strong>
-                    <p></p>
-                    <hr>
-                    <a href="disbur_list.html" class="btn btn-success btn-sm">View</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="container-fluid">
-        <div class="row d-flex">
             <div class="col-lg-6">
                 <!-- Income-->
                 <div class="card income text-center">
@@ -40,11 +25,19 @@
                     <strong class="text-success">Deligations Status</strong>
                     <p></p>
                     <hr>
-                    <a href="delegation_status.html" class="btn btn-success btn-sm">View</a>
+                    <a href="@Url.Action("ViewDelegationStatus", "DepartmentEmployee")" class="btn btn-success btn-sm">View</a>
                 </div>
             </div>
-            @if (rolename == "Representative")
-            {
+
+        </div>
+    </div>
+    <br>
+    @if (rolename == "Representative")
+    {
+        <div class="container-fluid">
+            <div class="row d-flex">
+
+
                 <div class="col-lg-6">
                     <!-- Income-->
                     <div class="card income text-center">
@@ -52,19 +45,10 @@
                         <strong class="text-success">Collection Points</strong>
                         <p></p>
                         <hr>
-                        <a href="delegation_status.html" class="btn btn-success btn-sm">View</a>
+                        <a href="@Url.Action("CollectionPoint", "DepartmentRepresentative")" class="btn btn-success btn-sm">View</a>
                     </div>
+
                 </div>
-            }
-
-        </div>
-
-    </div>
-    <br />
-    @if (rolename == "Representative")
-    {
-        <div class="container-fluid">
-            <div class="row d-flex">
                 <div class="col-lg-6">
                     <!-- Income-->
                     <div class="card income text-center">
@@ -72,12 +56,14 @@
                         <strong class="text-success">Disbursement List</strong>
                         <p></p>
                         <hr>
-                        <a href="delegation_status.html" class="btn btn-success btn-sm">View</a>
+                        <a href="@Url.Action("Disbursement", "DepartmentRepresentative")" class="btn btn-success btn-sm">View</a>
                     </div>
                 </div>
 
             </div>
+
         </div>
     }
-    </section>
+
+</section>
 

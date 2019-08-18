@@ -18,16 +18,13 @@
 
     <div class="card-body">
         <div class="row">
-            <Label class="col-12">Representative - </Label>@Html.Label(representativeName)
-            <Label class="col-12">Collection Point - </Label>@Html.Label(collectionPoint)
-            @using (Html.BeginForm())
-            {
+            <Label class="col-12">Representative - @Html.Label(representativeName)</Label>
+            <Label class="col-12">Collection Point - @Html.Label(collectionPoint)</Label>
+            <form class="form col-12">
                 
                     <div class="col-12 form-group">
-                        <div class="row">
-                            <div class="col-3"></div>
-                            <div class="col-10">
-                                <label class="from-control">Collection Points</label>
+                                <label class="from-control"><b>Collection Points</b></label>
+
                                 <div>
                                     @{
                                         foreach (var cp in collectionPoints)
@@ -38,20 +35,17 @@
                                 </div>
 
                             </div>
-                        </div>
-                    </div>
 
                     <div class="col-12 form-group">
                         <div class="row">
                             <div class="col-4">
-                                <input type="reset" value="Cancel" class="btn btn-danger">
                             </div>
                             <div class="col-4">
                                 <input type="submit" value="Update" class="btn btn-success">
                             </div>
                         </div>
                     </div>
-            }
+            </form>
 
         </div>
     </div>

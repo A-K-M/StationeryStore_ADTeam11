@@ -37,7 +37,7 @@
                                     if (req.Status == "Pending")
                                     {
                                 <td>
-                                    <a href="/DepartmentHead/ViewPendingRequestDetails/@req.RequestId">@req.Status</a>
+                                    <a href="/DepartmentHead/ViewPendingRequestDetails/@req.RequestId" class="btn btn-info btn-sm">@req.Status</a>
                                     @*@Html.ActionLink(req.Status, "ViewPendingRequestDetails", "DepartmentHead", new { reqid = req.RequestId }, null)*@
                                 </td>
                                     }

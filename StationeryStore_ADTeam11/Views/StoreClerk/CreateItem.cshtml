@@ -1,0 +1,111 @@
+﻿@model StationeryStore_ADTeam11.Models.Item
+@using StationeryStore_ADTeam11.Models
+@{
+    ViewBag.Title = "CreateItem";
+    Layout = "~/Views/Shared/_storeClerkLayout.cshtml";
+
+    var categories = (List<Category>)ViewData["catlist"];
+    var suppliers = (List<Supplier>)ViewData["suppliers"];
+}
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>New Item</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("AddItem", "StoreClerk"))
+                     {
+                        <div class="row">
+                            <div class=" col-12 form-group">
+                                <label class="form">Item Id</label>
+                                @Html.TextBoxFor(model => model.Id, new { @class = "form-control" })
+                            </div>
+                        <div class="col-12 form-group">
+                            <label class="from">Category</label>
+                            <select class="form-control" name="CategoryID">
+                                @foreach (var category in categories)
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            </select>
+                           
+                        </div>
+                        <div class="col-4 form-group">
+                            <label class="form">Suppliers 1</label>
+                            
+                            <select class="form-control" name="FirstSupplier">
+                                @foreach (var supplier in suppliers)
+                                {
+                                    <option value="@supplier.Id">@supplier.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="from">Suppliers 2</label>
+                           
+                            <select class="form-control" name="SecondSupplier">
+                                @foreach (var supplier in suppliers)
+                                {
+                                    <option value="@supplier.Id">@supplier.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="from">Suppliers 3</label>
+                            
+                            <select class="form-control" name="ThirdSupplier">
+                                @foreach (var supplier in suppliers)
+                                {
+                                    <option value="@supplier.Id">@supplier.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="from">Price 1</label>
+                            @Html.TextBoxFor(model => model.FirstPrice, new { @class = "form-control"})
+                        </div>
+                        <div class="col-4">
+                            <label class="from">Price 2</label>
+                            @Html.TextBoxFor(model => model.SecondPrice, new { @class = "form-control" })
+                        </div>
+                        <div class="col-4">
+                            <label class="from">Price 3</label>
+                            @Html.TextBoxFor(model => model.ThirdPrice, new { @class = "form-control" })
+                        </div>
+                        <div class=" col-6 form-group">
+                            <label class="from">Reorder Level</label>
+                            @Html.TextBoxFor(model => model.ThresholdValue, new { @class = "form-control" })
+                        </div>
+                        <div class=" col-6 form-group">
+                            <label class="from">Reorder Qty</label>
+                            @Html.TextBoxFor(model => model.ReorderQty, new { @class = "form-control" })
+                        </div>
+                        <div class=" col-12 form-group">
+                            <label class="from">Item Description</label>
+                            @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                        </div>
+                        <div class="col-12 form-group">
+                            <label class="from">Unit of Measurement</label>
+                            @Html.TextBoxFor(model => model.Uom, new { @class = "form-control" })
+                        </div>
+                        <div class="col-12 form-group">
+                            <label class="from">Bin Number</label>
+                            @Html.TextBoxFor(model => model.BinNo, new { @class = "form-control" })
+                        </div>
+                        <div class="col-12 form-group">
+                            <div class="row">
+                                <div class="col-5"></div>
+                                <div class="col-4">
+                                    <input type="submit" value="Create" class="btn btn-outline-success">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

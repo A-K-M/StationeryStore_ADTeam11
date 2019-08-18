@@ -42,7 +42,7 @@
                     <li><a href="@Url.Action("Index", "StoreClerk")"> <i class="icon-home"></i>Home </a></li>
                     <li><a href="approved_request.html"> <i class="icon-list-1"></i>Approved Requests</a></li>
                     <li><a href="@Url.Action("CreateRetrievalList","StoreClerk")"> <i class="icon-padnote"></i>Create Retrieval Form</a></li>
-                    <li><a href="clerk_disbursment.html"> <i class="icon-bill"></i>Disbursment List</a></li>
+                    <li><a href="@Url.Action("ViewDisbursementList", "StoreClerk")"> <i class="icon-bill"></i>Disbursment List</a></li>
                     <li><a href="@Url.Action( "CreateAdjustmentVoucher", "StoreClerk")"> <i class="icon-form"></i>Adjustment Voucher</a></li>
                     <li><a href="clerk_low_stock.html"> <i class="icon-page"></i>Low-stock Items</a></li>
                     <li><a href="@Url.Action( "ViewStockCard", "StoreClerk")"> <i class="icon-website"></i>Stock Card</a></li>
@@ -66,30 +66,6 @@
                         </div>
                         <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
                             <!-- Notifications dropdown-->
-                            <li class="nav-item dropdown">
-                                <a id="notifications" rel="nofollow" data-target="#" href="#"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">
-                                    <i class="fa fa-bell"></i><span class="badge badge-warning">2</span>
-                                </a>
-                                <ul aria-labelledby="notifications" class="dropdown-menu">
-                                    <li>
-                                        <a rel="nofollow" href="#" class="dropdown-item">
-                                            <div class="notification d-flex justify-content-between">
-                                                <div class="notification-content">Sample Notification</div>
-                                                <!--<div class="notification-time"><small>4 minutes ago</small></div>-->
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a rel="nofollow" href="#" class="dropdown-item">
-                                            <div class="notification d-flex justify-content-between">
-                                                <div class="notification-content">Sample Notification</div>
-                                                <!-- <div class="notification-time"><small>4 minutes ago</small></div> -->
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
                             <!-- Log out-->
                             <li class="nav-item">
                                 <a href="@Url.Action("Logout", "Base")" class="nav-link logout">
@@ -102,6 +78,7 @@
             </nav>
         </header>
         <section class="statistics">
+            <br />
             @RenderBody()
 
             @*<div class="container-fluid">

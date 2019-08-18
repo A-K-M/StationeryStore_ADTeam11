@@ -8,7 +8,7 @@
 function loadItems(CategoryID) {
 
     $.ajax({
-        url: "/StoreClerk/GetItemByCategory/" + CategoryID,
+        url: "/DepartmentEmployee/GetItemByCategory/" + CategoryID,
         type: "GET",
         contentType: "application/json;charset=utf-8",
         dataType: "json",

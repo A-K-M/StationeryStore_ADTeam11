@@ -15,34 +15,22 @@ namespace StationeryStore_ADTeam11.DAOs
         public Employee GetEmployeeByUsername(string username)
         {
             Employee employee = null;
-            SqlDataReader reader = null;
             try
             {
                 connection.Open();
                 string sql = @"select id,DeptID,Name,UserName,Password,Email,Role from employee where UserName = @userName";
                 SqlCommand command = new SqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@userName", username);
-                reader = command.ExecuteReader();
-                if (reader.Read())
+                employee = Employee.mapToOBj(command.ExecuteReader());
+                if (employee == null)
                 {
-                    employee = new Employee()
-                    {
-                        Id = (int)reader["id"],
-                        DepartmentId = (string)reader["DeptID"],
-                        Name = (string)reader["Name"],
-                        UserName = (string)reader["UserName"],
-                        Password = (string)reader["Password"],
-                        Email = (string)reader["Email"],
-                        Role = (string)reader["Role"]
-                    };
+                    throw new Exception();
                 }
-              
             }
             catch {
+                return null;
             }
-            finally
-            {
-                if (reader != null) { reader.Close(); }
+            finally {
                 connection.Close();
             }
 
@@ -57,8 +45,7 @@ namespace StationeryStore_ADTeam11.DAOs
             try
             {
                 connection.Open();
-                string sql = @"";
-                sql = @"SELECT RepID FROM Department WHERE ID = @deptId";
+                string sql = @"SELECT RepID FROM Department WHERE ID = @deptId";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@deptId", emp.DepartmentId);
                 reader = cmd.ExecuteReader();
@@ -71,7 +58,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
@@ -82,29 +69,53 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             return false;
         }
+        public Employee login(string userName,string password)
+        {
+            Employee employee = null;
+            SqlConnection conn = connection;
+
+            try
+            {
+                conn.Open();
+                string sql = "spMobileLogin";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@userName", userName);
+                cmd.Parameters.AddWithValue("@password", password);
+                employee = Employee.mapToOBj(cmd.ExecuteReader());
+            }
+            catch
+            {
+                return null;
+            }
+            finally {
+                conn.Close();
+            }
+
+            if (employee != null && employee.Role.Equals(Constant.ROLE_EMPLOYEE))
+            {
+                if (isRepresentative(employee)) employee.Role = Constant.ROLE_REPRESENTATIVE;
+            }
+            return employee;
+
+        }
         public Employee GetEmployeeById(int Id)
         {
             Employee employee = null;
             SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select * from employee where ID = '" + Id + "'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
-            {
-                employee = new Employee()
-                {
-                    Id = (int)reader["id"],
-                    DepartmentId = (string)reader["DeptID"],
-                    Name = (string)reader["Name"],
-                    UserName = (string)reader["UserName"],
-                    Password = (string)reader["Password"],
-                    Email = (string)reader["Email"],
-                    Role = (string)reader["Role"]
-                };
-
+            try  {
+                conn.Open();
+                string sql = @"select * from employee where ID = '" + Id + "'";
+                SqlCommand command = new SqlCommand(sql, conn);
+                employee = Employee.mapToOBj(command.ExecuteReader());
             }
-            conn.Close();
+            catch{
+                return null;
+            }
+            finally {
+                conn.Close();
+            }
+
             if (employee.Role.Equals(Constant.ROLE_EMPLOYEE)) {
                 if (isRepresentative(employee)) employee.Role = Constant.ROLE_REPRESENTATIVE;
             }
@@ -209,6 +220,27 @@ namespace StationeryStore_ADTeam11.DAOs
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@empId", empId);
                 cmd.Parameters.AddWithValue("@deptId", deptId);
+                if ((int)cmd.ExecuteScalar() == 0) throw new Exception();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return true;
+        }
+        public bool checkDelegation(int empId)
+        {
+            try
+            {
+                connection.Open();
+                string sql = @"select count(*) from Delegation where EmpID = " + empId + @"
+                        and (CONVERT(date,getdate()) > StartDate or CONVERT(date,getdate()) = StartDate) 
+                        and (CONVERT(date,getdate()) < EndDate or CONVERT(date,getdate()) = EndDate) ";
+                SqlCommand cmd = new SqlCommand(sql, connection);
                 if ((int)cmd.ExecuteScalar() == 0) throw new Exception();
             }
             catch (Exception e)

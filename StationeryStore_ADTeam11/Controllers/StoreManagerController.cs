@@ -11,26 +11,19 @@ using System.IO;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
-    //[AuthenticationFilter]
-    //[RoleFilter("Manager")]
+    [AuthenticationFilter]
+    [RoleFilter("Manager")]
     [LayoutFilter("_storeManagerLayout")]
     public class StoreManagerController : BaseController
     {
         // GET: StoreManager
         public ActionResult Index()
         {
-            //Session Objects will have to be edited when including session objects later
-            Session["Username"] = "User";
-            Session["Role"] = "Role";
             return View();
         }
 
         public ActionResult Suppliers()
         {
-           
-            Session["Username"] = "User";
-            Session["Role"] = "Role";
-
             List<Supplier> suppliers = new SupplierDAO().GetAllSuppliers();
 
             ViewData["Suppliers"] = suppliers;
@@ -39,17 +32,12 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult CreateSupplier()
         {
-            Session["Username"] = "User";
-            Session["Role"] = "Role";
-
             return View();
         }
 
         public ActionResult AddSupplier(Supplier supplier)
         {
             SupplierDAO suppDAO = new SupplierDAO();
-            Session["Username"] = "User";
-            Session["Role"] = "Role";
 
             bool saved = false;
             //string duplicateMsg = "supplier ID already exist";
@@ -80,20 +68,11 @@ namespace StationeryStore_ADTeam11.Controllers
                 return RedirectToAction("Suppliers");
             }
 
-            //else
-            //{
-            //    ViewData["duplicateMsg"] = duplicateMsg;
-            //}
-
-            //ViewData["saved"] = saved;
-            //return View();
         }
 
         public ActionResult EditSupplier(Supplier supp)
         {
             SupplierDAO suppDAO = new SupplierDAO();
-            Session["Username"] = "User";
-            Session["Role"] = "Role";
 
             Supplier supplier = suppDAO.EditSupplier(supp.Id);
 
@@ -104,8 +83,6 @@ namespace StationeryStore_ADTeam11.Controllers
         public ActionResult UpdateSupplier(Supplier supp)
         {
             SupplierDAO suppDAO = new SupplierDAO();
-            Session["Username"] = "User";
-            Session["Role"] = "Role";
 
             bool updated = suppDAO.UpdateSupplier(supp);
             if (updated)
@@ -116,16 +93,11 @@ namespace StationeryStore_ADTeam11.Controllers
 
             SetFlash(Enums.FlashMessageType.Error, "Failed to update supplier record for Supplier ID: " + supp.Id + ".");
             return RedirectToAction("Suppliers");
-            //ViewData["updated"] = updated;
-            //ViewData["supplier"] = supp;
-            //return View();
         }
 
         public ActionResult DeleteSupplier(string id)
         {
             SupplierDAO suppDAO = new SupplierDAO();
-            Session["Username"] = "User";
-            Session["Role"] = "Role";
 
             bool deleted = suppDAO.DeleteSupplier(id);
             if (deleted)
@@ -136,10 +108,6 @@ namespace StationeryStore_ADTeam11.Controllers
 
             SetFlash(Enums.FlashMessageType.Error, "Supplier record for Supplier ID: " + id + " was not deleted.");
             return RedirectToAction("Suppliers");
-
-            //ViewData["deleted"] = deleted;
-            //ViewData["id"] =id;
-            //return View();
         }
 
         public ActionResult AdjustmentVouchers()

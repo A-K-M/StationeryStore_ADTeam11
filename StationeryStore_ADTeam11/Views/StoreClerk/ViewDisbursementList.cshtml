@@ -38,7 +38,7 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <label class="col-6">Representative :@row.RepName</label>
-                                                    <a href="@Url.Action("EditDisbursementList","StoreClerk" , new { id = row.DeptId} ) " class="btn btn-warning pull-right">Edit</a>
+                                                    <a href="@Url.Action("EditDisbursementList","StoreClerk" , new { dept_id = row.DeptId, dept_name = row.DeptName} ) " class="btn btn-warning pull-right">Edit</a>
                                                     <br />
                                                     <label class="col-6">Department : @row.DeptName</label>
                                                     

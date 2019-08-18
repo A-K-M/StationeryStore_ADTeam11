@@ -29,7 +29,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             SqlDataReader data = cmd.ExecuteReader();
 
-            if (data.Read())
+            while (data.Read())
             {
                 item = new Item()
                 {
@@ -56,6 +56,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             return items;
         }
+
         public string GetItemDescription(string id)
         {
             string itemDescription="";
@@ -76,7 +77,10 @@ namespace StationeryStore_ADTeam11.DAOs
         {
             List<Item> itemList = new List<Item>();
 
-            string sql = @"select id,ThresholdValue from item";
+            string sql = @"select id,ThresholdValue from item
+                            where id not in (SELECT ItemID
+                            FROM PurchaseOrderItem where PurchaseID in (SELECT id
+                            FROM PurchaseOrder where Status = 'Pending')) ";
             SqlCommand cmd = new SqlCommand(sql, connection);
             connection.Open();
             SqlDataReader data = cmd.ExecuteReader();
@@ -105,6 +109,8 @@ namespace StationeryStore_ADTeam11.DAOs
             List<Item> itemList = new List<Item>();
 
             Item item = null;
+            if (ids == "")
+                ids = "'0'";
 
             string sql = @"select i.*, c.name as Category from Item i, Category c 
                     where i.CategoryID = c.ID and 
@@ -238,6 +244,214 @@ namespace StationeryStore_ADTeam11.DAOs
             return itemList;
         }
 
+        public bool RequestReorderItems(int empId, List<PurchaseOrderItem> items)
+        {
+            SqlTransaction transaction = null;
 
+            string status = Constant.STATUS_PENDING;
+
+            try
+            {
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                string purchaseOrderSql = "INSERT INTO PurchaseOrder " +
+                                           "(EmpID, Date, Status) OUTPUT INSERTED.ID " +
+                                            "VALUES (@empId, @date, @status)";
+
+                SqlCommand cmd = new SqlCommand(purchaseOrderSql, connection, transaction);
+
+                cmd.Parameters.AddWithValue("@empId", empId);
+                cmd.Parameters.AddWithValue("@date", DateTime.Now);
+                cmd.Parameters.AddWithValue("@status", status);
+
+                int purchaseOrderId = Convert.ToInt32(cmd.ExecuteScalar());
+
+                string purchaseOrderDetailSql = "";
+
+                foreach (PurchaseOrderItem item in items)
+                {
+                    purchaseOrderDetailSql += "INSERT INTO PurchaseOrderItem " +
+                                                "(PurchaseID, ItemID, Description, Qty, Status) " +
+                                                $" VALUES ({purchaseOrderId}, '{item.ItemId}', '{item.Description}', {item.Qty}, 'Pending');";
+                }
+
+                cmd = new SqlCommand(purchaseOrderDetailSql, connection, transaction);
+
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return true;
+        }
+
+        public bool UpdateItemSupplier(Item updItem, int suppOrder)
+        {
+            bool success;
+            string sqlUpdateItemSupp = null;
+
+            if (suppOrder == 1)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET FirstSupplier = '" + updItem.FirstSupplier + "', "
+                    + "FirstPrice = " + updItem.FirstPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+            else if (suppOrder == 2)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET SecondSupplier = '" + updItem.SecondSupplier + "', "
+                    + "SecondPrice = " + updItem.SecondPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+            else if (suppOrder == 3)
+            {
+                sqlUpdateItemSupp = @"UPDATE Item SET ThirdSupplier = '" + updItem.ThirdSupplier + "', "
+                    + "ThirdPrice = " + updItem.ThirdPrice + " WHERE Item.ID = '" + updItem.Id + "'";
+            }
+
+            try
+            {
+                connection.Open();
+
+                SqlCommand cmd = new SqlCommand(sqlUpdateItemSupp, connection);
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+
+                success = true;
+            }
+            catch (Exception e)
+            {
+                success = false;
+            }
+
+            return success;
+        }
+
+        //DELETE FROM HERE IF SOMETHING WENT WRONG
+        public List<Item> GetAllItemsNM()
+        {
+            List<Item> items = new List<Item>();
+
+            Item item = null;
+
+            string sql = "SELECT * FROM Item";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                item = new Item()
+                {
+                    Id = data["ID"].ToString(),
+                    CategoryId = Convert.ToInt32(data["CategoryID"]),
+                    Description = data["Description"].ToString(),
+                    ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
+                    ReorderQty = Convert.ToInt32(data["ReorderQty"]),
+                    Uom = data["UOM"].ToString(),
+                    BinNo = data["BinNo"].ToString(),
+                    FirstSupplier = data["FirstSupplier"].ToString(),
+                    FirstPrice = Convert.ToDouble(data["FirstPrice"]),
+                    SecondSupplier = data["SecondSupplier"].ToString(),
+                    SecondPrice = Convert.ToDouble(data["SecondPrice"]),
+                    ThirdSupplier = data["ThirdSupplier"].ToString(),
+                    ThirdPrice = Convert.ToDouble(data["ThirdPrice"])
+                };
+
+                items.Add(item);
+            }
+
+            data.Close();
+            connection.Close();
+
+            return items;
+        }
+
+        public Item GetItemByIdNM(string id)
+        {
+
+
+            Item item = null;
+
+            string sql = "SELECT * FROM Item WHERE Id ='" + id + "'";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            connection.Open();
+
+            SqlDataReader data = cmd.ExecuteReader();
+
+            while (data.Read())
+            {
+                item = new Item()
+                {
+                    CategoryId = Convert.ToInt32(data["CategoryID"]),
+                    Description = data["Description"].ToString(),
+                    ThresholdValue = Convert.ToInt32(data["ThresholdValue"]),
+                    ReorderQty = Convert.ToInt32(data["ReorderQty"]),
+                    Uom = data["UOM"].ToString(),
+                    BinNo = data["BinNo"].ToString(),
+                    FirstSupplier = data["FirstSupplier"].ToString(),
+                    FirstPrice = Convert.ToDouble(data["FirstPrice"]),
+                    SecondSupplier = data["SecondSupplier"].ToString(),
+                    SecondPrice = Convert.ToDouble(data["SecondPrice"]),
+                    ThirdSupplier = data["ThirdSupplier"].ToString(),
+                    ThirdPrice = Convert.ToDouble(data["ThirdPrice"])
+                };
+
+
+            }
+
+            data.Close();
+            connection.Close();
+
+            return item;
+        }
+        public void AddItem(Item itm)
+        {
+            Item item = new Item();
+            item = itm;
+            string sql = "INSERT INTO Item (ID,CategoryID,Description,ThresholdValue,ReorderQty,UOM,BinNo,FirstSupplier,FirstPrice,SecondSupplier,SecondPrice,ThirdSupplier,ThirdPrice) VALUES ('" +
+                  item.Id + "'," + item.CategoryId + ",'" + item.Description +
+                  "'," + item.ThresholdValue + "," + item.ReorderQty +
+                  ",'" + item.Uom + "','" + item.BinNo + "','" + item.FirstSupplier + "',"
+                  + item.FirstPrice + ",'" + item.SecondSupplier + "'," + item.SecondPrice + ",'"
+                  + item.ThirdSupplier + "'," + item.ThirdPrice + ")";
+
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+            cmd.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public void EditItem(Item item, string id)
+        {
+            string sql = "UPDATE Item SET CategoryID= " + item.CategoryId + ",Description = '"
+                + item.Description + "',ThresholdValue = " + item.ThresholdValue +
+                ",ReorderQty= " + item.ReorderQty + ",UOM= '" + item.Uom + "',BinNo= '" +
+                item.BinNo + "',FirstSupplier= '" + item.FirstSupplier + "',FirstPrice= " +
+                item.FirstPrice + ",SecondSupplier= '" + item.SecondSupplier + "',SecondPrice= " +
+                item.SecondPrice + ",ThirdSupplier= '" + item.ThirdSupplier + "',ThirdPrice= " +
+                item.ThirdPrice + " WHERE ID = '" + id + "'";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+            cmd.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        //NANT MOE'S CODES END HERE
     }
 }

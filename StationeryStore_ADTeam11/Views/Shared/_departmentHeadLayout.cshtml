@@ -37,9 +37,9 @@
             <div class="main-menu">
                 <h5 class="sidenav-heading">Main</h5>
                 <ul id="side-main-menu" class="side-menu list-unstyled">
-                    <li><a href="/DepartmentHead/Index"> <i class="icon-home"></i>Home </a></li>
-                    <li><a href="/DepartmentHead/Delegation"> <i class="fas fa-user"></i>Deligation </a></li>
-                    <li><a href="/DepartmentHead/ReviewStationeryRequest"> <i class="fa fa-file-alt"></i>Stationary Requests </a></li>
+                    <li><a href="@Url.Action("Index", "DepartmentHead")"> <i class="icon-home"></i>Home </a></li>
+                    <li><a href="@Url.Action("Delegation", "DepartmentHead")"> <i class="fas fa-user"></i>Deligation </a></li>
+                    <li><a href="@Url.Action("ReviewStationeryRequest", "DepartmentHead")"> <i class="fa fa-file-alt"></i>Stationary Requests </a></li>
                     @*<li><a href="emp_list.html"> <i class="fa fa-users"></i>Employees </a></li>*@
                     <li><a href="/DepartmentHead/CollectionPoint"> <i class="fa fa-map-marker-alt"></i>Collection Points </a></li>
                 </ul>
@@ -64,34 +64,11 @@
                         </div>
                         <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
                             <!-- Notifications dropdown-->
-                            <li class="nav-item dropdown">
-                                <a id="notifications" rel="nofollow" data-target="#" href="#"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">
-                                    <i class="fa fa-bell"></i><span class="badge badge-warning">2</span>
-                                </a>
-                                <ul aria-labelledby="notifications" class="dropdown-menu">
-                                    <li>
-                                        <a rel="nofollow" href="#" class="dropdown-item">
-                                            <div class="notification d-flex justify-content-between">
-                                                <div class="notification-content"></i>Sample Notification</div>
-                                                <!--<div class="notification-time"><small>4 minutes ago</small></div>-->
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a rel="nofollow" href="#" class="dropdown-item">
-                                            <div class="notification d-flex justify-content-between">
-                                                <div class="notification-content"></i>Sample Notification</div>
-                                                <!-- <div class="notification-time"><small>4 minutes ago</small></div> -->
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                           
                             <!-- Log out-->
                             <li class="nav-item">
                                 <a href="@Url.Action("Logout", "Base")" class="">
-                                    <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out-alt"></i>
+                                    <span class="d-none d-sm-inline-block">Logout </span><i class="fa fa-sign-out-alt"></i>
                                 </a>
                             </li>
                         </ul>
