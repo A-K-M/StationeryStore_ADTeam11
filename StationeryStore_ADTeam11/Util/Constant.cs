@@ -12,7 +12,7 @@ namespace StationeryStore_ADTeam11.MobileModels
         public  const string  STATUS_APPROVE = "Approved";
         public  const string  STATUS_REJECT = "Rejected";
         public  const string STATUS_Cancel = "Cancel";
-        public  const string STATUS_Complete = "Complete";
+        public  const string STATUS_Complete = "Completed";
 
 
         public  const string ROLE_MANAGER = "Manager";

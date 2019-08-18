@@ -51,7 +51,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 if (newDelegationId == 0) throw new Exception();
 
                 SqlCommand cmd2 = new SqlCommand("UPDATE Department SET DelegateID = @delegateId WHERE HeadID = @id", connection, transaction);
-                cmd2.Parameters.AddWithValue("@status", Constant.STATUS_PENDING);
+                cmd2.Parameters.AddWithValue("@status", Constant.STATUS_ONGOING);
                 cmd2.Parameters.AddWithValue("@delegateId",newDelegationId);
                 cmd2.Parameters.AddWithValue("@id", headId);
                 if (cmd2.ExecuteNonQuery() == 0) throw new Exception();
@@ -81,9 +81,10 @@ namespace StationeryStore_ADTeam11.DAOs
                 connection.Open();
                 transaction = connection.BeginTransaction();
 
-                string sql = @"UPDATE Department SET DelegateID = 0 WHERE HeadID = @headId";
+                string sql = @"UPDATE Department SET DelegatedStatus = @status WHERE HeadID = @headId";
                 SqlCommand cmd = new SqlCommand(sql, connection, transaction);
                 cmd.Parameters.AddWithValue("@headId", headId);
+                cmd.Parameters.AddWithValue("@status", Constant.STATUS_Complete);
 
                 if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
@@ -144,7 +145,7 @@ namespace StationeryStore_ADTeam11.DAOs
                     DateTime endDate = (DateTime)reader["EndDate"];
                     reader.Close();
                     if (DateTime.Today.CompareTo(endDate) > 0) {
-                        string status = "Completed";
+                        string status = Constant.STATUS_Complete;
                         sql = "UPDATE Department SET DelegatedStatus = @status WHERE ID = @Id";
                         //sql = "UPDATE Department SET DelegateId = 0 WHERE ID = @Id";
                         SqlCommand cmd = new SqlCommand(sql, connection);
