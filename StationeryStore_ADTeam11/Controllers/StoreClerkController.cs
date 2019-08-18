@@ -577,7 +577,13 @@ namespace StationeryStore_ADTeam11.Controllers
                     item.CategoryId =catList[i].Id;
                 }
             }
-            it.AddItem(item);
+            if (it.AddItem(item))
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Successfully inserted!");
+                return RedirectToAction("ViewItems", "StoreClerk");
+            }
+
+            SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
             return RedirectToAction("ViewItems", "StoreClerk");
         }
 
