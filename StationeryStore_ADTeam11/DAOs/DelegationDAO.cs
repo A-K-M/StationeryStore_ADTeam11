@@ -33,7 +33,7 @@ namespace StationeryStore_ADTeam11.DAOs
         }
 
       
-        public bool InsertDelegation(Delegation del, int headId) {
+        public bool InsertDelegation(Delegation del, string  deptId) {
 
             SqlTransaction transaction = null;
             int newDelegationId = 0;
@@ -50,10 +50,10 @@ namespace StationeryStore_ADTeam11.DAOs
                 newDelegationId =(Int32) cmd1.ExecuteScalar() ;
                 if (newDelegationId == 0) throw new Exception();
 
-                SqlCommand cmd2 = new SqlCommand("UPDATE Department SET DelegateID = @delegateId WHERE HeadID = @id", connection, transaction);
+                SqlCommand cmd2 = new SqlCommand("UPDATE Department SET DelegateID = @delegateId , Status = @status WHERE ID = @id", connection, transaction);
                 cmd2.Parameters.AddWithValue("@status", Constant.STATUS_ONGOING);
                 cmd2.Parameters.AddWithValue("@delegateId",newDelegationId);
-                cmd2.Parameters.AddWithValue("@id", headId);
+                cmd2.Parameters.AddWithValue("@id", deptId);
                 if (cmd2.ExecuteNonQuery() == 0) throw new Exception();
 
                 transaction.Commit();
@@ -72,23 +72,25 @@ namespace StationeryStore_ADTeam11.DAOs
             return true;
 
         }
-        public bool CancelDelegation(int headId,int delegationId)
+        public bool CancelDelegation(string deptId,int delegationId)
         {
             SqlTransaction transaction = null;
-                 
+            DateTime now = DateTime.Now;
+
+            string sqlFormattedDate = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
             try
             {
                 connection.Open();
                 transaction = connection.BeginTransaction();
 
-                string sql = @"UPDATE Department SET DelegatedStatus = @status WHERE HeadID = @headId";
+                string sql = @"UPDATE Department SET DelegatedStatus = @status WHERE ID = @id";
                 SqlCommand cmd = new SqlCommand(sql, connection, transaction);
-                cmd.Parameters.AddWithValue("@headId", headId);
+                cmd.Parameters.AddWithValue("@id", deptId);
                 cmd.Parameters.AddWithValue("@status", Constant.STATUS_Complete);
 
                 if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
-                sql = @"UPDATE Delegation SET EndDate = '" + DateTime.Today + "' where ID = @delegationId";
+                sql = @"UPDATE Delegation SET EndDate = '" +sqlFormattedDate + "' where ID = @delegationId";
                 cmd = new SqlCommand(sql, connection, transaction);
                 cmd.Parameters.AddWithValue("@delegationId", delegationId);
 
