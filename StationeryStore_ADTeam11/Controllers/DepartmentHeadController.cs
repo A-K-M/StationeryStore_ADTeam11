@@ -90,6 +90,13 @@ namespace StationeryStore_ADTeam11.Controllers
 
                     return RedirectToAction("Delegation", "DepartmentHead");
                 }
+                ///// start Email /////
+                EmailDAO emailDAO = new EmailDAO();
+                Employee employee = emailDAO.EmailDelegation(delegation.EmployeeId);
+                Email email = new Email();
+                email.SendEmail(employee.Email, "Delegation", "Please Check delegation status");
+                ///////////////////////
+                ///
                 SetFlash(Enums.FlashMessageType.Success, "Authourity successfully granted!");
                 //delegationDAO.CreateDelegation(delegation);
                 //departmentDAO.UpdateDepartmentDelegation(deptId, delegation.EmployeeId, status);
@@ -101,15 +108,23 @@ namespace StationeryStore_ADTeam11.Controllers
         public ActionResult CancelDelegation(int Id)
         {
             deptId = GetDeptId();
+            DelegationDAO delegationDAO = new DelegationDAO();
             //status = "completed";
             //departmentDAO.UpdateDepartmentDelegation(deptId, delegationDAO.GetDelegationById(Id).EmployeeId, status);
             //delegationDAO.CancelDelegation(Id);
-            if(!departmentDAO.CancelDelegation(deptId, Id))
+            if (!departmentDAO.CancelDelegation(deptId, Id))
             {
                 SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
 
                 return RedirectToAction("Delegation", "DepartmentHead");
             }
+            ///// start Email /////
+            Delegation delegation = delegationDAO.GetDelegationById(Id);
+            EmailDAO emailDAO = new EmailDAO();
+            Employee employee = emailDAO.EmailDelegation(delegation.EmployeeId);
+            Email email = new Email();
+            email.SendEmail(employee.Email, "Delegation", "Dear " + delegation.EmployeeName + ",Please Check delegation status");
+            ///////////////////////
             SetFlash(Enums.FlashMessageType.Success, "You've cancelled Authority Delegation!");
 
             return RedirectToAction("Delegation", "DepartmentHead");
