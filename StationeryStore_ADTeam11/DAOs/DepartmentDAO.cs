@@ -177,7 +177,9 @@ namespace StationeryStore_ADTeam11.DAOs
 
                 if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
-                sql = @"UPDATE Delegation SET EndDate = '" + DateTime.Now + "' where ID = @delegationId";
+                DateTime now = DateTime.Now;
+                string sqlFormattedDate = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                sql = @"UPDATE Delegation SET EndDate = '" + sqlFormattedDate + "' where ID = @delegationId";
                 cmd = new SqlCommand(sql, connection, transaction);
                 cmd.Parameters.AddWithValue("@delegationId", delegationId);
 
