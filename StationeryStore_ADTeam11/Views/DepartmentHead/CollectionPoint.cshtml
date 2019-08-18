@@ -24,7 +24,9 @@
                     <div class="row">
                         <Label class="col-12">Representative - @Html.Label(representativeName)</Label>
                         <Label class="col-12">Collection Point - @Html.Label(collectionPoint)</Label>
-                        <form class="form col-12">
+                        @using (Html.BeginForm())
+                        {
+                            @*<form class="form col-12">*@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-12">
@@ -42,18 +44,18 @@
                                                 <label class="from-control"><b>Representative</b></label>
                                                 @*@{
 
-                foreach (var emp in employees)
-                {
-                    if (emp.Value == Request["employees"])
-                    {
-                        emp.Selected = true;
-                        break;
-                    }
-                }
-            }*@
+                                    foreach (var emp in employees)
+                                    {
+                                        if (emp.Value == Request["employees"])
+                                        {
+                                            emp.Selected = true;
+                                            break;
+                                        }
+                                    }
+                                }*@
                                                 @{
                                                     var emps = new List<SelectListItem>{ new SelectListItem{ Text="Select Employee Name",
-                                                              Value = "0" , Disabled = true, Selected = true}, };
+                                                                                                  Value = "0" , Disabled = true, Selected = true}, };
                                                     foreach (var e in employees)
                                                     {
                                                         emps.Add(e);
@@ -62,15 +64,15 @@
                                                 @Html.DropDownListFor(model => model.RepName, emps, new { @class = "form-control" })
                                             </div>
                                         </div>
-                                       
+
 
                                     </div>
                                 </div>
                             </div>
 
-                           
-                             
-                           
+
+
+
 
                             <div class="col-12 form-group">
                                 <div class="row">
@@ -84,10 +86,12 @@
                                     </div>
                                 </div>
                             </div>
+                        }
 
-                        </form>
-                            
-                        
+
+                        @*</form>*@
+
+
 
                     </div>
                 </div>
