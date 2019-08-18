@@ -47,7 +47,6 @@
                     <li><a href="@Url.Action("Index", "DepartmentEmployee")"> <i class="icon-home"></i>Home </a></li>
                     <li><a href="@Url.Action("ViewDelegationStatus", "DepartmentEmployee")"> <i class="icon-user"></i>Deligation Status</a></li>
                     <li><a href="@Url.Action("RequisitionList", "DepartmentEmployee")"> <i class="icon-pencil-case"></i>Request Stationaries</a></li>
-                    <li><a href="disbur_list.html"> <i class="icon-list"></i>Disbursement List</a></li>
                 </ul>
             </div>
             @if (Session["delegation"].ToString() == "Yes")
@@ -55,7 +54,7 @@
                 <div class="admin-menu">
                     <h5 class="sidenav-heading">Delegated</h5>
                     <ul id="side-admin-menu" class="side-menu list-unstyled">
-                        <li><a href="emp_stationary.html"> <i class="fa fa-file-alt"></i>Stationary Requests </a></li>
+                        <li><a href="@Url.Action("ReviewStationeryRequest","DepartmentEmployee")"> <i class="fa fa-file-alt"></i>Stationary Requests </a></li>
                     </ul>
                 </div>
             }

@@ -1,0 +1,70 @@
+﻿@using StationeryStore_ADTeam11.View_Models
+@{
+    ViewBag.Title = "ViewPendingRequestDetails";
+    var penReqList = (List<StationeryRequest>)ViewData["PendingRequests"];
+
+    int reqId = penReqList.First().RequestId;
+}
+
+<h2>ViewPendingRequestDetails</h2>
+
+<br>
+<section class="statistics">
+    <div class="container-fluid">
+        <div class="row d-flex">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Request Detail</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <Label class="col-12">              </Label>
+                            <div class="col-12">
+                                <table class="table  table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Stationary Name</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            @:<tr>
+                                            @:<tr>
+                                                {
+                                                    foreach (var req in penReqList)
+                                                    {
+                                                    <tr>
+                                                        <td>@req.Description</td>
+                                                        <td>@req.TotalItem</td>                                                       
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-6"></div>
+                            <div class="col-6"></div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6"></div>
+                                    <div class="col-3">
+                                        @*<button class="btn btn-outline-danger">Reject</button>*@
+                                        @*<a href="/DepartmentHead/ApproveRejectRequest/Reject" class="btn btn-outline-danger">Reject</a>*@
+                                        @*<button onclick="@Url.Action("ApproveRejectRequest", "DepartmentHead", new {status = "Reject" })">Reject</button>*@
+                                        @Html.ActionLink("Reject", "ApproveRejectRequest", "DepartmentEmployee", new { status = "Rejected" , reqid = reqId }, new {@class = "btn btn-danger"})
+                                    </div>
+                                    <div class="col-3">
+                                        @Html.ActionLink("Approve", "ApproveRejectRequest", "DepartmentEmployee", new { status = "Approved", reqid = reqId }, new { @class = "btn btn-success" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+</section>

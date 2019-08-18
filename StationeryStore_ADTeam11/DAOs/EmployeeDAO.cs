@@ -237,11 +237,15 @@ namespace StationeryStore_ADTeam11.DAOs
             try
             {
                 connection.Open();
-                string sql = @"select count(*) from Delegation where EmpID = " + empId + @"
-                        and (CONVERT(date,getdate()) > StartDate or CONVERT(date,getdate()) = StartDate) 
-                        and (CONVERT(date,getdate()) < EndDate or CONVERT(date,getdate()) = EndDate) ";
+                string sql = @"SELECT dl.EmpID
+                            FROM Department as d, Delegation as dl, Employee as e
+                            WHERE d.DelegateID=dl.ID and d.DelegatedStatus='Ongoing' and e.DeptID=d.ID and e.ID ="+ empId + "";
                 SqlCommand cmd = new SqlCommand(sql, connection);
-                if ((int)cmd.ExecuteScalar() == 0) throw new Exception();
+
+                if ((int)cmd.ExecuteScalar() != empId)
+                {
+                    throw new Exception();
+                }
             }
             catch (Exception e)
             {

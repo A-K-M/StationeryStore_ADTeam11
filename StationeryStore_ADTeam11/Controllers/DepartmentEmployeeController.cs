@@ -11,10 +11,14 @@ using StationeryStore_ADTeam11.Util;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
+
+    [AuthenticationFilter]
+    [RoleFilter("Employee,Representative")]
     [LayoutFilter("_deptartmentEmployeeLayout")]
     public class DepartmentEmployeeController : BaseController
     {
         // GET: DepartmentEmployee
+
         public ActionResult Index()
         {
             return View();
@@ -143,5 +147,38 @@ namespace StationeryStore_ADTeam11.Controllers
         }
 
         //******************************************//
+
+
+
+        [RoleFilter("Representative")]
+        public ActionResult ReviewStationeryRequest()
+        {
+            RequestDAO reqlist = new RequestDAO();
+            ViewData["reqlist"] = reqlist.GetRequestList();
+            return View();
+        }
+
+        [RoleFilter("Representative")]
+        public ActionResult ViewPendingRequestDetails(int id)
+        {
+            RequestDAO requestDAO = new RequestDAO();
+            ViewData["PendingRequests"] = requestDAO.ViewPendingRequestDetails(id);
+
+            return View();
+        }
+
+        [RoleFilter("Representative")]
+        public ActionResult ApproveRejectRequest(string status, int reqId)
+        {
+            RequestDAO chngStatus = new RequestDAO();
+            chngStatus.UpdateStatus(status, reqId);
+            EmailDAO emailDAO = new EmailDAO();
+            Employee employee = emailDAO.EmailRequestStatus(reqId);
+            string sender = Session["username"].ToString();
+            Email email = new Email();
+            email.SendEmail(employee.Email, "Requesation Status", "Dear" + employee.Name + ",   \n Please check for Requestsation status. Regards,\n" + sender);
+            return RedirectToAction("ReviewStationeryRequest", "DepartmentEmployee");
+
+        }
     }
 }

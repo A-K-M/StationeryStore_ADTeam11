@@ -12,7 +12,7 @@ namespace StationeryStore_ADTeam11.DAOs
     {
         protected SqlConnection connection;
 
-        private string _connectionString = "SERVER=DESKTOP-7S8BJH3;DATABASE=StationeryInventory; Integrated Security=true";
+        private string _connectionString = "SERVER=DESKTOP-KO5CS62;DATABASE=StationeryInventory; Integrated Security=true";
 
         public DatabaseConnection()
         {
