@@ -334,72 +334,22 @@ namespace StationeryStore_ADTeam11.Controllers
         public ActionResult CreateRetrieval()
         {
             string username = Session["username"].ToString();
-            string ItemId;
-            int retrieved;
+            List<Retrieval> r_list = new List<Retrieval>();
             foreach (string key in Request.Form.AllKeys)
             {
-                string out_ids = "";
-                string req_ids = "";
-                string ir_query = "";
-                ItemId = Convert.ToString(key);
-                retrieved = Convert.ToInt32(Request[key]);
-                RetrievalDAO retrieval = new RetrievalDAO();
-                retrieval.CreateRetrieval(username, ItemId, retrieved);
-
-                List<Outstanding> out_list = retrieval.GetPendingOutstandingsListByItemId(ItemId);
-                if (out_list != null)
-                {
-                    foreach (Outstanding row in out_list)
-                    {
-                        int real = 0;
-                        if (retrieved > 0)
-                        {
-                            real = retrieved;
-                        }
-                        retrieved -= row.RemainingQty;
-                        if (retrieved >= 0)
-                        {
-                            out_ids += row.Id.ToString() + ", ";
-                            real = retrieved;
-                        }
-                    }
-                    out_ids = out_ids.TrimEnd(',', ' ');
-                    if (out_ids != "")
-                        retrieval.UpdateOutstanding(out_ids);
-                }
-
-
-                List<ItemRequest> request_list = retrieval.GetReqDeptListByItemId(ItemId);
-                if (request_list != null && retrieved > 0)
-                {
-                    foreach (ItemRequest request in request_list)
-                    {
-                        int real = 0;
-                        if (retrieved > 0)
-                        {
-                            real = retrieved;
-                        }
-                        retrieved -= request.NeededQty;
-                        if (retrieved >= 0)
-                        {
-                            req_ids += request.RequestId.ToString() + ", ";
-                            real = retrieved;
-                            retrieval.UpdateItemRequest(request.Id, request.NeededQty);
-                        }
-                        else
-                        {
-                            ir_query += retrieval.CreateOutstandingQuery(request.Id, request.NeededQty - real);
-                            retrieval.UpdateItemRequest(request.Id, real);
-                        }
-                    }
-                    req_ids = req_ids.TrimEnd(',', ' ');
-                    if (req_ids != "")
-                        retrieval.UpdateRequestStatus(req_ids);
-                    if (ir_query != "")
-                        retrieval.CreateOutstanding(ir_query);
-                }
-
+                Retrieval r = new Retrieval();
+                r.ItemId = Convert.ToString(key);
+                r.RetrievalQty = Convert.ToInt32(Request[key]);
+                r_list.Add(r);
             }
+
+            EmployeeDAO e = new EmployeeDAO();
+            Employee e_info = e.GetEmployeeByUsername(username);
+
+            RetrievalDAO retrieval = new RetrievalDAO();
+
+            retrieval.CreateRetrieval(e_info.Id, r_list);
+
             return RedirectToAction("ViewRetrievalList");
         }
 
@@ -439,6 +389,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return View(list);
 
         }
+
         [HttpGet]
         public ActionResult ViewDisbursementList()
         {

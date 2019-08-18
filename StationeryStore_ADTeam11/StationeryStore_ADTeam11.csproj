@@ -430,6 +430,7 @@
     <Content Include="Statics\vendor\jquery.cookie\jquery.cookie.js" />
     <Content Include="Statics\vendor\jquery.cookie\MIT-LICENSE.txt" />
     <Content Include="Statics\vendor\jquery\core.js" />
+    <Content Include="Statics\vendor\jquery\jquery-3.4.1.min.js" />
     <Content Include="Statics\vendor\jquery\jquery.js" />
     <Content Include="Statics\vendor\jquery\jquery.min.js" />
     <Content Include="Statics\vendor\jquery\jquery.slim.js" />

@@ -15,6 +15,18 @@
     <link href="~/Statics/css/style.default.css" rel="stylesheet" />
     <link href="~/Statics/css/fa-all.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/datatables.min.css" />
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/datatables.min.js"></script>
+
+
+
+
+
 </head>
 
 <body>
@@ -40,16 +52,16 @@
                 <h5 class="sidenav-heading">Main</h5>
                 <ul id="side-main-menu" class="side-menu list-unstyled">
                     <li><a href="@Url.Action("Index", "StoreClerk")"> <i class="icon-home"></i>Home </a></li>
-                    <li><a href="approved_request.html"> <i class="icon-list-1"></i>Approved Requests</a></li>
+                    <li><a href="@Url.Action("ApprovedRequests", "StoreClerk")"> <i class="icon-list-1"></i>Approved Requests</a></li>
                     <li><a href="@Url.Action("CreateRetrievalList","StoreClerk")"> <i class="icon-padnote"></i>Create Retrieval Form</a></li>
                     <li><a href="@Url.Action("ViewDisbursementList", "StoreClerk")"> <i class="icon-bill"></i>Disbursment List</a></li>
                     <li><a href="@Url.Action( "CreateAdjustmentVoucher", "StoreClerk")"> <i class="icon-form"></i>Adjustment Voucher</a></li>
-                    <li><a href="clerk_low_stock.html"> <i class="icon-page"></i>Low-stock Items</a></li>
+                    <li><a href="@Url.Action("ViewLowStockItems", "StoreClerk")"> <i class="icon-page"></i>Low-stock Items</a></li>
                     <li><a href="@Url.Action( "ViewStockCard", "StoreClerk")"> <i class="icon-website"></i>Stock Card</a></li>
-                    <li><a href="clerk_suppliers.html"> <i class="icon-user"></i>Suppliers</a></li>
+                    <li><a href="@Url.Action("ItemSuppliers", "StoreClerk")"> <i class="icon-user"></i>Suppliers</a></li>
                     <li><a href="clerk_item_list.html"> <i class="icon-pencil-case"></i>Items</a></li>
                     <li><a href="clerk_category.html"> <i class="icon-bars"></i>Categories</a></li>
-                    <li><a href="clerk_purchase_order.html"> <i class="icon-list"></i>Purchase Orders</a></li>
+                    <li><a href="@Url.Action("PurchaseOrderHistory", "StoreClerk")"> <i class="icon-list"></i>Purchase Orders</a></li>
                 </ul>
             </div>
         </div>
@@ -92,15 +104,15 @@
                 </div>*@
         </section>
     </div>
-    <script src="~/Statics/vendor/jquery/jquery.min.js"></script>
-    <script src="~/Statics/vendor/popper.js/umd/popper.min.js"></script>
     <script src="~/Statics/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="~/Statics/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
-    <script src="~/Statics/vendor/jquery.cookie/jquery.cookie.js"></script>
-    <script src="~/Statics/vendor/chart.js/Chart.min.js"></script>
-    <script src="~/Statics/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="~/Statics/js/charts-home.js"></script>
+
+
+
+   
+
+
+
 
     @RenderSection("Scripts", false)
 </body>

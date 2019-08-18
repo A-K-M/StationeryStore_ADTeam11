@@ -41,9 +41,21 @@ namespace StationeryStore_ADTeam11.Controllers
                 Success = true
             };
         }
+        [Route("{clerkId}/{deptId}/disbursements")]
+        [HttpPost]
+        public MResponse UpdateDisbursementInfo(string deptId,int clerdId, List<ItemRequest> items)
+        {
+            
+            return new MResponseListAndObj<ItemRequest, CollectionPoint>()
+            {
+                Success = true
+            };
+        }
+
+
 
         [Route("{deptId}/disbursements/approve")]
-        [HttpPost]
+        [HttpGet]
         public MResponse ApproveDisbursement(string deptId) {
             DisbursementDAO dao = new DisbursementDAO();
             return new MResponse() { Success = dao.ApproveDisbursement(deptId) };
