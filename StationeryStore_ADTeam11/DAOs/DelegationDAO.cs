@@ -51,7 +51,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 if (newDelegationId == 0) throw new Exception();
 
                 SqlCommand cmd2 = new SqlCommand("UPDATE Department SET DelegateID = @delegateId WHERE HeadID = @id", connection, transaction);
-                //cmd2.Parameters.AddWithValue("@status", Constant.STATUS_PENDING);
+                cmd2.Parameters.AddWithValue("@status", Constant.STATUS_PENDING);
                 cmd2.Parameters.AddWithValue("@delegateId",newDelegationId);
                 cmd2.Parameters.AddWithValue("@id", headId);
                 if (cmd2.ExecuteNonQuery() == 0) throw new Exception();
@@ -134,7 +134,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 }
                 reader.Close();
                 sql = @"SELECT de.ID delegateId,de.EndDate FROM Delegation de,Department d
-                        WHERE d.DelegateID = de.ID AND d.ID = @deptId";
+                        WHERE d.DelegateID = de.ID AND d.ID = @deptId AND d.DelegatedStatus=Ongoing";
                 command = new SqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@deptId", deptId);
                 reader = command.ExecuteReader();

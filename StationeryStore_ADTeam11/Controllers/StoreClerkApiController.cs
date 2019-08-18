@@ -74,6 +74,17 @@ namespace StationeryStore_ADTeam11.Controllers
             return new MResponseList<MDisbursement>() { ResList = retrievals };
         }
 
+        [Route("{clerkId}/{deptId}/disbursements")]
+        [HttpPost]
+        public MResponse UpdateDisbursementInfo(int clerkId,string deptId, List<ItemRequest> items)
+        {
+            bool success = new DisbursementDAO().UpdateDisbursement(deptId, clerkId, items);
+            return new MResponseListAndObj<ItemRequest, CollectionPoint>()
+            {
+                Success = success
+            };
+        }
+
         [Route("{clerkId}/collectionPoints")]
         [HttpGet]
         public MResponse GetCollectionPoints(int clerkId)
