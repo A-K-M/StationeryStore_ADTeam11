@@ -24,6 +24,14 @@
     <link href="~/Statics/css/style.default.css" rel="stylesheet" />
     <link href="~/Statics/css/fa-all.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/datatables.min.css" />
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/datatables.min.js"></script>
 </head>
 
 <body>
@@ -51,7 +59,7 @@
                     <li><a href="@Url.Action("ReorderStockList", "StoreSupervisor")"> <i class="icon-bill"></i>Reorder Stock List</a></li>
                     <li><a href="@Url.Action("AdjustmentVouchers", "StoreSupervisor")"> <i class="fa fa-file-alt"></i>Adjustment Vouchers </a></li>
                     <li>
-                        <a href="@Url.Action("AdjustmentVouchers", "StoreSupervisor")">
+                        <a href="@Url.Action("ViewCharts", "StoreSupervisor")">
                             <i class="icon-presentation"></i>Create Barchart
                         </a>
                     </li>
