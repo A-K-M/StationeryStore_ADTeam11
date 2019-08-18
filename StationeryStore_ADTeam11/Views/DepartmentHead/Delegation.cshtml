@@ -39,12 +39,12 @@
             <div class="form-group row">
                 <div class="col-6">
                     <label class="from">From</label>
-                    @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control" ,type="Date"})
                     @*<input id="dele_startdate" type="Date" class="form-control">*@
                 </div>
                 <div class="col-6">
                     <label class="from">To</label>
-                    @Html.TextBoxFor(model => model.EndDate, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.EndDate, new { @class = "form-control", type = "Date" })
                     @*<input id="dele_enddate" type="date" class="form-control">*@
                 </div>
             </div>

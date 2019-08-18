@@ -17,7 +17,7 @@ namespace StationeryStore_ADTeam11.View_Models
         private int _threshold;
         private int _balance;
         private int _reorderQty;
-        private int _suggestedReorderQty;
+        private string _suggestedReorderQty;
         private string _uom;
         private Item _itemList;
 
@@ -28,7 +28,7 @@ namespace StationeryStore_ADTeam11.View_Models
         public int Threshold { get; set; }
         public int Balance { get; set; }
         public int ReorderQty { get; set; }
-        public int SuggestedReorderQty { get; set; }
+        public string SuggestedReorderQty { get; set; }
         public string Uom { get; set; }
         public Item ItemList { get; set; }
 

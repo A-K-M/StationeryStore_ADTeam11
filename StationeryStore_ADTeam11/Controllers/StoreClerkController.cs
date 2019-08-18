@@ -113,7 +113,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return Json(itemStockCard, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<ActionResult> ViewLowStockItems(String itemCategory)  //PredictReorderQuantity
         {
             using (var client = new HttpClient())
@@ -138,8 +138,33 @@ namespace StationeryStore_ADTeam11.Controllers
                 }
 
             }
+        }*/
+        public async Task<string> PredictReorderQuantity(int itemCategory)
+        {
+            using (var client = new HttpClient())
+            {
+                string year = Convert.ToString(DateTime.Today.Year);
+
+                string month = Convert.ToString(DateTime.Today.Month);
+
+                string item = itemCategory.ToString();
+
+                HttpResponseMessage res = await client.GetAsync("http://127.0.0.1:5000/model1?x=" + year + "&y=" + month + "&z=" + item);
+
+                if (res.IsSuccessStatusCode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Response : " + res.Content.ToString());
+                    System.Diagnostics.Debug.WriteLine("Response : " + res.Content.ReadAsStringAsync().Result);
+                    return res.Content.ReadAsStringAsync().Result;
+                }
+                else
+                {
+                    return "Error";
+                }
+
+            }
         }
-        public ActionResult ViewLowStockItems()  //PredictReorderQuantity
+        public async Task<ActionResult> ViewLowStockItems()  //PredictReorderQuantity
         {
             ItemDAO itemDAO = new ItemDAO();
             List<LowStockItemViewModel> list = new List<LowStockItemViewModel>();
@@ -147,9 +172,9 @@ namespace StationeryStore_ADTeam11.Controllers
             string ids = "";
             foreach (var i in ItemIdsAndThresholdValue)
             {
-                if (i.ThresholdValue>itemDAO.GetBalanceByItemId(i.Id))
+                if (i.ThresholdValue > itemDAO.GetBalanceByItemId(i.Id))
                 {
-                    ids += "'"+i.Id.ToString()+"', ";
+                    ids += "'" + i.Id.ToString() + "', ";
                 }
             }
             ids = ids.TrimEnd(',', ' ');
@@ -160,29 +185,60 @@ namespace StationeryStore_ADTeam11.Controllers
                 LowStockItemViewModel itemVM = new LowStockItemViewModel();
                 itemVM.Balance = itemDAO.GetBalanceByItemId(row.Id);
                 itemVM.ItemList = row;
+                ////////////////////////////////
+                itemVM.SuggestedReorderQty= await PredictReorderQuantity(row.CategoryId); //row.CategoryId
+                ////////////////////////////////
                 list.Add(itemVM);
             }
 
             ViewData["LowStockList"] = list;
             return View(list);
 
-
-
-            //ItemDAO itemDAO = new ItemDAO();
-            //List<LowStockItemViewModel> list = new List<LowStockItemViewModel>();
-            //List<Item> items = itemDAO.GetLowStockItems();
-
-            //foreach (var row in items)
-            //{
-            //    LowStockItemViewModel itemVM = new LowStockItemViewModel();
-            //    itemVM.Balance = itemDAO.GetBalanceByItemId(row.Id);
-            //    itemVM.ItemList = row;
-            //    list.Add(itemVM);                
-            //}
-
-            //ViewData["LowStockList"] = list;
-            //return View(list);
         }
+        //public ActionResult ViewLowStockItems()  //PredictReorderQuantity
+        //{
+        //    ItemDAO itemDAO = new ItemDAO();
+        //    List<LowStockItemViewModel> list = new List<LowStockItemViewModel>();
+        //    List<Item> ItemIdsAndThresholdValue = itemDAO.GetItemIdsAndThresholdValue();
+        //    string ids = "";
+        //    foreach (var i in ItemIdsAndThresholdValue)
+        //    {
+        //        if (i.ThresholdValue>itemDAO.GetBalanceByItemId(i.Id))
+        //        {
+        //            ids += "'"+i.Id.ToString()+"', ";
+        //        }
+        //    }
+        //    ids = ids.TrimEnd(',', ' ');
+        //    List<Item> items = itemDAO.GetLowStockItems(ids);
+
+        //    foreach (var row in items)
+        //    {
+        //        LowStockItemViewModel itemVM = new LowStockItemViewModel();
+        //        itemVM.Balance = itemDAO.GetBalanceByItemId(row.Id);
+        //        itemVM.ItemList = row;
+        //        list.Add(itemVM);
+        //    }
+
+        //    ViewData["LowStockList"] = list;
+        //    return View(list);
+
+
+
+        //    //ItemDAO itemDAO = new ItemDAO();
+        //    //List<LowStockItemViewModel> list = new List<LowStockItemViewModel>();
+        //    //List<Item> items = itemDAO.GetLowStockItems();
+
+        //    //foreach (var row in items)
+        //    //{
+        //    //    LowStockItemViewModel itemVM = new LowStockItemViewModel();
+        //    //    itemVM.Balance = itemDAO.GetBalanceByItemId(row.Id);
+        //    //    itemVM.ItemList = row;
+        //    //    list.Add(itemVM);                
+        //    //}
+
+        //    //ViewData["LowStockList"] = list;
+        //    //return View(list);
+        //}
 
         public ActionResult ItemSuppliers(String Id)
         {

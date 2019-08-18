@@ -221,6 +221,7 @@
     <Compile Include="View_Models\DisbursementVM.cs" />
     <Compile Include="View_Models\LowStockItemViewModel.cs" />
     <Compile Include="View_Models\RequestDetailViewModel.cs" />
+    <Compile Include="View_Models\RequestReport.cs" />
     <Compile Include="View_Models\RequestStationery.cs" />
     <Compile Include="View_Models\RequestViewModel.cs" />
     <Compile Include="View_Models\RequisitionVM.cs" />
@@ -238,6 +239,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bar.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="App_Data\data.xsd">
@@ -536,6 +538,7 @@
     <Content Include="Views\DepartmentEmployee\CreateStationeryRequest.cshtml" />
     <Content Include="Views\DepartmentEmployee\RequisitionList.cshtml" />
     <Content Include="Views\StoreClerk\ViewLowStockItems.cshtml" />
+    <Content Include="Views\StoreManager\ViewChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />
