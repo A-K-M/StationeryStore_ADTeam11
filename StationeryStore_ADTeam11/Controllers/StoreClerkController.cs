@@ -509,6 +509,7 @@ namespace StationeryStore_ADTeam11.Controllers
 
             DisbursementVM disbursement = new DisbursementVM();
             disbursement.DeptName = dept_name;
+            disbursement.DeptId = dept_id;
             disbursement.CollectionPointName = collectionPoint.Name;
             disbursement.ItemList = itemList;
 
@@ -624,6 +625,57 @@ namespace StationeryStore_ADTeam11.Controllers
             ViewData["itemId"] = itemid;
             return RedirectToAction("ViewItems", "StoreClerk");
         }
+
+
+        [HttpPost]
+        public ActionResult EditDisbursementList()
+        {
+
+            string deptId = "";
+            List<ItemRequest> new_list = new List<ItemRequest>();
+
+            DisbursementDAO disbursementDAO = new DisbursementDAO();
+           
+
+
+
+            foreach (string key in Request.Form.AllKeys)
+            {
+                if (Convert.ToString(key) == "deptId")
+                {
+                    deptId = Convert.ToString(Request[key]);
+                }
+                else
+                {
+                    ItemRequest item = new ItemRequest();
+                    item.ItemId = Convert.ToString(key);
+                    item.ActualQty = Convert.ToInt32(Request[key]);
+                    new_list.Add(item);
+                }
+            }
+            List<ItemRequest> old_list = disbursementDAO.GetDisburseItemsForRep(deptId);
+            List<ItemRequest> list = new List<ItemRequest>();
+
+            foreach (var item in new_list)
+            {
+                foreach (var row in old_list)
+                {
+                    if (item.ItemId == row.ItemId)
+                    {
+                        if (row.ActualQty - item.ActualQty != 0)
+                        {
+                            item.ActualQty = row.ActualQty - item.ActualQty;
+                            list.Add(item);
+                        }
+                    }
+                }
+            }
+            int clerkId = (int)Session["userid"];
+
+            disbursementDAO.UpdateDisbursement(deptId, clerkId, list);
+            return RedirectToAction("ViewDisbursementList", "StoreClerk");
+        }
+
 
         //NANT MOE'S CODE END HERE
     }

@@ -16,7 +16,7 @@
                     </div>
                     <div class="card-body">
                         <form method="post">
-                            <input type="hidden" name="dept" value="@Model.DeptName" />
+                            <input type="hidden" name="deptId" value="@Model.DeptId" />
                             <div class="row">
                                 <Label class="col-12">Collection Point - @Model.CollectionPointName</Label>
                                 <Label class="col-12">Department - @Model.DeptName</Label>
@@ -35,7 +35,7 @@
                                                 <tr>
                                                     <td>@row.Description</td>
                                                     <td>@row.NeededQty</td>
-                                                    <td><input type="number" value="@row.ActualQty" onchange="if(this.value > @row.ActualQty) warning()"></td>
+                                                    <td><input type="number" name="@row.ItemId" value="@row.ActualQty" onchange="if(this.value > @row.ActualQty) warning()"></td>
                                                 </tr>
                                             }
                                         </tbody>

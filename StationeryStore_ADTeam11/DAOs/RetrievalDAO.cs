@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.Util;
 using StationeryStore_ADTeam11.View_Models;
 namespace StationeryStore_ADTeam11.DAOs
 {
@@ -21,6 +22,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 string sql = "spRetrievalList";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@date",DateUtils.getLastRequestDate());
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {

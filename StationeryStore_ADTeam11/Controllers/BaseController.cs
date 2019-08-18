@@ -35,7 +35,7 @@ namespace StationeryStore_ADTeam11.Controllers
             Employee employee = employeeDAO.GetEmployeeByUsername(username);
 
 
-            if(employee == null || employee.Role == null)
+            if (employee == null || employee.Role == null)
             {
                 error = "No Employee with this name.";
                 ViewData["error"] = error;
