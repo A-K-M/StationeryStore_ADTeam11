@@ -14,12 +14,37 @@ namespace StationeryStore_ADTeam11.Filters
 
         public RoleFilter (string role)
         {
-            _role = role;
+            if (role == "Employee,Representative")
+            {
+                _role = "er";
+            }
+            else if(role == "Representative")
+            {
+                _role = "r";
+            }
+            else
+            {
+                _role = role;
+
+            }
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             string userRole = HttpContext.Current.Session["role"].ToString();
+
+            if (userRole == "Representative" && _role == "er")
+            {
+                userRole = "er";
+            }else if (userRole == "Employee" && _role == "er")
+            {
+                userRole = "er";
+            }else if (userRole == "Representative" && _role == "r")
+            {
+                userRole = "r";
+            }
+
+
             if (userRole != _role)
             {
 
@@ -28,7 +53,7 @@ namespace StationeryStore_ADTeam11.Filters
                                            new RouteValueDictionary
                                            {
                                                 {"controller", "base"},
-                                                { "action", "Error"}
+                                                { "action", "ShowError"}
                                            });
             }
         }

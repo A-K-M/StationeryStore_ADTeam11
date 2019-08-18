@@ -189,18 +189,18 @@ namespace StationeryStore_ADTeam11.DAOs
 
                 if (reqSql != "")
                 {
-                    cmd = new SqlCommand(reqSql, connection);
-                    if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+                   SqlCommand cmd1 = new SqlCommand(reqSql, connection,transaction);
+                    if (cmd1.ExecuteNonQuery() == 0) throw new Exception();
                 }
                 if (irSql != "")
                 {
-                    cmd = new SqlCommand(irSql, connection);
-                    if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+                    SqlCommand cmd2 = new SqlCommand(irSql, connection,transaction);
+                    if (cmd2.ExecuteNonQuery() == 0) throw new Exception();
                 }
                 if (outSql != "")
                 {
-                    cmd = new SqlCommand(outSql, connection);
-                    if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+                    SqlCommand cmd3 = new SqlCommand(outSql, connection,transaction);
+                    if (cmd3.ExecuteNonQuery() == 0) throw new Exception();
                 }
                 transaction.Commit();
 

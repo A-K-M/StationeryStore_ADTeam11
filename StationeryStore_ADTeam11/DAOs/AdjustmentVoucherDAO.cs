@@ -540,7 +540,7 @@ namespace StationeryStore_ADTeam11.DAOs
             return voucherList;
         }
 
-        public bool CreateAdjVoucher(int clerkId,List<MAdjustmentItem> adjItems) {
+        public bool CreateAdjVoucher(int clerkId,List<MAdjustmentItem> adjItems) {   
             SqlTransaction transaction = null;
             try
             {
@@ -567,10 +567,10 @@ namespace StationeryStore_ADTeam11.DAOs
                 }
 
                cmd = new SqlCommand(sql, connection,transaction);
-                if (cmd.ExecuteNonQuery() != adjItems.Count()) throw new Exception();
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
                 cmd = new SqlCommand(sqlStockCard, connection, transaction);
-                if (cmd.ExecuteNonQuery() != adjItems.Count()) throw new Exception();
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
                 transaction.Commit();
 

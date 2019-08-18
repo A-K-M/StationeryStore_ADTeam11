@@ -11,6 +11,8 @@ using StationeryStore_ADTeam11.Filters;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
+    [AuthenticationFilter]
+    [RoleFilter("Representative")]
     [LayoutFilter("_deptartmentEmployeeLayout")]
     public class DepartmentRepresentativeController : DepartmentEmployeeController // Dept Rep is inherited from Dept Employee
     {
@@ -40,7 +42,7 @@ namespace StationeryStore_ADTeam11.Controllers
             ViewData["collectionPoints"] = collectionPoints;
 
             
-            string deptId = GetDeptId("helen"); 
+            string deptId = GetDeptId(Session["username"].ToString()); 
 
             Department department = departmentDAO.GetDepartmentByDeptId(deptId);
 
@@ -58,7 +60,7 @@ namespace StationeryStore_ADTeam11.Controllers
         [HttpPost]
         public ActionResult CollectionPoint(Department point)
         {
-            string deptId = GetDeptId("helen");
+            string deptId = GetDeptId(Session["username"].ToString());
            
             departmentDAO.UpdateDepartmentCollectionPoint(deptId, point.CollectionPoinId);
 
@@ -67,7 +69,7 @@ namespace StationeryStore_ADTeam11.Controllers
       
         public ActionResult Disbursement()
         {
-            string deptId = GetDeptId("helen");
+            string deptId = GetDeptId(Session["username"].ToString());
             List<string> collectionPoint = departmentDAO.GetCollectionPointByDeptId(deptId);
 
             List<RequestDetailViewModel> itemRequests = new List<RequestDetailViewModel>();
@@ -93,7 +95,7 @@ namespace StationeryStore_ADTeam11.Controllers
         public ActionResult ApproveDisbursement()
         {
             OutstandingDAO outstandingDAO = new OutstandingDAO();
-            string deptId = GetDeptId("helen");
+            string deptId = GetDeptId(Session["username"].ToString());
             foreach(var ir in itemRequestDAO.GetDisburseItems(deptId))
             {
                 outstandingDAO.AddItemRequest(ir);

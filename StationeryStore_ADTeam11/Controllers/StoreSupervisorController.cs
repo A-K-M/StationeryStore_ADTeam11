@@ -11,6 +11,8 @@ using System.IO;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
+    [AuthenticationFilter]
+    [RoleFilter("Supervisor")]
     [LayoutFilter("_storeSupervisorLayout")]
     public class StoreSupervisorController : BaseController
     {

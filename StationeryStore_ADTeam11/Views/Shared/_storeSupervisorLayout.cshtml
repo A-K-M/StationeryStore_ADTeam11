@@ -24,6 +24,14 @@
     <link href="~/Statics/css/style.default.css" rel="stylesheet" />
     <link href="~/Statics/css/fa-all.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/datatables.min.css" />
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/datatables.min.js"></script>
 </head>
 
 <body>
@@ -48,14 +56,13 @@
                 <h5 class="sidenav-heading">Main</h5>
                 <ul id="side-main-menu" class="side-menu list-unstyled">
                     <li><a href="@Url.Action("Index", "StoreSupervisor")"> <i class="icon-home"></i>Home </a></li>
-                    <li><a href="@Url.Action("Index", "StoreSupervisor")"> <i class="fas fa-user"></i>Purchase Orders </a></li>
+                    <li><a href="@Url.Action("ReorderStockList", "StoreSupervisor")"> <i class="icon-bill"></i>Reorder Stock List</a></li>
                     <li><a href="@Url.Action("AdjustmentVouchers", "StoreSupervisor")"> <i class="fa fa-file-alt"></i>Adjustment Vouchers </a></li>
                     <li>
-                        <a href="store_supervisor_create_barcharts.html">
-                            <i class="fa fa-map-marker-alt"></i>Create Barchart
+                        <a href="@Url.Action("ViewCharts", "StoreSupervisor")">
+                            <i class="icon-presentation"></i>Create Barchart
                         </a>
                     </li>
-                    <li><a href="view_barcharts.html"> <i class="fa fa-map-marker-alt"></i>View Barcharts </a></li>
                 </ul>
             </div>
             <div class="admin-menu">

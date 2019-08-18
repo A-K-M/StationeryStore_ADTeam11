@@ -10,36 +10,11 @@
             <div class="col-lg-6">
                 <!-- Income-->
                 <div class="card income text-center">
-                    <div class="icon"><i class="fas fa-user"></i></div>
-                    <strong class="text-success">Review Purchase Orders</strong>
-                    <p></p>
-                    <hr>
-                    <a href="store_supervisor_purchase_order.html" class="btn btn-success btn-sm">View</a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <!-- Income-->
-                <div class="card income text-center">
-                    <div class="icon"><i class="fa fa-file-alt"></i></div>
-                    <strong class="text-success">Review Adjustment Voucher</strong>
-                    <p></p>
-                    <hr>
-                    <a href="store_supervisor_approve_av.html" class="btn btn-success btn-sm">View</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="container-fluid">
-        <div class="row d-flex">
-            <div class="col-lg-6">
-                <!-- Income-->
-                <div class="card income text-center">
-                    <div class="icon"><i class="fas fa-users"></i></div>
+                    <div class="icon"><i class="icon-bill"></i></div>
                     <strong class="text-success">Review Re-order Stock List</strong>
                     <p></p>
                     <hr>
-                    <a href="store_supervisor_reorder_stock_list.html" class="btn btn-success btn-sm">View</a>
+                    <a href="@Url.Action("ReorderStockList", "StoreSupervisor")" class="btn btn-success btn-sm">View</a>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -49,15 +24,27 @@
                     <strong class="text-success">Generate Charts and Tables</strong>
                     <p></p>
                     <hr>
-                    <a href="store_supervisor_create_barcharts.html" class="btn btn-success btn-sm">View</a>
+                    <a href="@Url.Action("ViewCharts", "StoreSupervisor")" class="btn btn-success btn-sm">View</a>
                 </div>
             </div>
-
-
-
         </div>
-
-
     </div>
+    <br>
+
+    <div class="container-fluid">
+        <div class="row d-flex">
+            <div class="col-lg-6">
+                <!-- Income-->
+                <div class="card income text-center">
+                    <div class="icon"><i class="icon-list-1"></i></div>
+                    <strong class="text-success">Review Adjustment Voucher</strong>
+                    <p></p>
+                    <hr>
+                    <a href="@Url.Action("AdjustmentVouchers", "StoreSupervisor")" class="btn btn-success btn-sm">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </section>
