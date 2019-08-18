@@ -17,11 +17,11 @@ namespace StationeryStore_ADTeam11.Controllers
     public class DepartmentHeadApiController : ApiController
     {
 
-        [Route("{headId}/delegates")]
+        [Route("{headId}/{deptId}/delegates")]
         [HttpPost]
-        public MResponse PostDelegate(Delegation delegation,int headId) {
+        public MResponse PostDelegate(Delegation delegation,int headId,string deptId) {
             
-            bool success = new DelegationDAO().InsertDelegation(delegation,headId);
+            bool success = new DelegationDAO().InsertDelegation(delegation,deptId);
             if (success) {
                 Email email = new Email();
                 Employee e = new EmployeeDAO().GetEmployeeById(headId);
@@ -43,12 +43,12 @@ namespace StationeryStore_ADTeam11.Controllers
             return respone;
         }
 
-        [Route("{headId}/delegates/cancel")]
+        [Route("{headId}/{deptId}/delegates/cancel")]
         [HttpPut]
-        public MResponse CancelDelegate(int headId,Delegation delegation)
+        public MResponse CancelDelegate(int headId,string deptId,Delegation delegation)
         {
 
-            bool success = new DelegationDAO().CancelDelegation(headId,delegation.Id);
+            bool success = new DelegationDAO().CancelDelegation(deptId,delegation.Id);
             if (success)
             {
                 Email email = new Email();
