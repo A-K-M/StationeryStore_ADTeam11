@@ -40,30 +40,22 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table  table-hover table-striped">
+                        <table class="table  table-hover table-striped display nowrap" id="Cate_Table">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th>ID</th>
                                     <th>Category Name</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach (var category in categoryList)
+                                {
+                                    <tr>
 
-                                @{
-                                    @:<tr>
-                                        {
-                                            foreach (var category in categoryList)
-                                            {
-                                            <tr>
-
-                                                <td>@category.Id</td>
-                                                <td>@category.Name</td>
-                                               
-                                            </tr>
-                                        }
-                                    }
+                                        <td>@category.Id</td>
+                                        <td>@category.Name</td>
+                                    </tr>
                                 }
-
                             </tbody>
                         </table>
                     </div>
@@ -72,3 +64,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#Cate_Table').DataTable({
+        });
+    });
+
+</script>

@@ -20,6 +20,24 @@ namespace StationeryStore_ADTeam11.Controllers
     {
         public ActionResult Index()
         {
+            RequestDAO r = new RequestDAO();
+            ItemDAO i = new ItemDAO();
+            OutstandingDAO o = new OutstandingDAO();
+
+            List<Item> ItemIdsAndThresholdValue = i.GetItemIdsAndThresholdValue();
+
+            int low = 0;
+            foreach (var row in ItemIdsAndThresholdValue)
+            {
+                if (row.ThresholdValue > i.GetBalanceByItemId(row.Id))
+                {
+                    low++;
+                }
+            }
+
+            ViewData["todayCount"] = r.getTodayReqCount();
+            ViewData["lowstock"] = low;
+            ViewData["outCount"] = o.GetPendingOutstandingCount();
             return View();
         }
 
@@ -559,7 +577,13 @@ namespace StationeryStore_ADTeam11.Controllers
                     item.CategoryId =catList[i].Id;
                 }
             }
-            it.AddItem(item);
+            if (it.AddItem(item))
+            {
+                SetFlash(Enums.FlashMessageType.Success, "Successfully inserted!");
+                return RedirectToAction("ViewItems", "StoreClerk");
+            }
+
+            SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
             return RedirectToAction("ViewItems", "StoreClerk");
         }
 

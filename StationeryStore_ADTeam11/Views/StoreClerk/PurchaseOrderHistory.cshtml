@@ -16,7 +16,7 @@
                     <h3>Purchase Order History</h3>
                 </div>
                 <div class="card-body">
-                    <table class="table  table-hover table-striped">
+                    <table class="table  table-hover table-striped" id="po_table">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -28,19 +28,19 @@
                         <tbody>
                             @foreach (ReorderStockListVM list in purchaseOrders)
                             {
-                            <tr>
-                                <th>@list.Id</th>
-                                <td>@list.RequestedDate</td>
-                                @if (list.Status == "Delivered")
-                                {
-                                    <td class="text-success">@list.Status</td>
-                                }
-                                else
-                                {
-                                    <td class="text-info">@list.Status</td>
-                                }
-                                <td><a href="/StoreClerk/PurchaseOrderDetail/@list.Id" class="btn btn-info">View</a></td>
-                            </tr>
+                                <tr>
+                                    <th>@list.Id</th>
+                                    <td>@list.RequestedDate</td>
+                                    @if (list.Status == "Delivered")
+                                    {
+                                        <td class="text-success">@list.Status</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-info">@list.Status</td>
+                                    }
+                                    <td><a href="/StoreClerk/PurchaseOrderDetail/@list.Id" class="btn btn-info">View</a></td>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -49,4 +49,11 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#po_table').DataTable({
+        });
+    });
+
+</script>
 
