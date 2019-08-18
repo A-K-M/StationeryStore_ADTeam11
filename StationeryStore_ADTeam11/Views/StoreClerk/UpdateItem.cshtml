@@ -1,0 +1,138 @@
+﻿@model StationeryStore_ADTeam11.Models.Item
+@using StationeryStore_ADTeam11.Models
+@{
+    ViewBag.Title = "EditItem";
+    Layout = "~/Views/Shared/_storeClerkLayout.cshtml";
+
+    string itemId = ViewData["itemId"].ToString();
+    var categories = (List<Category>)ViewData["catlist"];
+
+
+    //var categoryName = (IEnumerable<String>)ViewData["categoryName"];
+    //var categoryId = (IEnumerable<int>)ViewData["categoryId"];
+
+    //var supplierName = (IEnumerable<String>)ViewData["supplierName"];
+    var suppliers = (List<Supplier>)ViewData["suppliers"];
+    var itemList = (Item)ViewData["itemList"];
+
+}
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Edit Item</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("EditItem", "StoreClerk", new { itemId = itemId }))
+                    {
+                        <div class="row">
+                            <div class="col-12 form-group">
+                                <label class="from">Category</label>                                    
+                                    @*@Html.DropDownListFor(model => model.CategoryName, new SelectList(categoryName), "--Select One--",new { @class = "form-control"})*@
+                                <select class="form-control" name="CategoryID">
+                                    @foreach (var category in categories)
+                                    {
+                                        <option value="@category.Id"
+                                                @if (itemList.CategoryId == category.Id) {
+                                                    @:selected
+                                                }
+                                                >@category.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-4 form-group">
+                                <label class="form">Suppliers 1</label>
+                                @*@Html.DropDownListFor(model => model.FirstSupplier, new SelectList(suppliers), itemList.FirstSupplier, new { @class = "form-control", @placeholder = itemList.FirstSupplier })*@
+                                <select class="form-control" name="FirstSupplier">
+                                    @foreach (var supplier in suppliers)
+                                    {
+                                        <option value="@supplier.Id"
+                                                @if (itemList.FirstSupplier == supplier.Id)
+                                                {
+                                                    @:selected
+                                                }
+                                                >@supplier.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="from">Suppliers 2</label>
+                                @*@Html.DropDownListFor(model => model.SecondSupplier, new SelectList(suppliers),itemList.SecondSupplier, new { @class = "form-control",@placeholder = itemList.SecondSupplier })*@
+                                <select class="form-control" name="SecondSupplier">
+                                    @foreach (var supplier in suppliers)
+                                    {
+                                        <option value="@supplier.Id"
+                                                 @if (itemList.SecondSupplier == supplier.Id)
+                                                {
+                                                    @:selected
+                                                }
+                                                >@supplier.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="from">Suppliers 3</label>
+                                @*@Html.DropDownListFor(model => model.ThirdSupplier, new SelectList(suppliers), itemList.ThirdSupplier, new { @class = "form-control" , @placeholder = itemList.ThirdSupplier })*@
+                                <select class="form-control" name="ThirdSupplier">
+                                @foreach (var supplier in suppliers)
+                                {
+                                    <option value="@supplier.Id"
+                                             @if (itemList.ThirdSupplier == supplier.Id)
+                                                {
+                                                    @:selected
+                                                }
+                                            >@supplier.Name</option>
+                                }
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="from">Price 1</label>
+                                @Html.TextBoxFor(model => model.FirstPrice, new { @class = "form-control", @Value = itemList.FirstPrice })
+
+                            </div>
+                            <div class="col-4">
+                                <label class="from">Price 2</label>
+                                @Html.TextBoxFor(model => model.SecondPrice, new { @class = "form-control", @Value = itemList.SecondPrice })
+
+                            </div>
+                            <div class="col-4">
+                                <label class="from">Price 3</label>
+                                @Html.TextBoxFor(model => model.ThirdPrice, new { @class = "form-control", @Value = itemList.ThirdPrice })
+                            </div>
+                            <div class=" col-6 form-group">
+                                <label class="from">Reorder Level</label>
+                                @Html.TextBoxFor(model => model.ThresholdValue, new { @class = "form-control", @Value = itemList.ThresholdValue })
+                            </div>
+                            <div class=" col-6 form-group">
+                                <label class="from">Reorder Qty</label>
+                                @Html.TextBoxFor(model => model.ReorderQty, new { @class = "form-control", @Value = itemList.ReorderQty })
+                            </div>
+                            <div class=" col-12 form-group">
+                                <label class="from">Item Description</label>
+                                @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @Value = itemList.Description })
+                            </div>
+                            <div class="col-12 form-group">
+                                <label class="from">Unit of Measurement</label>
+                                @Html.TextBoxFor(model => model.Uom, new { @class = "form-control", @Value = itemList.Uom })
+                            </div>
+                            <div class="col-12 form-group">
+                                <label class="from">Bin Number</label>
+                                @Html.TextBoxFor(model => model.BinNo, new { @class = "form-control", @Value = itemList.BinNo })
+                            </div>
+                            <div class="col-12 form-group">
+                                <div class="row">
+                                    <div class="col-5"></div>
+                                    <div class="col-4">
+                                        <input type="submit" value="Update" class="btn btn-outline-success">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

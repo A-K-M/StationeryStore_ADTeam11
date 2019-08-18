@@ -63,5 +63,24 @@ namespace StationeryStore_ADTeam11.DAOs
             return employee;
         }
 
+        public Employee EmailDelegation(int empID)
+        {
+            connection.Open();
+            string sql = "select Email,Name from Employee where Employee.ID = " + empID;
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            Employee employee = null;
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                employee = new Employee()
+                {
+                    Email = reader["Email"].ToString(),
+                    Name = reader["Name"].ToString(),
+                };
+            }
+            connection.Close();
+            return employee;
+        }
+
     }
 }

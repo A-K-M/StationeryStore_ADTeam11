@@ -48,7 +48,7 @@ namespace StationeryStore_ADTeam11.Controllers
             List<Delegation> delegations = new List<Delegation>();
             foreach (var e in employees)
             {
-                List<Delegation> deles = delegationDAO.GetDelegationsByEmpId(e.Id);
+                List<Delegation> deles = delegationDAO.GetDelegationsByEmpId(e.Id,deptId);
                 foreach (var dele in deles)
                 {
                     dele.EmployeeName = employeeDAO.GetEmployeeById(dele.EmployeeId).Name;
@@ -72,24 +72,60 @@ namespace StationeryStore_ADTeam11.Controllers
         public ActionResult Delegation(Delegation delegation)
         {
             deptId = GetDeptId();
-            status = "ongoing";
+            status = "Ongoing";
+            string currentStatus = departmentDAO.GetDepartmentByDeptId(deptId).DelegateStatus;
+            if (currentStatus==status)
+            {
+                SetFlash(Enums.FlashMessageType.Error, "You've already granted authourity to someone!");
 
-            delegation.EmployeeId = employeeDAO.GetEmployeeByName(deptId, delegation.EmployeeName).Id;
+                return RedirectToAction("Delegation", "DepartmentHead");
+            }
+            else
+            {
+                delegation.EmployeeId = employeeDAO.GetEmployeeByName(deptId, delegation.EmployeeName).Id;
 
-            delegationDAO.CreateDelegation(delegation);
+                if (!departmentDAO.InsertDelegation(delegation, deptId))
+                {
+                    SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
 
-            departmentDAO.UpdateDepartmentDelegation(deptId, delegation.EmployeeId, status);
+                    return RedirectToAction("Delegation", "DepartmentHead");
+                }
+                ///// start Email /////
+                EmailDAO emailDAO = new EmailDAO();
+                Employee employee = emailDAO.EmailDelegation(delegation.EmployeeId);
+                Email email = new Email();
+                email.SendEmail(employee.Email, "Delegation", "Please Check delegation status");
+                ///////////////////////
+                ///
+                SetFlash(Enums.FlashMessageType.Success, "Authourity successfully granted!");
+                //delegationDAO.CreateDelegation(delegation);
+                //departmentDAO.UpdateDepartmentDelegation(deptId, delegation.EmployeeId, status);
 
-            return RedirectToAction("Delegation", "DepartmentHead");
+                return RedirectToAction("Delegation", "DepartmentHead");
+            }
+            
         }
         public ActionResult CancelDelegation(int Id)
         {
             deptId = GetDeptId();
-            status = "completed";
+            DelegationDAO delegationDAO = new DelegationDAO();
+            //status = "completed";
+            //departmentDAO.UpdateDepartmentDelegation(deptId, delegationDAO.GetDelegationById(Id).EmployeeId, status);
+            //delegationDAO.CancelDelegation(Id);
+            if (!departmentDAO.CancelDelegation(deptId, Id))
+            {
+                SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
 
-            departmentDAO.UpdateDepartmentDelegation(deptId, delegationDAO.GetDelegationById(Id).EmployeeId, status);
-
-            delegationDAO.CancelDelegation(Id);
+                return RedirectToAction("Delegation", "DepartmentHead");
+            }
+            ///// start Email /////
+            Delegation delegation = delegationDAO.GetDelegationById(Id);
+            EmailDAO emailDAO = new EmailDAO();
+            Employee employee = emailDAO.EmailDelegation(delegation.EmployeeId);
+            Email email = new Email();
+            email.SendEmail(employee.Email, "Delegation", "Dear " + delegation.EmployeeName + ",Please Check delegation status");
+            ///////////////////////
+            SetFlash(Enums.FlashMessageType.Success, "You've cancelled Authority Delegation!");
 
             return RedirectToAction("Delegation", "DepartmentHead");
         }

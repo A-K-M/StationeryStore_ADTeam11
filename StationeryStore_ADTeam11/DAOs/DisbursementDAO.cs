@@ -31,7 +31,8 @@ namespace StationeryStore_ADTeam11.DAOs
                     {
                         DeptId = reader["ID"].ToString(),
                         RepName = reader["RepName"].ToString(),
-                        DeptName = reader["DeptName"].ToString()
+                        DeptName = reader["DeptName"].ToString(),
+                        Phone = reader["Phone"].ToString()
                     };
                     disbursements.Add(dis);
                     System.Diagnostics.Debug.WriteLine("MDis Dept  " + dis.DeptId);
@@ -73,13 +74,10 @@ namespace StationeryStore_ADTeam11.DAOs
                     }
       
                 }
-
-
             }
             catch (Exception e)
             {
                System.Diagnostics.Debug.WriteLine("Error  "+e.Message);
-
                 return null;
             }
             finally
@@ -127,6 +125,123 @@ namespace StationeryStore_ADTeam11.DAOs
             return items;
 
         }
+
+        public bool updateDisbursement(string deptId,int clerkId, List<ItemRequest> items) {
+            List<MAdjustmentItem> adjItems = new List<MAdjustmentItem>();
+         
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = null;
+                SqlDataReader reader = null;
+                string reqSql = "";
+                string irSql = "";
+                string outSql = "";
+                foreach (ItemRequest item in items) {
+                
+                int updatedQty = item.ActualQty;
+                        string sql = @" SELECT ir.RequestID,ir.ID,ir.NeededQty,ir.ActualQty
+                                        FROM Request r,ItemRequest ir , Employee e
+                                        WHERE R.ID = ir.RequestID AND r.EmployeeID = e.ID AND e.DeptID = @deptId
+	                                          AND r.Status = 'Disbursed' AND ir.ItemID = @itemId
+                                        ORDER BY r.DateTime DESC";
+                        cmd = new SqlCommand(sql, connection);
+                        cmd.Parameters.AddWithValue("@deptId", deptId);
+                        cmd.Parameters.AddWithValue("@itemId", item.ItemId);
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            if (updatedQty == 0)
+                            {
+                                break;
+                            }
+                            int actual = (int)reader["ActualQty"];
+                            int irID = (int)reader["ID"];
+                            int reqId = (int)reader["RequestID"];
+                            if (updatedQty >= actual)
+                            {
+                                updatedQty -= actual;
+                                reqSql += sqlUpdateRequestStatus(reqId);
+                                irSql += sqlUpdateItemReqQuantity(irID,0);
+                                outSql += sqlCreateOutstanding(irID,actual);
+                        }
+                        else if(updatedQty < actual){
+                                irSql += sqlUpdateItemReqQuantity(irID, actual-updatedQty);
+                                outSql += sqlCreateOutstanding(irID, updatedQty);
+                                updatedQty = 0;
+                            }
+                        }
+                    reader.Close();
+
+                    
+                    //for create adjustment
+                    adjItems.Add(new MAdjustmentItem() {
+                        ItemId = item.ItemId,
+                        Description = item.Description,
+                        Quantity = item.ActualQty,
+                        Reason = "Disburse Edit"
+                    });
+                }
+                connection.Close();
+                bool success;
+                if (reqSql != "") {
+                     success = executeSql(reqSql);
+                    if (!success) throw new Exception();
+                }
+                if (irSql != "") {
+                     success = executeSql(irSql);
+                    if (!success) throw new Exception();
+                }
+                if (outSql != "") {
+                     success = executeSql(outSql);
+                    if (!success) throw new Exception();
+                }
+                
+            }
+            catch 
+            {
+                return false;
+            }
+            //Create Adjustment Vouchers
+            AdjustmentVoucherDAO adjDAO = new AdjustmentVoucherDAO();
+           return  adjDAO.CreateAdjVoucher(clerkId, adjItems);
+        }
+
+        private bool executeSql(string sql)
+        {
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return true;
+
+        }
+
+        private string sqlCreateOutstanding(int irID, int qty)
+        {
+            return "INSERT INTO Outstanding(ItemRequestID,Qty,Status) VALUES("+irID+", "+qty+", '"+Constant.STATUS_PENDING+"') ;\n";
+        }
+
+        private string sqlUpdateItemReqQuantity(int irID, int qty)
+        {
+            return "UPDATE ItemRequest SET ActualQty ="+qty+" WHERE ID = " + irID + ";\n";
+        }
+
+        private string sqlUpdateRequestStatus(int reqId)
+        {
+            return "UPDATE Request SET Status = '"+Constant.STATUS_APPROVE+"' WHERE ID = " + reqId + ";\n";
+        }
+
         public bool ApproveDisbursement(string deptId)
         {
             try
@@ -210,11 +325,9 @@ namespace StationeryStore_ADTeam11.DAOs
                         disbursements[index].CollectionPointID = (int)reader["CollectionPointID"];
                         prev = index;
                     }
-
-
+                    
                 }
-
-
+                
             }
             catch (Exception e)
             {
