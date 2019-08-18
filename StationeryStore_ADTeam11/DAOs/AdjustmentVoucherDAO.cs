@@ -540,7 +540,7 @@ namespace StationeryStore_ADTeam11.DAOs
             return voucherList;
         }
 
-        public bool CreateAdjVoucher(int clerkId,List<MAdjustmentItem> adjItems) {
+        public bool CreateAdjVoucher(int clerkId,List<MAdjustmentItem> adjItems) {   
             SqlTransaction transaction = null;
             try
             {

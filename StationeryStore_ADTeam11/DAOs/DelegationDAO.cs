@@ -76,7 +76,6 @@ namespace StationeryStore_ADTeam11.DAOs
         {
             SqlTransaction transaction = null;
             DateTime now = DateTime.Now;
-
             string sqlFormattedDate = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
             try
             {
@@ -250,9 +249,11 @@ namespace StationeryStore_ADTeam11.DAOs
         }
         public void CancelDelegation(int delegationId)
         {
+            DateTime now = DateTime.Now;
+            string sqlFormattedDate = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"update Delegation set EndDate = '" + DateTime.Now + "' where ID = " + delegationId;
+            string sql = @"update Delegation set EndDate = '" + now + "' where ID = " + delegationId;
             SqlCommand command = new SqlCommand(sql, conn);
             command.ExecuteNonQuery();
             conn.Close();

@@ -1,10 +1,13 @@
 ﻿using StationeryStore_ADTeam11.DAOs;
+using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.View_Models;
 using StationeryStore_ADTeam11.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
 
 namespace StationeryStore_ADTeam11.Controllers
 {
@@ -124,6 +127,107 @@ namespace StationeryStore_ADTeam11.Controllers
 
             SetFlash(Enums.FlashMessageType.Error, "Something went wrong please try again later!");
             return RedirectToAction("ReorderStockList");
+        }
+        public List<int> ExtractSalesReports()
+        {
+            int year = DateTime.Now.Year;
+
+            EmployeeDAO employeeDAO = new EmployeeDAO();
+
+            RequestDAO requestDAO = new RequestDAO();
+
+            DepartmentDAO departmentDAO = new DepartmentDAO();
+
+            List<Department> departments = departmentDAO.GetDepartments();
+
+            List<int> monthlySales = new List<int>(); //{paper,pen,stapler}
+
+            foreach (Department d in departments)
+            {
+                List<RequestReport> requestReports = requestDAO.GetRequestsByDepartment(d.Id);
+
+                if (requestReports != null)
+                {
+                    int[] sales = new int[3];
+
+                    foreach (RequestReport request in requestReports)
+                    {
+                        if (request.ReqYear == year)//DateTime.Today.year)
+                        {
+                            if (request.CategoryID == 1) //paper
+                            {
+                                sales[0] += request.Qty;
+                            }
+                            else if (request.CategoryID == 2) //pen
+                            {
+                                sales[1] += request.Qty;
+                            }
+                            else //stapler
+                            {
+                                sales[2] += request.Qty;
+                            }
+                        }
+                    }
+                    //monthlySales.Add(DateTime.Today.Month);
+                    monthlySales.Add(sales[0]);
+                    monthlySales.Add(sales[1]);
+                    monthlySales.Add(sales[2]);
+                }
+            }
+            System.Diagnostics.Debug.WriteLine(monthlySales);
+            return monthlySales;
+
+        }
+        public ActionResult ViewCharts()
+        {
+            int[] salesReport = ExtractSalesReports().ToArray();
+            List<int> request_paper = new List<int>();
+            List<int> request_pen = new List<int>();
+            List<int> request_stapler = new List<int>();
+            for (int i = 0; i < salesReport.Length; i++)
+            {
+                request_paper.Add(salesReport[i++]);
+                request_pen.Add(salesReport[i++]);
+                request_stapler.Add(salesReport[i]);
+            }
+            ViewBag.request_paper = request_paper.ToArray();
+            ViewBag.request_pen = request_pen.ToArray();
+            ViewBag.request_stapler = request_stapler.ToArray();
+
+            using (var reader = new StreamReader(@"D:\AD Workspace\MLtesting\ReorderChart.csv"))
+            {
+                List<int> paper = new List<int>();
+                List<int> pen = new List<int>();
+                List<int> stapler = new List<int>();
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(',');
+
+                    if (values[3] == "Paper")
+                    {
+                        paper.Add(Convert.ToInt32(values[4]));
+                    }
+                    else if (values[3] == "Pen")
+                    {
+                        pen.Add(Convert.ToInt32(values[4]));
+                    }
+                    else
+                    {
+                        stapler.Add(Convert.ToInt32(values[4]));
+                    }
+                }
+                //int[] paper_array = paper.ToArray();
+                //System.Diagnostics.Debug.WriteLine(paper_array);
+                //ViewData["paper"] = paper.ToArray();
+                //ViewData["pen"] = pen.ToArray();
+                //ViewData["stapler"] = stapler.ToArray();
+
+                ViewBag.reorder_paper = paper.ToArray();
+                ViewBag.reorder_pen = pen.ToArray();
+                ViewBag.reorder_stapler = stapler.ToArray();
+            }
+            return View();
         }
     }
 }

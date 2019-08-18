@@ -551,6 +551,7 @@
     <Content Include="Views\StoreClerk\ViewCategories.cshtml" />
     <Content Include="Views\StoreClerk\ViewItems.cshtml" />
     <Content Include="Views\StoreManager\ViewCharts.cshtml" />
+    <Content Include="Views\StoreSupervisor\ViewCharts.cshtml" />
     <Content Include="Views\DepartmentEmployee\ReviewStationeryRequest.cshtml" />
     <Content Include="Views\DepartmentEmployee\ViewPendingRequestDetails.cshtml" />
   </ItemGroup>

@@ -24,7 +24,7 @@
         <div class="row d-flex">
             <div class="col-12">
                 <div class="card">
-                    <h4>View Barcharts By Month</h4>
+                    @*<h4>View Barcharts By Month</h4>*@
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group col-2">
@@ -46,8 +46,8 @@
                                     {
                                         <input type="hidden" id="stapler-@i" value="@stapler[i]">
                                     }
-                                </div>
-
+                                </div>                                
+                                    
                                 <div id="request-paper-list">
                                     @for (int i = 0; i < request_paper.Length; i++)
                                     {
@@ -65,11 +65,11 @@
                                     {
                                         <input type="hidden" id="request-stapler-@i" value="@request_stapler[i]">
                                     }
-                                </div>
+                                </div>                              
+                               
 
-
-                                <label class="from">Select Month</label>
-                                <select name="month" id="month" class="form-control">
+                                @*<label class="from">Select Month</label>
+                                <select name="month" id="month" class="form-control" onchange="passValue(this.value)">
                                     <option value="o" selected>---Select---</option>
                                     <option value="1">Janurary</option>
                                     <option value="2">Feburary</option>
@@ -84,13 +84,15 @@
                                     <option value="11">November</option>
                                     <option value="12">December</option>
                                 </select>
+
+                                <div class="row"><a href="/StoreManager/CreateChart/8" class="btn btn-success">Submit</a></div>*@
                             </div>
                             <div class="col-10"></div>
 
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Requisition Chart</h4>
+                                        <h4>Requisition Chart For Each Department</h4>
                                     </div>
                                     <div class="card-body">
                                         <canvas id="barChartExample"></canvas>
@@ -110,7 +112,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>
-                            Order Chart
+                            Order Chart For Each Month
                         </h4>
                     </div>
                     <div class="card-body">

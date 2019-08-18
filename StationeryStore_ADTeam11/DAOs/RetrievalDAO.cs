@@ -12,6 +12,7 @@ namespace StationeryStore_ADTeam11.DAOs
 {
     public class RetrievalDAO : DatabaseConnection
     {
+        string sqlFormattedDate;
         public List<Retrieval> GetRetrievalList()
         {
             List<Retrieval> retrievals = new List<Retrieval>();
@@ -198,7 +199,8 @@ namespace StationeryStore_ADTeam11.DAOs
         }
         public void CreateRetrieval(int clerkId, List<Retrieval> list)
         {
-           
+            DateTime now = DateTime.Now;
+             sqlFormattedDate = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
             SqlConnection conn = connection;
             conn.Open();
             string sql = "";
@@ -241,7 +243,7 @@ namespace StationeryStore_ADTeam11.DAOs
                         UpdateOutstanding(out_ids);
                 }
 
-
+               
                 List<ItemRequest> request_list = GetReqDeptListByItemId(ItemId);
                 if (request_list != null && retrieved > 0)
                 {
@@ -310,7 +312,7 @@ namespace StationeryStore_ADTeam11.DAOs
         }
         public string CreateOutstandingQuery(int ir_id, int qty)
         {
-            return "insert into Outstanding  (ItemRequestID, qty, Status,DateTime) values (" + ir_id + "," + qty + ",'Pending','"+DateTime.Now+"');";
+            return "insert into Outstanding  (ItemRequestID, qty, Status,DateTime) values (" + ir_id + "," + qty + ",'Pending','"+sqlFormattedDate+"');";
         }
         public void UpdateItemRequest(int ir_id, int actual_qty)
         {
