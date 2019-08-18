@@ -15,7 +15,6 @@
     </script>
 }
 
-<h2>ViewLowStockItems</h2>
 
 <div class="card">
     <div class="card-header">
@@ -25,7 +24,7 @@
         </h4>
     </div>
     <div class="card-body">
-        <table class="table  table-hover table-striped">
+        <table class="table  table-hover table-striped display nowrap" id="low_stock">
             <thead>
                 <tr>
                     <th>Item Number</th>
@@ -39,9 +38,9 @@
                 </tr>
             </thead>
 
-            <tbody id="ls-table">
+            <tbody>
 
-                @{ 
+                @{
                     int counter = 0;
                 }
 
@@ -62,7 +61,16 @@
 
             </tbody>
         </table>
+
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#low_stock').DataTable({
+        });
+    });
+
+</script>
 
 
