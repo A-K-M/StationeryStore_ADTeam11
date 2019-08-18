@@ -170,7 +170,7 @@ namespace StationeryStore_ADTeam11.DAOs
                           "FROM Employee e, Department d " +
                            "WHERE e.DeptID = d.ID " +
                             "AND e.ID != d.HeadID " +
-                            "AND e.ID != d.RepID " +
+                            //"AND e.ID != d.RepID " +
                             "AND d.ID = '" + deptId + "'";
             SqlCommand command = new SqlCommand(sql, conn);
             SqlDataReader reader = command.ExecuteReader();
