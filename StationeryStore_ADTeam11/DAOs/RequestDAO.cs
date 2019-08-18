@@ -498,7 +498,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
             int count = 0;
                 connection.Open();
-                string sql = @"select Count(*) from Request where  CONVERT(date,DateTime)= CONVERT(date,getdate());";
+                string sql = @"select Count(*) from Request where  CONVERT(date,DateTime) = CONVERT(date,getdate());";
                 SqlCommand cmd = new SqlCommand(sql, connection);
             count = (int)cmd.ExecuteScalar();
             

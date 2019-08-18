@@ -49,12 +49,17 @@ namespace StationeryStore_ADTeam11.Controllers
             foreach (var e in employees)
             {
                 List<Delegation> deles = delegationDAO.GetDelegationsByEmpId(e.Id,deptId);
-                foreach (var dele in deles)
+                if(deles!=null)
                 {
-                    dele.EmployeeName = employeeDAO.GetEmployeeById(dele.EmployeeId).Name;
-                    delegations.Add(dele);
+                    foreach (var dele in deles)
+                    {
+                        dele.EmployeeName = employeeDAO.GetEmployeeById(dele.EmployeeId).Name;
+                        delegations.Add(dele);
+                    }
+                    
                 }
                 Delegations = delegations.OrderBy(Delegation => Delegation.Id);
+
             }
 
             List<SelectListItem> Employees = new List<SelectListItem>();

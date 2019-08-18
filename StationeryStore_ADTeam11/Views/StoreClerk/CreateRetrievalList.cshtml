@@ -26,25 +26,34 @@
                                     Retrieved Qty
                                 </th>
                             </tr>
-
-                            @foreach (var item in Model.retrievals)
+                            @if (Model.retrievals != null)
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ItemId)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Qty)
-                                    </td>
-                                    <td>
-                                        <input type="number" name="@item.ItemId" value="@item.RetrievalQty" onchange="if(this.value > @item.Qty) warning()"/>
-                                    </td>
-                                    
-                                </tr>
+                                foreach (var item in Model.retrievals)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ItemId)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Qty)
+                                        </td>
+                                        <td>
+                                            <input type="number" name="@item.ItemId" value="@item.RetrievalQty" onchange="if(this.value > @item.Qty) warning()" />
+                                        </td>
+
+                                    </tr>
+                                }
                             }
 
+
+
+
                         </table>
-                        <input type="submit" name="" value="Create" class="btn btn-success pull-right" formaction="/StoreClerk/CreateRetrieval/"/>
+                        @if (Model.retrievals != null)
+                        {
+                            <input type="submit" name="" value="Create" class="btn btn-success pull-right" formaction="/StoreClerk/CreateRetrieval/" />
+                        }
+
                     </form>
                 </div>
             </div>

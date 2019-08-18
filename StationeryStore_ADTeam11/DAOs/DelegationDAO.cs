@@ -199,8 +199,7 @@ namespace StationeryStore_ADTeam11.DAOs
             SqlCommand command = new SqlCommand(sql, connnection);
             SqlDataReader reader = command.ExecuteReader();
             try
-            {
-                           
+            {                           
                 while (reader.Read())
                 {
                     Delegation delegation = new Delegation()
@@ -210,18 +209,30 @@ namespace StationeryStore_ADTeam11.DAOs
                         StartDate = (DateTime)reader["StartDate"],
                         EndDate = (DateTime)reader["EndDate"]
                     };
-                    if (DateTime.Today.CompareTo(delegation.EndDate) > 0)
-                    {
-                        string status = "Completed";
-                        sql = "UPDATE Department SET DelegatedStatus = @status WHERE ID = @Id";
-                        SqlCommand cmd = new SqlCommand(sql, connection);
-                        cmd.Parameters.AddWithValue("@status", status);
-                        cmd.Parameters.AddWithValue("@Id", deptId);
-                        int row = cmd.ExecuteNonQuery();
-                        if (row == 0) throw new Exception();
-                    }
+
                     delegations.Add(delegation);
                 }
+                reader.Close();
+                sql = @"SELECT de.ID delegateId,de.EndDate FROM Delegation de,Department d
+                        WHERE d.DelegateID = de.ID AND d.ID = @deptId AND d.DelegatedStatus='Ongoing'";
+                command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@deptId", deptId);
+                reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    DateTime endDate = (DateTime)reader["EndDate"];
+                    reader.Close();
+                    if (DateTime.Today.CompareTo(endDate) > 0)
+                    {
+                            string status = "Completed";
+                            sql = "UPDATE Department SET DelegatedStatus = @status WHERE ID = @Id";
+                            SqlCommand cmd = new SqlCommand(sql, connection);
+                            cmd.Parameters.AddWithValue("@status", status);
+                            cmd.Parameters.AddWithValue("@Id", deptId);
+                            int row = cmd.ExecuteNonQuery();
+                            if (row == 0) throw new Exception();
+                        }
+                    }
             }
             catch(Exception e)
             {

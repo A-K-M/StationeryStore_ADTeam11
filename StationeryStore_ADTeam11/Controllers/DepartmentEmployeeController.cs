@@ -149,27 +149,39 @@ namespace StationeryStore_ADTeam11.Controllers
         //******************************************//
 
 
-
-        [RoleFilter("Representative")]
+         
         public ActionResult ReviewStationeryRequest()
         {
+            if (Session["delegation"].ToString() != "Yes")
+            {
+                return RedirectToAction("ShowError", "Base");
+            }
+
             RequestDAO reqlist = new RequestDAO();
             ViewData["reqlist"] = reqlist.GetRequestList();
             return View();
         }
 
-        [RoleFilter("Representative")]
+      
         public ActionResult ViewPendingRequestDetails(int id)
         {
+            if (Session["delegation"].ToString() != "Yes")
+            {
+                return RedirectToAction("ShowError", "Base");
+            }
             RequestDAO requestDAO = new RequestDAO();
             ViewData["PendingRequests"] = requestDAO.ViewPendingRequestDetails(id);
 
             return View();
         }
 
-        [RoleFilter("Representative")]
+        
         public ActionResult ApproveRejectRequest(string status, int reqId)
         {
+            if (Session["delegation"].ToString() != "Yes")
+            {
+                return RedirectToAction("ShowError", "Base");
+            }
             RequestDAO chngStatus = new RequestDAO();
             chngStatus.UpdateStatus(status, reqId);
             EmailDAO emailDAO = new EmailDAO();

@@ -20,32 +20,32 @@
         <div class="row">
             <Label class="col-12">Representative - @Html.Label(representativeName)</Label>
             <Label class="col-12">Collection Point - @Html.Label(collectionPoint)</Label>
-            <form class="form col-12">
-                
-                    <div class="col-12 form-group">
-                                <label class="from-control"><b>Collection Points</b></label>
+            @using (Html.BeginForm())
+            {
+                <div class="col-12 form-group">
+                    <label class="from-control"><b>Collection Points</b></label>
 
-                                <div>
-                                    @{
-                                        foreach (var cp in collectionPoints)
-                                        {
-                                            @Html.RadioButtonFor(model => model.CollectionPoinId, cp.Id) @Html.Label(cp.Name)<br>
-                                        }
-                                    }
-                                </div>
+                    <div>
+                        @{
+                            foreach (var cp in collectionPoints)
+                            {
+                                @Html.RadioButtonFor(model => model.CollectionPoinId, cp.Id) @Html.Label(cp.Name)<br>
+                            }
+                        }
+                    </div>
 
-                            </div>
+                </div>
 
-                    <div class="col-12 form-group">
-                        <div class="row">
-                            <div class="col-4">
-                            </div>
-                            <div class="col-4">
-                                <input type="submit" value="Update" class="btn btn-success">
-                            </div>
+                <div class="col-12 form-group">
+                    <div class="row">
+                        <div class="col-4">
+                        </div>
+                        <div class="col-4">
+                            <input type="submit" value="Update" class="btn btn-success">
                         </div>
                     </div>
-            </form>
+                </div>
+            }
 
         </div>
     </div>

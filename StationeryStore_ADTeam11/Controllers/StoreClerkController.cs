@@ -421,16 +421,21 @@ namespace StationeryStore_ADTeam11.Controllers
 
             CollectionPointDAO c = new CollectionPointDAO();
             List<CollectionPoint> c_list = c.GetCollectionPointsByClerk(clerk_id);
-            foreach (DisbursementVM row in list)
+            if (list != null)
             {
-                foreach (CollectionPoint col in c_list)
+                foreach (DisbursementVM row in list)
                 {
-                    if (col.Id == row.CollectionPointID)
+                    foreach (CollectionPoint col in c_list)
                     {
-                        row.CollectionPointName = col.Name;
+                        if (col.Id == row.CollectionPointID)
+                        {
+                            row.CollectionPointName = col.Name;
+                        }
                     }
                 }
             }
+
+           
 
             ViewData["c_list"] = c_list;
             return View(list);

@@ -22,56 +22,60 @@
                         {
                         <div class="card">
                             <h4>@col.Name</h4>
-                            @foreach (var row in Model)
+                            @if (Model != null)
                             {
-                                if (row.ItemList != null && col.Id == row.CollectionPointID)
+                                foreach (var row in Model)
                                 {
-                                    <div class="card-header" id="headingOne">
-                                        <h2 class="mb-0">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@row.DeptId" aria-expanded="false" aria-controls="collapseOne">
-                                                @row.DeptName
-                                            </button>
-                                        </h2>
-                                    </div>
-                                    <div id="@row.DeptId" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <label class="col-6">Representative :@row.RepName</label>
-                                                    <a href="@Url.Action("EditDisbursementList","StoreClerk" , new { dept_id = row.DeptId, dept_name = row.DeptName} ) " class="btn btn-warning pull-right">Edit</a>
-                                                    <br />
-                                                    <label class="col-6">Department : @row.DeptName</label>
-                                                    
-                                                </div>
-                                                
-                                            </div>
-                                            <div class="col-12">
-                                                <table class="table table-striped table-hovered table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Item Name</th>
-                                                            <th>Needed</th>
-                                                            <th>Actual </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                    if (row.ItemList != null && col.Id == row.CollectionPointID)
+                                    {
+                                        <div class="card-header" id="headingOne">
+                                            <h2 class="mb-0">
+                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@row.DeptId" aria-expanded="false" aria-controls="collapseOne">
+                                                    @row.DeptName
+                                                </button>
+                                            </h2>
+                                        </div>
+                                        <div id="@row.DeptId" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <label class="col-6">Representative :@row.RepName</label>
+                                                        <a href="@Url.Action("EditDisbursementList","StoreClerk" , new { dept_id = row.DeptId, dept_name = row.DeptName} ) " class="btn btn-warning pull-right">Edit</a>
+                                                        <br />
+                                                        <label class="col-6">Department : @row.DeptName</label>
 
-                                                        @foreach (var item in row.ItemList)
-                                                        {
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-12">
+                                                    <table class="table table-striped table-hovered table-bordered">
+                                                        <thead>
                                                             <tr>
-                                                                <td>@item.Description</td>
-                                                                <td>@item.NeededQty</td>
-                                                                <td>@item.ActualQty</td>
+                                                                <th>Item Name</th>
+                                                                <th>Needed</th>
+                                                                <th>Actual </th>
                                                             </tr>
-                                                        }
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @foreach (var item in row.ItemList)
+                                                            {
+                                                                <tr>
+                                                                    <td>@item.Description</td>
+                                                                    <td>@item.NeededQty</td>
+                                                                    <td>@item.ActualQty</td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
 
+                                }
                             }
+
                         </div>
                         <hr />
                         }
