@@ -175,6 +175,7 @@
     <Compile Include="DAOs\RetrievalDAO.cs" />
     <Compile Include="DAOs\StockCardDAO.cs" />
     <Compile Include="DAOs\SupplierDAO.cs" />
+    <Compile Include="DAOs\SupplierItemDAO.cs" />
     <Compile Include="Enums\FlashMessageType.cs" />
     <Compile Include="Filters\AuthenticationFilter.cs" />
     <Compile Include="Filters\LayoutFilter.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="View_Models\LowStockItemViewModel.cs" />
     <Compile Include="View_Models\ReorderStockListVM.cs" />
     <Compile Include="View_Models\RequestDetailViewModel.cs" />
+    <Compile Include="View_Models\RequestReport.cs" />
     <Compile Include="View_Models\RequestStationery.cs" />
     <Compile Include="View_Models\RequestViewModel.cs" />
     <Compile Include="View_Models\RequisitionVM.cs" />
@@ -241,6 +243,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bar.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="App_Data\data.xsd">
@@ -540,6 +543,12 @@
     <Content Include="Views\StoreClerk\PurchaseOrderHistory.cshtml" />
     <Content Include="Views\StoreClerk\PurchaseOrderDetail.cshtml" />
     <Content Include="Views\StoreClerk\EditDisbursementList.cshtml" />
+    <Content Include="Views\StoreClerk\CreateItem.cshtml" />
+    <Content Include="Views\StoreClerk\DetailsItem.cshtml" />
+    <Content Include="Views\StoreClerk\UpdateItem.cshtml" />
+    <Content Include="Views\StoreClerk\ViewCategories.cshtml" />
+    <Content Include="Views\StoreClerk\ViewItems.cshtml" />
+    <Content Include="Views\StoreManager\ViewCharts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

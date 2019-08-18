@@ -451,5 +451,45 @@ namespace StationeryStore_ADTeam11.DAOs
             return true;
         }
         /***************************************************************************************/
+        public List<RequestReport> GetRequestsByDepartment(string deptId)
+        {
+            List<RequestReport> requestReports=new List<RequestReport>();
+            SqlDataReader reader = null;
+            try
+            {
+                string sql = "Select MONTH(r.DateTime) as DateTime,i.CategoryID,SUM(ir.ActualQty) as ActualQty " +
+                    "from Request r,ItemRequest ir, Item as i " +
+                    "where r.ID = ir.RequestID and ir.ItemID = i.ID " +
+                    "and r.EmployeeID in(select e.ID from Employee as e where e.DeptID=@deptId) "+
+                    "group by MONTH(r.DateTime),i.CategoryID,ir.ItemID";
+
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@deptId", deptId);
+                connection.Open();
+                reader = cmd.ExecuteReader();
+                while (reader != null && reader.Read())
+                {
+                    RequestReport req = new RequestReport()
+                    {
+                        ReqMonth = (int)reader["DateTime"],
+                        CategoryID = (int)reader["CategoryID"],
+                        Qty = (int)reader["ActualQty"]
+                    };
+                    requestReports.Add(req);
+                }
+
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
+            return requestReports;
+        }
+
     }
 }

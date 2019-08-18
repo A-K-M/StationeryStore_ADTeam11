@@ -125,7 +125,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return Json(itemStockCard, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<ActionResult> ViewLowStockItems(String itemCategory)  //PredictReorderQuantity
         {
             using (var client = new HttpClient())
@@ -150,8 +150,33 @@ namespace StationeryStore_ADTeam11.Controllers
                 }
 
             }
+        }*/
+        public async Task<string> PredictReorderQuantity(int itemCategory)
+        {
+            using (var client = new HttpClient())
+            {
+                string year = Convert.ToString(DateTime.Today.Year);
+
+                string month = Convert.ToString(DateTime.Today.Month);
+
+                string item = itemCategory.ToString();
+
+                HttpResponseMessage res = await client.GetAsync("http://127.0.0.1:5000/model1?x=" + year + "&y=" + month + "&z=" + item);
+
+                if (res.IsSuccessStatusCode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Response : " + res.Content.ToString());
+                    System.Diagnostics.Debug.WriteLine("Response : " + res.Content.ReadAsStringAsync().Result);
+                    return res.Content.ReadAsStringAsync().Result;
+                }
+                else
+                {
+                    return "Error";
+                }
+
+            }
         }
-        public ActionResult ViewLowStockItems()  //PredictReorderQuantity
+        public async Task<ActionResult> ViewLowStockItems()  //PredictReorderQuantity
         {
             ItemDAO itemDAO = new ItemDAO();
             List<LowStockItemViewModel> list = new List<LowStockItemViewModel>();
@@ -172,6 +197,9 @@ namespace StationeryStore_ADTeam11.Controllers
                 LowStockItemViewModel itemVM = new LowStockItemViewModel();
                 itemVM.Balance = itemDAO.GetBalanceByItemId(row.Id);
                 itemVM.ItemList = row;
+                ////////////////////////////////
+                itemVM.SuggestedReorderQty= await PredictReorderQuantity(row.CategoryId); //row.CategoryId
+                ////////////////////////////////
                 list.Add(itemVM);
             }
 
@@ -468,5 +496,111 @@ namespace StationeryStore_ADTeam11.Controllers
 
             return View(disbursement);
         }
+
+        //DELETE FROM HERE IF SOMETHING WENT WRONG
+
+        public ActionResult ViewCategories()
+        {
+            CategoryDAO ctgDAO = new CategoryDAO();
+            ViewData["Categories"] = ctgDAO.GetAll();
+            return View();
+        }
+
+
+        public ActionResult AddCategory(string name)
+        {
+
+            CategoryDAO a = new CategoryDAO();
+            a.AddCategory(name);
+            return RedirectToAction("ViewCategories", "StoreClerk");
+        }
+
+        public ActionResult ViewItems()
+        {
+            ItemDAO itemDAO = new ItemDAO();
+            ViewData["Items"] = itemDAO.GetAllItemsNM();
+            return View();
+        }
+
+        public ActionResult DetailsItem(string itemid)
+        {
+            ItemDAO itemDAO = new ItemDAO();
+            ViewData["itemid"] = itemid;
+            ViewData["itemDetails"] = itemDAO.GetItemByIdNM(itemid);
+            return View();
+        }
+
+        public ActionResult CreateItem()       {
+
+
+            SupplierItemDAO suppliersDAO = new SupplierItemDAO();
+            List<Supplier> supplierList = suppliersDAO.GetSupplierNames();
+            CategoryDAO categoryList = new CategoryDAO();
+            List<Category> catlist = categoryList.GetAll();
+
+            ViewData["catlist"] = catlist;
+            ViewData["suppliers"] = supplierList;
+
+            return View();
+        }
+
+        public ActionResult AddItem(Item item)
+        {
+            ItemDAO it = new ItemDAO();
+            CategoryDAO cat = new CategoryDAO();
+            List<Category> catList = cat.GetAll();
+            Category eachCategory = new Category();
+            int count = catList.Count();
+            for (int i = 0; i < count; i++)
+            {
+                if (item.CategoryName == catList[i].Name)
+                {
+
+                    item.CategoryId =catList[i].Id;
+                }
+            }
+            it.AddItem(item);
+            return RedirectToAction("ViewItems", "StoreClerk");
+        }
+
+        public ActionResult UpdateItem(string itemid)
+        {
+            ViewData["itemid"] = itemid;
+            SupplierItemDAO suppliersDAO = new SupplierItemDAO();
+            List<Supplier> supplierList = suppliersDAO.GetSupplierNames();
+
+            CategoryDAO categoryList = new CategoryDAO();
+            List<Category> catlist = categoryList.GetAll();
+
+            ItemDAO itemDAO = new ItemDAO();
+            Item itemList = itemDAO.GetItemByIdNM(itemid);
+
+            ViewData["catlist"] = catlist;
+            ViewData["itemList"] = itemList;
+            ViewData["suppliers"] = supplierList;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditItem(string itemid, Item item)
+        {
+            ItemDAO itemDAO = new ItemDAO();
+            CategoryDAO categoryDAO = new CategoryDAO();
+            Category category = new Category();
+            List<Category> categoreyList = categoryDAO.GetAll();
+            int length = categoreyList.Count;
+            for (int i = 0; i < length; i++)
+            {
+                if (item.CategoryName == categoreyList[i].Name)
+                {
+                    item.CategoryId = categoreyList[i].Id;
+                }
+            }
+            itemDAO.EditItem(item, itemid);
+            ViewData["itemId"] = itemid;
+            return RedirectToAction("ViewItems", "StoreClerk");
+        }
+
+        //NANT MOE'S CODE END HERE
     }
 }
