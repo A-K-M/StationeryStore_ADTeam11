@@ -14,9 +14,13 @@ namespace StationeryStore_ADTeam11.Filters
 
         public RoleFilter (string role)
         {
-            if (role == "Employee,Representative" || role == "Representative")
+            if (role == "Employee,Representative")
             {
-                _role = "Both";
+                _role = "er";
+            }
+            else if(role == "Representative")
+            {
+                _role = "r";
             }
             else
             {
@@ -29,9 +33,15 @@ namespace StationeryStore_ADTeam11.Filters
         {
             string userRole = HttpContext.Current.Session["role"].ToString();
 
-            if (userRole == "Representative")
+            if (userRole == "Representative" && _role == "er")
             {
-                userRole = "Both";
+                userRole = "er";
+            }else if (userRole == "Employee" && _role == "er")
+            {
+                userRole = "er";
+            }else if (userRole == "Representative" && _role == "r")
+            {
+                userRole = "r";
             }
 
 

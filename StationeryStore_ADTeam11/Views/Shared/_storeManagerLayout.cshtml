@@ -15,6 +15,16 @@
     <link href="~/Statics/css/style.default.css" rel="stylesheet" />
     <link href="~/Statics/css/fa-all.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/datatables.min.css" />
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/datatables.min.js"></script>
+
+
+
 </head>
 
 <body>
@@ -44,12 +54,6 @@
                     <li><a href="@Url.Action("AdjustmentVouchers", "StoreManager")"> <i class="icon-bill"></i>Approve Adjustment &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Voucher</a></li>
                     <li><a href="@Url.Action("Suppliers", "StoreManager")"> <i class="icon-website"></i>Suppliers info</a></li>
                     <li><a href="@Url.Action("CreateSupplier", "StoreManager")"> <i class="fa fa-user-plus"></i>Add new supplier</a></li>
-                </ul>
-            </div>
-            <div class="admin-menu">
-                <h5 class="sidenav-heading">Lists</h5>
-                <ul id="side-admin-menu" class="side-menu list-unstyled">
-                    <li> <a href="#"> <i class="icon-screen"> </i>Demo</a></li>
                 </ul>
             </div>
         </div>
@@ -90,7 +94,6 @@
     <script src="~/Statics/vendor/chart.js/Chart.min.js"></script>
     <script src="~/Statics/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="~/Statics/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="~/Statics/js/charts-home.js"></script>
 
     @*<script src="~/Scripts/bar.js"></script>*@
 
