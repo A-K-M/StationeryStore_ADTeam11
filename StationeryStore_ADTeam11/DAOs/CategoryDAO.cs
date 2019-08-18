@@ -39,6 +39,38 @@ namespace StationeryStore_ADTeam11.DAOs
             return categories;
         }
 
+        //DELETE FROM HERE IF SOMETHING WENT WRONG
 
+        public void AddCategory(String name)
+        {
+            string sql = "insert into Category values('" + name + "')";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            connection.Close();
+        }
+
+        public List<Category> GetAllCategoryName()
+        {
+            List<Category> categories = new List<Category>();
+            Category category = null;
+            string sql = "SELECT Name FROM Category";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            connection.Open();
+            SqlDataReader data = cmd.ExecuteReader();
+            while (data.Read())
+            {
+                category = new Category()
+                {
+                    Name = data["Name"].ToString()
+                };
+                categories.Add(category);
+
+            }
+            data.Close();
+            return categories;
+        }
+
+        //NANT MOE'S CODE ENDED HERE
     }
 }

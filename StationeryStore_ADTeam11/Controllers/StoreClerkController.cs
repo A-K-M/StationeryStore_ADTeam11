@@ -517,5 +517,111 @@ namespace StationeryStore_ADTeam11.Controllers
 
             return View(disbursement);
         }
+
+        //DELETE FROM HERE IF SOMETHING WENT WRONG
+
+        public ActionResult ViewCategories()
+        {
+            CategoryDAO ctgDAO = new CategoryDAO();
+            ViewData["Categories"] = ctgDAO.GetAll();
+            return View();
+        }
+
+
+        public ActionResult AddCategory(string name)
+        {
+
+            CategoryDAO a = new CategoryDAO();
+            a.AddCategory(name);
+            return RedirectToAction("ViewCategories", "StoreClerk");
+        }
+
+        public ActionResult ViewItems()
+        {
+            ItemDAO itemDAO = new ItemDAO();
+            ViewData["Items"] = itemDAO.GetAllItemsNM();
+            return View();
+        }
+
+        public ActionResult DetailsItem(string itemid)
+        {
+            ItemDAO itemDAO = new ItemDAO();
+            ViewData["itemid"] = itemid;
+            ViewData["itemDetails"] = itemDAO.GetItemByIdNM(itemid);
+            return View();
+        }
+
+        public ActionResult CreateItem()       {
+
+
+            SupplierItemDAO suppliersDAO = new SupplierItemDAO();
+            List<Supplier> supplierList = suppliersDAO.GetSupplierNames();
+            CategoryDAO categoryList = new CategoryDAO();
+            List<Category> catlist = categoryList.GetAll();
+
+            ViewData["catlist"] = catlist;
+            ViewData["suppliers"] = supplierList;
+
+            return View();
+        }
+
+        public ActionResult AddItem(Item item)
+        {
+            ItemDAO it = new ItemDAO();
+            CategoryDAO cat = new CategoryDAO();
+            List<Category> catList = cat.GetAll();
+            Category eachCategory = new Category();
+            int count = catList.Count();
+            for (int i = 0; i < count; i++)
+            {
+                if (item.CategoryName == catList[i].Name)
+                {
+
+                    item.CategoryId =catList[i].Id;
+                }
+            }
+            it.AddItem(item);
+            return RedirectToAction("ViewItems", "StoreClerk");
+        }
+
+        public ActionResult UpdateItem(string itemid)
+        {
+            ViewData["itemid"] = itemid;
+            SupplierItemDAO suppliersDAO = new SupplierItemDAO();
+            List<Supplier> supplierList = suppliersDAO.GetSupplierNames();
+
+            CategoryDAO categoryList = new CategoryDAO();
+            List<Category> catlist = categoryList.GetAll();
+
+            ItemDAO itemDAO = new ItemDAO();
+            Item itemList = itemDAO.GetItemByIdNM(itemid);
+
+            ViewData["catlist"] = catlist;
+            ViewData["itemList"] = itemList;
+            ViewData["suppliers"] = supplierList;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditItem(string itemid, Item item)
+        {
+            ItemDAO itemDAO = new ItemDAO();
+            CategoryDAO categoryDAO = new CategoryDAO();
+            Category category = new Category();
+            List<Category> categoreyList = categoryDAO.GetAll();
+            int length = categoreyList.Count;
+            for (int i = 0; i < length; i++)
+            {
+                if (item.CategoryName == categoreyList[i].Name)
+                {
+                    item.CategoryId = categoreyList[i].Id;
+                }
+            }
+            itemDAO.EditItem(item, itemid);
+            ViewData["itemId"] = itemid;
+            return RedirectToAction("ViewItems", "StoreClerk");
+        }
+
+        //NANT MOE'S CODE END HERE
     }
 }

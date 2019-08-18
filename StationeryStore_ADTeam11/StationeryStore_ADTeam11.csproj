@@ -175,6 +175,7 @@
     <Compile Include="DAOs\RetrievalDAO.cs" />
     <Compile Include="DAOs\StockCardDAO.cs" />
     <Compile Include="DAOs\SupplierDAO.cs" />
+    <Compile Include="DAOs\SupplierItemDAO.cs" />
     <Compile Include="Enums\FlashMessageType.cs" />
     <Compile Include="Filters\AuthenticationFilter.cs" />
     <Compile Include="Filters\LayoutFilter.cs" />
@@ -540,6 +541,11 @@
     <Content Include="Views\StoreClerk\PurchaseOrderHistory.cshtml" />
     <Content Include="Views\StoreClerk\PurchaseOrderDetail.cshtml" />
     <Content Include="Views\StoreClerk\EditDisbursementList.cshtml" />
+    <Content Include="Views\StoreClerk\CreateItem.cshtml" />
+    <Content Include="Views\StoreClerk\DetailsItem.cshtml" />
+    <Content Include="Views\StoreClerk\UpdateItem.cshtml" />
+    <Content Include="Views\StoreClerk\ViewCategories.cshtml" />
+    <Content Include="Views\StoreClerk\ViewItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

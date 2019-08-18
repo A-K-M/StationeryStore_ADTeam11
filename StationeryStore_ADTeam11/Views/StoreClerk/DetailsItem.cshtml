@@ -1,0 +1,108 @@
+﻿@using StationeryStore_ADTeam11.Models
+@model StationeryStore_ADTeam11.Models.Item
+@{
+    ViewBag.Title = "DetailsItem";
+    Layout = "~/Views/Shared/_storeClerkLayout.cshtml";
+    var item = (Item)ViewData["itemDetails"];
+    string itemId = ViewData["itemId"].ToString();
+
+}
+
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-12">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>
+                            Item Details
+                            <a href="@Url.Action("ViewItems", "StoreClerk")" class="btn btn-outline-success pull-right">Item List</a>
+                        </h4>
+                    </div>
+
+                    <div class="card-body">
+                        <table class="table  table-hover table-striped">
+                            
+                            <tbody>
+                                @{
+                                    @:
+                                    {
+
+                                        <tr>
+                                            <th>Item ID</th>
+                                            <td>@itemId</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Item Category</th>
+                                            <td>@item.CategoryId</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Item Description</th>
+                                            <td>@item.Description</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Reorder Level</th>
+                                            <td>@item.ThresholdValue</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Reorder Qty</th>
+                                            <td>@item.ReorderQty</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Unit of Measure</th>
+                                            <td>@item.Uom</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Bin Number</th>
+                                            <td>@item.BinNo</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>First Supplier</th>
+                                            <td>@item.FirstSupplier</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>First Price</th>
+                                            <td>@item.FirstPrice</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Second Supplier</th>
+                                            <td>@item.SecondSupplier</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Second Price</th>
+                                            <td>@item.SecondPrice</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Third Supplier</th>
+                                            <td>@item.ThirdSupplier</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Third Price</th>
+                                            <td>@item.ThirdPrice</td>
+
+                                        </tr>
+
+                                    }
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
