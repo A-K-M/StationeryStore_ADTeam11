@@ -20,6 +20,24 @@ namespace StationeryStore_ADTeam11.Controllers
     {
         public ActionResult Index()
         {
+            RequestDAO r = new RequestDAO();
+            ItemDAO i = new ItemDAO();
+            OutstandingDAO o = new OutstandingDAO();
+
+            List<Item> ItemIdsAndThresholdValue = i.GetItemIdsAndThresholdValue();
+
+            int low = 0;
+            foreach (var row in ItemIdsAndThresholdValue)
+            {
+                if (row.ThresholdValue > i.GetBalanceByItemId(row.Id))
+                {
+                    low++;
+                }
+            }
+
+            ViewData["todayCount"] = r.getTodayReqCount();
+            ViewData["lowstock"] = low;
+            ViewData["outCount"] = o.GetPendingOutstandingCount();
             return View();
         }
 

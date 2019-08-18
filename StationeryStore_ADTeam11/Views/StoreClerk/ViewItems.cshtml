@@ -4,7 +4,7 @@
     ViewBag.Title = "ViewItems";
     Layout = "~/Views/Shared/_storeClerkLayout.cshtml";
     var itemList = (List<Item>)ViewData["Items"];
-    
+
 }
 
 <div class="container-fluid">
@@ -18,9 +18,9 @@
                             <a href="@Url.Action("CreateItem", "StoreClerk")" class="btn btn-outline-success pull-right">New Item</a>
                         </h4>
                     </div>
-                    
+
                     <div class="card-body">
-                        <table class="table  table-hover table-striped">
+                        <table class="table  table-hover table-striped display nowrap" id="itemTable">
                             <thead>
                                 <tr>
                                     <th>Item Number</th>
@@ -29,30 +29,32 @@
                                     <th>Reorder Level</th>
                                     <th>Reorder Qty</th>
                                     <th>Unit of Measure</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @{
                                     @:
+                                    {
+                                        foreach (var item in itemList)
                                         {
-                                            foreach (var item in itemList)
-                                            {
-                                <tr>
+                                            <tr>
 
-                                    <td>@item.Id</td>
-                                    <td>@item.CategoryId</td>
-                                    <td>@item.Description</td>
-                                    <td>@item.ThresholdValue</td>
-                                    <td>@item.ReorderQty</td>
-                                    <td>@item.Uom</td>
-                                    <td>@Html.ActionLink("Edit", "UpdateItem", "StoreClerk", new { itemid = item.Id }, null)</td>
-                                    <td>@Html.ActionLink("Details", "DetailsItem", "StoreClerk", new { itemid = item.Id }, null)</td>
+                                                <td>@item.Id</td>
+                                                <td>@item.CategoryId</td>
+                                                <td>@item.Description</td>
+                                                <td>@item.ThresholdValue</td>
+                                                <td>@item.ReorderQty</td>
+                                                <td>@item.Uom</td>
+                                                <td>@Html.ActionLink("Edit", "UpdateItem", "StoreClerk", new { itemid = item.Id }, new { @class="btn btn-warning btn-sm"})</td>
+                                                <td>@Html.ActionLink("Details", "DetailsItem", "StoreClerk", new { itemid = item.Id }, new { @class = "btn btn-info btn-sm" })</td>
 
-                                </tr>
+                                            </tr>
                                         }
                                     }
                                 }
-                                
+
 
                             </tbody>
                         </table>
@@ -62,4 +64,10 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#itemTable').DataTable({
+        });
+    });
 
+</script>
