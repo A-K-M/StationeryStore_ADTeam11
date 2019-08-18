@@ -94,6 +94,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
                 retrievals.Add(r);
             }
+            reader.Close();
             conn.Close();
             return retrievals;
         }
@@ -113,6 +114,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 qty = (int)reader["remaining"];
             }
+            reader.Close();
             conn.Close();
             return qty;
         }
@@ -138,6 +140,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 ir.Id = (int)reader["id"];
                 list.Add(ir);
             }
+            reader.Close();
             conn.Close();
             return list;
         }
@@ -168,6 +171,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 o.DateTime = (DateTime)reader["reqdate"];
                 outstandings.Add(o);
             }
+            reader.Close();
             conn.Close();
             return outstandings;
         }
@@ -186,21 +190,87 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 hasOutstanding = true;
             }
+            reader.Close();
             conn.Close();
             return hasOutstanding;
         }
-        public void CreateRetrieval(string username, string itemId, int Qty)
+        public void CreateRetrieval(int clerkId, List<Retrieval> list)
         {
-            EmployeeDAO e = new EmployeeDAO();
-            Employee e_info = e.GetEmployeeByUsername(username);
-
+           
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"  insert into Retrieval(itemID, Status, EmployeeID, RetrievalQty) values ('" + itemId + "', 'Approved', '" + e_info.Id + "', " + Qty + " )";
+            string sql = "";
+            foreach (Retrieval item in list)
+            {
+                sql += "  insert into Retrieval(itemID, Status, EmployeeID, RetrievalQty) values ('" + item.ItemId + "', 'Approved', '" + clerkId + "', " + item.Qty + " );";
 
+            }
             SqlCommand command = new SqlCommand(sql, conn);
             command.ExecuteNonQuery();
             conn.Close();
+
+         
+            foreach (Retrieval r in list)
+            {
+                string out_ids = "";
+                string req_ids = "";
+                string ir_query = "";
+                string ItemId = r.ItemId;
+                int retrieved = r.RetrievalQty;
+                List<Outstanding> out_list = GetPendingOutstandingsListByItemId(ItemId);
+                if (out_list != null)
+                {
+                    foreach (Outstanding row in out_list)
+                    {
+                        int real = 0;
+                        if (retrieved > 0)
+                        {
+                            real = retrieved;
+                        }
+                        retrieved -= row.RemainingQty;
+                        if (retrieved >= 0)
+                        {
+                            out_ids += row.Id.ToString() + ", ";
+                            real = retrieved;
+                        }
+                    }
+                    out_ids = out_ids.TrimEnd(',', ' ');
+                    if (out_ids != "")
+                        UpdateOutstanding(out_ids);
+                }
+
+
+                List<ItemRequest> request_list = GetReqDeptListByItemId(ItemId);
+                if (request_list != null && retrieved > 0)
+                {
+                    foreach (ItemRequest request in request_list)
+                    {
+                        int real = 0;
+                        if (retrieved > 0)
+                        {
+                            real = retrieved;
+                        }
+                        retrieved -= request.NeededQty;
+                        if (retrieved >= 0)
+                        {
+                            req_ids += request.RequestId.ToString() + ", ";
+                            real = retrieved;
+                            UpdateItemRequest(request.Id, request.NeededQty);
+                        }
+                        else
+                        {
+                            ir_query += CreateOutstandingQuery(request.Id, request.NeededQty - real);
+                            UpdateItemRequest(request.Id, real);
+                        }
+                    }
+                    req_ids = req_ids.TrimEnd(',', ' ');
+                    if (req_ids != "")
+                        UpdateRequestStatus(req_ids);
+                    if (ir_query != "")
+                        CreateOutstanding(ir_query);
+                }
+            }
+
         }
         public string GetItemDescByItemId(string itemId)
         {
@@ -214,6 +284,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 itemDesc = (string)reader["Description"];
             }
+            reader.Close();
             conn.Close();
             return itemDesc;
         }
@@ -237,13 +308,13 @@ namespace StationeryStore_ADTeam11.DAOs
         }
         public string CreateOutstandingQuery(int ir_id, int qty)
         {
-            return "insert into Outstanding  (ItemRequestID, qty, Status) values (" + ir_id + "," + qty + ",'Pending');";
+            return "insert into Outstanding  (ItemRequestID, qty, Status,DateTime) values (" + ir_id + "," + qty + ",'Pending','"+DateTime.Now+"');";
         }
         public void UpdateItemRequest(int ir_id, int actual_qty)
         {
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"update ItemRequest set ActualQty = " + actual_qty + " where id = " + ir_id + ";";
+            string sql = @"update ItemRequest set ActualQty = " + actual_qty + " where id = " + ir_id + ";\n";
 
             SqlCommand command = new SqlCommand(sql, conn);
             command.ExecuteNonQuery();
@@ -280,6 +351,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 ir.Id = (int)reader["id"];
                 list.Add(ir);
             }
+            reader.Close();
             conn.Close();
             return list;
         }

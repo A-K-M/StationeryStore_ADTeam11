@@ -54,10 +54,10 @@
                                         @*<button class="btn btn-outline-danger">Reject</button>*@
                                         @*<a href="/DepartmentHead/ApproveRejectRequest/Reject" class="btn btn-outline-danger">Reject</a>*@
                                         @*<button onclick="@Url.Action("ApproveRejectRequest", "DepartmentHead", new {status = "Reject" })">Reject</button>*@
-                                        @Html.ActionLink("Reject", "ApproveRejectRequest", "DepartmentHead", new { status = "Reject" , reqid = reqId }, new {@class = "btn btn-danger"})
+                                        @Html.ActionLink("Reject", "ApproveRejectRequest", "DepartmentHead", new { status = "Rejected" , reqid = reqId }, new {@class = "btn btn-danger"})
                                     </div>
                                     <div class="col-3">
-                                        @Html.ActionLink("Approve", "ApproveRejectRequest", "DepartmentHead", new { status = "Approve", reqid = reqId }, new { @class = "btn btn-success" })
+                                        @Html.ActionLink("Approve", "ApproveRejectRequest", "DepartmentHead", new { status = "Approved", reqid = reqId }, new { @class = "btn btn-success" })
                                     </div>
                                 </div>
                             </div>

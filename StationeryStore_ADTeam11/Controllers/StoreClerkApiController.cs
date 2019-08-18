@@ -58,6 +58,14 @@ namespace StationeryStore_ADTeam11.Controllers
             return new MResponseList<Retrieval>() { ResList = retrievals };
         }
 
+        [Route("{clerkId}/retrievals")]
+        [HttpPost]
+        public MResponse InsertRetrievalList(int clerkId,List<Retrieval> retrievals )
+        {
+           new RetrievalDAO().CreateRetrieval(clerkId,retrievals);
+            return new MResponse() { Success = true };
+        }
+
         [Route("{clerkId}/disbursements")]
         [HttpGet]
         public MResponse GetDisbursements(int clerkId)
