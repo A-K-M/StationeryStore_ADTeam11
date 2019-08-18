@@ -126,9 +126,9 @@ namespace StationeryStore_ADTeam11.DAOs
 
         }
 
-        public bool updateDisbursement(string deptId,int clerkId, List<ItemRequest> items) {
+        public bool UpdateDisbursement(string deptId,int clerkId, List<ItemRequest> items) {
             List<MAdjustmentItem> adjItems = new List<MAdjustmentItem>();
-         
+            SqlTransaction transaction = null;
             try
             {
                 connection.Open();
@@ -137,94 +137,85 @@ namespace StationeryStore_ADTeam11.DAOs
                 string reqSql = "";
                 string irSql = "";
                 string outSql = "";
-                foreach (ItemRequest item in items) {
-                
-                int updatedQty = item.ActualQty;
-                        string sql = @" SELECT ir.RequestID,ir.ID,ir.NeededQty,ir.ActualQty
+                foreach (ItemRequest item in items)
+                {
+
+                    int updatedQty = item.ActualQty;
+                    string sql = @" SELECT ir.RequestID,ir.ID,ir.NeededQty,ir.ActualQty
                                         FROM Request r,ItemRequest ir , Employee e
                                         WHERE R.ID = ir.RequestID AND r.EmployeeID = e.ID AND e.DeptID = @deptId
 	                                          AND r.Status = 'Disbursed' AND ir.ItemID = @itemId
                                         ORDER BY r.DateTime DESC";
-                        cmd = new SqlCommand(sql, connection);
-                        cmd.Parameters.AddWithValue("@deptId", deptId);
-                        cmd.Parameters.AddWithValue("@itemId", item.ItemId);
-                        reader = cmd.ExecuteReader();
-                        while (reader.Read())
+                    cmd = new SqlCommand(sql, connection);
+                    cmd.Parameters.AddWithValue("@deptId", deptId);
+                    cmd.Parameters.AddWithValue("@itemId", item.ItemId);
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (updatedQty == 0)
                         {
-                            if (updatedQty == 0)
-                            {
-                                break;
-                            }
-                            int actual = (int)reader["ActualQty"];
-                            int irID = (int)reader["ID"];
-                            int reqId = (int)reader["RequestID"];
-                            if (updatedQty >= actual)
-                            {
-                                updatedQty -= actual;
-                                reqSql += sqlUpdateRequestStatus(reqId);
-                                irSql += sqlUpdateItemReqQuantity(irID,0);
-                                outSql += sqlCreateOutstanding(irID,actual);
+                            break;
                         }
-                        else if(updatedQty < actual){
-                                irSql += sqlUpdateItemReqQuantity(irID, actual-updatedQty);
-                                outSql += sqlCreateOutstanding(irID, updatedQty);
-                                updatedQty = 0;
-                            }
+                        int actual = (int)reader["ActualQty"];
+                        int irID = (int)reader["ID"];
+                        int reqId = (int)reader["RequestID"];
+                        if (updatedQty >= actual)
+                        {
+                            updatedQty -= actual;
+                            reqSql += sqlUpdateRequestStatus(reqId);
+                            irSql += sqlUpdateItemReqQuantity(irID, 0);
+                            outSql += sqlCreateOutstanding(irID, actual);
                         }
+                        else if (updatedQty < actual)
+                        {
+                            irSql += sqlUpdateItemReqQuantity(irID, actual - updatedQty);
+                            outSql += sqlCreateOutstanding(irID, updatedQty);
+                            updatedQty = 0;
+                        }
+                    }
                     reader.Close();
 
-                    
+
                     //for create adjustment
-                    adjItems.Add(new MAdjustmentItem() {
+                    adjItems.Add(new MAdjustmentItem()
+                    {
                         ItemId = item.ItemId,
                         Description = item.Description,
                         Quantity = item.ActualQty,
                         Reason = "Disburse Edit"
                     });
                 }
-                connection.Close();
-                bool success;
-                if (reqSql != "") {
-                     success = executeSql(reqSql);
-                    if (!success) throw new Exception();
+                transaction = connection.BeginTransaction();
+
+                if (reqSql != "")
+                {
+                    cmd = new SqlCommand(reqSql, connection);
+                    if (cmd.ExecuteNonQuery() == 0) throw new Exception();
                 }
-                if (irSql != "") {
-                     success = executeSql(irSql);
-                    if (!success) throw new Exception();
+                if (irSql != "")
+                {
+                    cmd = new SqlCommand(irSql, connection);
+                    if (cmd.ExecuteNonQuery() == 0) throw new Exception();
                 }
-                if (outSql != "") {
-                     success = executeSql(outSql);
-                    if (!success) throw new Exception();
+                if (outSql != "")
+                {
+                    cmd = new SqlCommand(outSql, connection);
+                    if (cmd.ExecuteNonQuery() == 0) throw new Exception();
                 }
-                
+                transaction.Commit();
+
             }
-            catch 
+            catch
             {
+                if (transaction != null) transaction.Rollback();
                 return false;
+            }
+            finally {
+                connection.Close();
             }
             //Create Adjustment Vouchers
             AdjustmentVoucherDAO adjDAO = new AdjustmentVoucherDAO();
            return  adjDAO.CreateAdjVoucher(clerkId, adjItems);
-        }
-
-        private bool executeSql(string sql)
-        {
-            try
-            {
-                connection.Open();
-                SqlCommand cmd = new SqlCommand(sql, connection);
-                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
-            }
-            catch
-            {
-                return false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-            return true;
-
         }
 
         private string sqlCreateOutstanding(int irID, int qty)
