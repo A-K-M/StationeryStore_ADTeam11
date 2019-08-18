@@ -1,13 +1,6 @@
 ﻿@*@model IEnumerable<StationeryStore_ADTeam11.View_Models.LowStockItemViewModel>*@
 @model IEnumerable<StationeryStore_ADTeam11.View_Models.LowStockItemViewModel>
 
-
-@{
-    ViewBag.Title = "ViewLowStockItems";
-
-    //List<LowStockItemViewModel> items = (List<LowStockItemViewModel>)ViewData["LowStockList"];
-}
-
 @section Scripts
 {
     <script src="@Url.Content("~/Scripts/store_clerk.js")">
@@ -55,7 +48,7 @@
                         <td id="ls-threshold-@counter">@row.ItemList.ThresholdValue</td>
                         <td id="ls-balance-@counter">@row.Balance</td>
                         <td><input id="ls-reorder-qty-@counter" type="text" value="@row.ItemList.ReorderQty"></td>
-                        <td>0</td>
+                        <td>@row.SuggestedReorderQty</td>
                         <td>@row.ItemList.Uom</td>
                     </tr>
                 }
