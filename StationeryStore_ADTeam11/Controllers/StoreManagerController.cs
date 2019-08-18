@@ -119,7 +119,7 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
 
-        
+
         public JsonResult FilterAdjustmentVouchers(string id) //Since we are using default route the parameter name must be id instead of status unless we wanna modify routes
         {
             AdjustmentVoucherDAO adjustment = new AdjustmentVoucherDAO();
@@ -167,14 +167,16 @@ namespace StationeryStore_ADTeam11.Controllers
             SetFlash(Enums.FlashMessageType.Error, "Something went wrong! Please try again later!");
             return RedirectToAction("AdjustmentVouchers");
         }
-        public List<int> ExtractSalesReports(int month)
+        public List<int> ExtractSalesReports( )
         {
+            int year = DateTime.Now.Year;
+
             EmployeeDAO employeeDAO = new EmployeeDAO();
 
             RequestDAO requestDAO = new RequestDAO();
 
-            DepartmentDAO departmentDAO = new DepartmentDAO();           
-            
+            DepartmentDAO departmentDAO = new DepartmentDAO();
+
             List<Department> departments = departmentDAO.GetDepartments();
 
             List<int> monthlySales = new List<int>(); //{paper,pen,stapler}
@@ -186,10 +188,10 @@ namespace StationeryStore_ADTeam11.Controllers
                 if (requestReports != null)
                 {
                     int[] sales = new int[3];
-                    
+
                     foreach (RequestReport request in requestReports)
                     {
-                        if (request.ReqMonth == month)//DateTime.Today.Month)
+                        if (request.ReqYear == year)//DateTime.Today.year)
                         {
                             if (request.CategoryID == 1) //paper
                             {
@@ -203,7 +205,7 @@ namespace StationeryStore_ADTeam11.Controllers
                             {
                                 sales[2] += request.Qty;
                             }
-                        }                        
+                        }
                     }
                     //monthlySales.Add(DateTime.Today.Month);
                     monthlySales.Add(sales[0]);
@@ -217,16 +219,15 @@ namespace StationeryStore_ADTeam11.Controllers
         }
         public ActionResult ViewCharts()
         {
-            int month = 8;
-            int[] salesReport=ExtractSalesReports(month).ToArray();
+            int[] salesReport = ExtractSalesReports().ToArray();
             List<int> request_paper = new List<int>();
             List<int> request_pen = new List<int>();
             List<int> request_stapler = new List<int>();
-            for (int i=0;i<salesReport.Length;i++)
+            for (int i = 0; i < salesReport.Length; i++)
             {
                 request_paper.Add(salesReport[i++]);
                 request_pen.Add(salesReport[i++]);
-                request_stapler.Add(salesReport[i]);                
+                request_stapler.Add(salesReport[i]);
             }
             ViewBag.request_paper = request_paper.ToArray();
             ViewBag.request_pen = request_pen.ToArray();
@@ -242,11 +243,11 @@ namespace StationeryStore_ADTeam11.Controllers
                     var line = reader.ReadLine();
                     var values = line.Split(',');
 
-                    if(values[3]=="Paper")
+                    if (values[3] == "Paper")
                     {
                         paper.Add(Convert.ToInt32(values[4]));
                     }
-                    else if(values[3]=="Pen")
+                    else if (values[3] == "Pen")
                     {
                         pen.Add(Convert.ToInt32(values[4]));
                     }
@@ -268,4 +269,5 @@ namespace StationeryStore_ADTeam11.Controllers
             return View();
         }
     }
-}
+
+ }

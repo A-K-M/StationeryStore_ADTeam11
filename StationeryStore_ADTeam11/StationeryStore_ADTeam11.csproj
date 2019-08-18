@@ -550,6 +550,7 @@
     <Content Include="Views\StoreClerk\ViewCategories.cshtml" />
     <Content Include="Views\StoreClerk\ViewItems.cshtml" />
     <Content Include="Views\StoreManager\ViewCharts.cshtml" />
+    <Content Include="Views\StoreSupervisor\ViewCharts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

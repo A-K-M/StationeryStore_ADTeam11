@@ -7,12 +7,12 @@ namespace StationeryStore_ADTeam11.View_Models
 {
     public class RequestReport
     {
-        private int _reqmonth;
+        private int _reqYear;
         private int _categoryID;
         private int _qty;
         private int _totalQty;
 
-        public int ReqMonth { get; set; }
+        public int ReqYear { get; set; }
         public int CategoryID { get; set; }
         public int Qty { get; set; }
         public int TotalQty { get; set; }
