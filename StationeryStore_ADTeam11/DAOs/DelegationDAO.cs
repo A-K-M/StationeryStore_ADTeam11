@@ -50,7 +50,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 newDelegationId =(Int32) cmd1.ExecuteScalar() ;
                 if (newDelegationId == 0) throw new Exception();
 
-                SqlCommand cmd2 = new SqlCommand("UPDATE Department SET DelegateID = @delegateId , Status = @status WHERE ID = @id", connection, transaction);
+                SqlCommand cmd2 = new SqlCommand("UPDATE Department SET DelegateID = @delegateId , DelegatedStatus = @status WHERE ID = @id", connection, transaction);
                 cmd2.Parameters.AddWithValue("@status", Constant.STATUS_ONGOING);
                 cmd2.Parameters.AddWithValue("@delegateId",newDelegationId);
                 cmd2.Parameters.AddWithValue("@id", deptId);
@@ -137,7 +137,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 }
                 reader.Close();
                 sql = @"SELECT de.ID delegateId,de.EndDate FROM Delegation de,Department d
-                        WHERE d.DelegateID = de.ID AND d.ID = @deptId AND d.DelegatedStatus=Ongoing";
+                        WHERE d.DelegateID = de.ID AND d.ID = @deptId AND d.DelegatedStatus='Ongoing'";
                 command = new SqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@deptId", deptId);
                 reader = command.ExecuteReader();
