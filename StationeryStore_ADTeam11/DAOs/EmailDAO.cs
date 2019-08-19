@@ -27,58 +27,85 @@ namespace StationeryStore_ADTeam11.DAOs
 
         public Employee EmailRequestStatus(int reqId)
         {
-            connection.Open();
-            string sql = "SELECT Email,Name from Employee where ID = (select EmployeeID from Request where ID =" + reqId+")";
-            SqlCommand cmd = new SqlCommand(sql, connection);
+            SqlDataReader reader = null;
             Employee employee = null;
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+
+            try
             {
-                employee = new Employee()
+                connection.Open();
+                string sql = "SELECT Email,Name from Employee where ID = (select EmployeeID from Request where ID =" + reqId + ")";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    Email = reader["Email"].ToString(),
-                    Name = reader["Name"].ToString(),
-                };
+                    employee = new Employee()
+                    {
+                        Email = reader["Email"].ToString(),
+                        Name = reader["Name"].ToString(),
+                    };
+                }
             }
-            connection.Close();
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
             return employee;
         }
 
         public Employee EmailUpdateDepartmentRep(int pointID)
         {
-            connection.Open();
-            string  sql = "  select e.Email ,e.Name from Employee as e, CollectionPoint as c where e.ID = c.EmpID and c.ID = '" + pointID + "'";
-            SqlCommand cmd = new SqlCommand(sql, connection);
             Employee employee = null;
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            SqlDataReader reader = null;
+
+            try
             {
-                employee = new Employee()
+                connection.Open();
+                string sql = "  select e.Email ,e.Name from Employee as e, CollectionPoint as c where e.ID = c.EmpID and c.ID = '" + pointID + "'";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    Email = reader["Email"].ToString(),
-                    Name = reader["Name"].ToString(),
-                };
+                    employee = new Employee()
+                    {
+                        Email = reader["Email"].ToString(),
+                        Name = reader["Name"].ToString(),
+                    };
+                }
             }
-            connection.Close();
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
             return employee;
         }
 
         public Employee EmailDelegation(int empID)
         {
-            connection.Open();
-            string sql = "select Email,Name from Employee where Employee.ID = " + empID;
-            SqlCommand cmd = new SqlCommand(sql, connection);
+            SqlDataReader reader = null;
             Employee employee = null;
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+
+            try
             {
-                employee = new Employee()
+                connection.Open();
+                string sql = "select Email,Name from Employee where Employee.ID = " + empID;
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                reader  = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    Email = reader["Email"].ToString(),
-                    Name = reader["Name"].ToString(),
-                };
+                    employee = new Employee()
+                    {
+                        Email = reader["Email"].ToString(),
+                        Name = reader["Name"].ToString(),
+                    };
+                }
             }
-            connection.Close();
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
             return employee;
         }
 

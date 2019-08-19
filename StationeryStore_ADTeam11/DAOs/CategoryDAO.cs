@@ -19,35 +19,46 @@ namespace StationeryStore_ADTeam11.DAOs
             string sql = "SELECT * FROM Category ORDER BY ID ASC";
 
             SqlCommand cmd = new SqlCommand(sql, connection);
+            SqlDataReader reader = null;
 
-            connection.Open();
-
-            SqlDataReader data = cmd.ExecuteReader();
-
-            while (data.Read())
+            try
             {
-                category = new Category()
+                connection.Open();
+
+                 reader = cmd.ExecuteReader();
+
+                while (reader.Read())
                 {
-                    Id = (int)data["ID"],
-                    Name = data["Name"].ToString()
-                };
+                    category = new Category()
+                    {
+                        Id = (int)reader["ID"],
+                        Name = reader["Name"].ToString()
+                    };
 
-                categories.Add(category);
+                    categories.Add(category);
+                }
             }
-
-            data.Close();
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
             return categories;
         }
 
-        //DELETE FROM HERE IF SOMETHING WENT WRONG
 
         public void AddCategory(String name)
         {
             string sql = "insert into Category values('" + name + "')";
             SqlCommand cmd = new SqlCommand(sql, connection);
-            connection.Open();
-            SqlDataReader reader = cmd.ExecuteReader();
-            connection.Close();
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+            }
+            finally {
+                connection.Close();
+            }
         }
 
         public List<Category> GetAllCategoryName()
@@ -56,21 +67,29 @@ namespace StationeryStore_ADTeam11.DAOs
             Category category = null;
             string sql = "SELECT Name FROM Category";
             SqlCommand cmd = new SqlCommand(sql, connection);
-            connection.Open();
-            SqlDataReader data = cmd.ExecuteReader();
-            while (data.Read())
+            SqlDataReader data = null;
+            try
             {
-                category = new Category()
+                connection.Open();
+                data = cmd.ExecuteReader();
+                while (data.Read())
                 {
-                    Name = data["Name"].ToString()
-                };
-                categories.Add(category);
+                    category = new Category()
+                    {
+                        Name = data["Name"].ToString()
+                    };
+                    categories.Add(category);
 
+                }
             }
-            data.Close();
+            finally
+            {
+                data.Close();
+                connection.Close();
+            }
+
             return categories;
         }
 
-        //NANT MOE'S CODE ENDED HERE
     }
 }

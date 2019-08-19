@@ -13,20 +13,27 @@ namespace StationeryStore_ADTeam11.DAOs
         {
             List<Department> departments = new List<Department>();
             SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select ID from Department where not ID='STOR'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            SqlDataReader reader = null;
+            try
             {
-                Department department = new Department()
+                conn.Open();
+                string sql = @"select ID from Department where not ID='STOR'";
+                SqlCommand command = new SqlCommand(sql, conn);
+                reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    Id = (string)reader["ID"]
-                };
+                    Department department = new Department()
+                    {
+                        Id = (string)reader["ID"]
+                    };
 
-                departments.Add(department);
+                    departments.Add(department);
+                }
             }
-            conn.Close();
+            finally {
+                if(reader != null)reader.Close();
+                conn.Close();
+            }
             return departments;
         }
 
@@ -34,45 +41,61 @@ namespace StationeryStore_ADTeam11.DAOs
         {
             Department department = new Department();
             SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select * from Department where ID='"+Id+"'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            SqlDataReader reader = null;
+            try
             {
-                department = new Department()
+                conn.Open();
+                string sql = @"select * from Department where ID='" + Id + "'";
+                SqlCommand command = new SqlCommand(sql, conn);
+                reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    Id = (string)reader["ID"],
-                    Name = (string)reader["Name"],
-                    ContactId = (int)reader["ContactID"],
-                    HeadId = (int)reader["HeadID"],
-                    RepId = (int)reader["RepID"],
-                    DelegationId = (int)reader["DelegateID"],
-                    CollectionPoinId = (int)reader["CollectionPointID"],
-                    DelegateStatus = (string)reader["DelegatedStatus"]
-                };
+                    department = new Department()
+                    {
+                        Id = (string)reader["ID"],
+                        Name = (string)reader["Name"],
+                        ContactId = (int)reader["ContactID"],
+                        HeadId = (int)reader["HeadID"],
+                        RepId = (int)reader["RepID"],
+                        DelegationId = (int)reader["DelegateID"],
+                        CollectionPoinId = (int)reader["CollectionPointID"],
+                        DelegateStatus = (string)reader["DelegatedStatus"]
+                    };
+                }
             }
-            conn.Close();
+            finally
+            {
+                if (reader != null) reader.Close();
+                conn.Close();
+            }
             return department;
         }
 
-        public List<String> GetCollectionPointByDeptId(string deptId)
+        public List<string> GetCollectionPointByDeptId(string deptId)
         {
-            List<String> CollectionPoint = new List<string>();
+            List<string> CollectionPoint = new List<string>();
             SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select d.Name as DeptName, c.Address as CollectionPoint,e.Name as ClerkName
-                            from CollectionPoint as c, Department as d, Employee as e
-                            where d.CollectionPointID=c.ID and c.EmpID=e.ID and d.ID='"+ deptId + "'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
+            SqlDataReader reader = null;
+            try
             {
-                CollectionPoint.Add((string)reader["DeptName"]);
-                CollectionPoint.Add((string)reader["CollectionPoint"]);
-                CollectionPoint.Add((string)reader["ClerkName"]);
+                conn.Open();
+                string sql = @"select d.Name as DeptName, c.Address as CollectionPoint,e.Name as ClerkName
+                            from CollectionPoint as c, Department as d, Employee as e
+                            where d.CollectionPointID=c.ID and c.EmpID=e.ID and d.ID='" + deptId + "'";
+                SqlCommand command = new SqlCommand(sql, conn);
+                reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    CollectionPoint.Add((string)reader["DeptName"]);
+                    CollectionPoint.Add((string)reader["CollectionPoint"]);
+                    CollectionPoint.Add((string)reader["ClerkName"]);
+                }
             }
-            conn.Close();
+            finally
+            {
+                if (reader != null) reader.Close();
+                conn.Close();
+            }
             return CollectionPoint;
         }
 
@@ -104,17 +127,7 @@ namespace StationeryStore_ADTeam11.DAOs
             return true;
         }
 
-        //public void UpdateDepartmentDelegation(string deptId, int empId,string status)
-        //{
-        //    Department department = new Department();
-        //    SqlConnection conn = connection;
-        //    conn.Open();
-        //    string sql = @"UPDATE Department SET DelegateID ='" + empId + "', DelegatedStatus ='"+status+"' WHERE  ID='" + deptId + "'";
-        //    SqlCommand command = new SqlCommand(sql, conn);
-        //    command.ExecuteNonQuery();
-        //    conn.Close();
-        //}
-
+     
         public bool InsertDelegation(Delegation del, string deptId)
         {
 

@@ -13,35 +13,41 @@ namespace StationeryStore_ADTeam11.DAOs
         public List<ReorderStockListVM> ReorderStockLists(string status)
         {
             List<ReorderStockListVM> reorderStockLists = new List<ReorderStockListVM>();
-
-            string sql = @"SELECT po.ID, po.Date, po.Status, e.Name
+            SqlDataReader data = null;
+            try
+            {
+                string sql = @"SELECT po.ID, po.Date, po.Status, e.Name
                         FROM PurchaseOrder po, Employee e
                         WHERE Status = @status
                         AND po.EmpID = e.ID";
 
-            SqlCommand cmd = new SqlCommand(sql, connection);
-            cmd.Parameters.AddWithValue("@status", status);
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@status", status);
 
-            connection.Open();
+                connection.Open();
 
-            SqlDataReader data = cmd.ExecuteReader();
+                data = cmd.ExecuteReader();
 
-            ReorderStockListVM stocks = null;
+                ReorderStockListVM stocks = null;
 
-            while (data.Read())
-            {
-                stocks = new ReorderStockListVM()
+                while (data.Read())
                 {
-                    Id = Convert.ToInt32(data["ID"]),
-                    RequestedDate = Convert.ToDateTime(data["Date"]),
-                    Status = data["Status"].ToString(),
-                    EmpName = data["Name"].ToString()
-                };
+                    stocks = new ReorderStockListVM()
+                    {
+                        Id = Convert.ToInt32(data["ID"]),
+                        RequestedDate = Convert.ToDateTime(data["Date"]),
+                        Status = data["Status"].ToString(),
+                        EmpName = data["Name"].ToString()
+                    };
 
-                reorderStockLists.Add(stocks);
+                    reorderStockLists.Add(stocks);
+                }
             }
-            data.Close();
-            connection.Close();
+            finally {
+                if(data != null)data.Close();
+                connection.Close();
+            }
+           
 
             return reorderStockLists;
         }
@@ -49,38 +55,46 @@ namespace StationeryStore_ADTeam11.DAOs
         public List<PurchaseOrderItem> ReorderStockDetail(int id)
         {
             List<PurchaseOrderItem> detailList = new List<PurchaseOrderItem>();
+            SqlDataReader data = null;
 
-            string sql = @"SELECT poi.*, i.FirstPrice, i.FirstSupplier
+            try
+            {
+                string sql = @"SELECT poi.*, i.FirstPrice, i.FirstSupplier
                             FROM PurchaseOrderItem poi, Item i
                             WHERE PurchaseID = @id
                             AND i.ID = poi.ItemID";
-            SqlCommand cmd = new SqlCommand(sql, connection);
-            cmd.Parameters.AddWithValue("@id", id);
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@id", id);
 
-            connection.Open();
+                connection.Open();
 
-            SqlDataReader data = cmd.ExecuteReader();
+                data = cmd.ExecuteReader();
 
-            PurchaseOrderItem item = null;
+                PurchaseOrderItem item = null;
 
-            while (data.Read())
-            {
-                item = new PurchaseOrderItem()
+                while (data.Read())
                 {
-                    Id = Convert.ToInt32(data["PurchaseID"]),
-                    ItemId = data["ItemID"].ToString(),
-                    PurchaseId = Convert.ToInt32(data["PurchaseID"]),
-                    Description = data["Description"].ToString(),
-                    Qty = Convert.ToInt32(data["Qty"]),
-                    Status = data["Status"].ToString(),
-                    Price = Convert.ToDouble(data["FirstPrice"]),
-                    Supplier = data["FirstSupplier"].ToString(),
-                    Amount = Convert.ToDouble(data["FirstPrice"]) * Convert.ToInt32(data["Qty"])
-                };
-                detailList.Add(item);
+                    item = new PurchaseOrderItem()
+                    {
+                        Id = Convert.ToInt32(data["PurchaseID"]),
+                        ItemId = data["ItemID"].ToString(),
+                        PurchaseId = Convert.ToInt32(data["PurchaseID"]),
+                        Description = data["Description"].ToString(),
+                        Qty = Convert.ToInt32(data["Qty"]),
+                        Status = data["Status"].ToString(),
+                        Price = Convert.ToDouble(data["FirstPrice"]),
+                        Supplier = data["FirstSupplier"].ToString(),
+                        Amount = Convert.ToDouble(data["FirstPrice"]) * Convert.ToInt32(data["Qty"])
+                    };
+                    detailList.Add(item);
+                }
             }
-            data.Close();
-            connection.Close();
+            finally
+            {
+                if (data != null) data.Close();
+                connection.Close();
+            }
+
 
             return detailList;
         }
@@ -115,30 +129,38 @@ namespace StationeryStore_ADTeam11.DAOs
         public List<ReorderStockListVM> ApprovedReorderStockList()
         {
             List<ReorderStockListVM> reorderStockLists = new List<ReorderStockListVM>();
+            SqlDataReader data = null;
 
-            string sql = @"SELECT * FROM PurchaseOrder WHERE Status = 'Approved'";
-
-            SqlCommand cmd = new SqlCommand(sql, connection);
-
-            connection.Open();
-
-            SqlDataReader data = cmd.ExecuteReader();
-
-            ReorderStockListVM stocks = null;
-
-            while (data.Read())
+            try
             {
-                stocks = new ReorderStockListVM()
-                {
-                    Id = Convert.ToInt32(data["ID"]),
-                    RequestedDate = Convert.ToDateTime(data["Date"]),
-                    Status = data["Status"].ToString()
-                };
+                string sql = @"SELECT * FROM PurchaseOrder WHERE Status = 'Approved'";
 
-                reorderStockLists.Add(stocks);
+                SqlCommand cmd = new SqlCommand(sql, connection);
+
+                connection.Open();
+
+                data = cmd.ExecuteReader();
+
+                ReorderStockListVM stocks = null;
+
+                while (data.Read())
+                {
+                    stocks = new ReorderStockListVM()
+                    {
+                        Id = Convert.ToInt32(data["ID"]),
+                        RequestedDate = Convert.ToDateTime(data["Date"]),
+                        Status = data["Status"].ToString()
+                    };
+
+                    reorderStockLists.Add(stocks);
+                }
             }
-            data.Close();
-            connection.Close();
+            finally
+            {
+                if (data != null) data.Close();
+                connection.Close();
+            }
+
 
             return reorderStockLists;
         }
@@ -171,30 +193,36 @@ namespace StationeryStore_ADTeam11.DAOs
         public List<ReorderStockListVM> PurchaseOrderHistory()
         {
             List<ReorderStockListVM> purchaseOrders = new List<ReorderStockListVM>();
+            SqlDataReader data = null;
 
             ReorderStockListVM purchaseOrder = null;
-
-            string sql = @"SELECT *
+            try
+            {
+                string sql = @"SELECT *
                         FROM PurchaseOrder
                         WHERE Status IN ('Ordered', 'Delivered', 'Processing')";
 
-            SqlCommand cmd = new SqlCommand(sql, connection);
-            connection.Open();
-            SqlDataReader data = cmd.ExecuteReader();
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                connection.Open();
+                data = cmd.ExecuteReader();
 
-            while (data.Read())
-            {
-                purchaseOrder = new ReorderStockListVM()
+                while (data.Read())
                 {
-                    Id = Convert.ToInt32(data["ID"]),
-                    RequestedDate = Convert.ToDateTime(data["Date"]),
-                    Status = data["Status"].ToString()
-                };
+                    purchaseOrder = new ReorderStockListVM()
+                    {
+                        Id = Convert.ToInt32(data["ID"]),
+                        RequestedDate = Convert.ToDateTime(data["Date"]),
+                        Status = data["Status"].ToString()
+                    };
 
-                purchaseOrders.Add(purchaseOrder);
+                    purchaseOrders.Add(purchaseOrder);
+                }
             }
-            data.Close();
-            connection.Close();
+            finally
+            {
+                if (data != null) data.Close();
+                connection.Close();
+            }
 
             return purchaseOrders;
         }

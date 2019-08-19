@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.Util;
 
 namespace StationeryStore_ADTeam11.DAOs
 {
@@ -13,22 +14,29 @@ namespace StationeryStore_ADTeam11.DAOs
         public List<Delegation> GetDelegationStatus(int empId)
         {
             List<Delegation> delegation = new List<Delegation>();
-            string sql = "select StartDate, EndDate from Delegation where EmpID='"+ empId +"'";
-            SqlCommand cmd = new SqlCommand(sql, connection);
-            connection.Open();
-            SqlDataReader reader = cmd.ExecuteReader();
-            while(reader != null && reader.Read())
+            SqlDataReader reader = null;
+            try
             {
-                Delegation del = new Delegation()
+                string sql = "select StartDate, EndDate from Delegation where EmpID='" + empId + "'";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                connection.Open();
+                reader = cmd.ExecuteReader();
+                while (reader != null && reader.Read())
                 {
-                    StartDate = (DateTime)reader["StartDate"],
-                    EndDate = (DateTime)reader["EndDate"],
-                };
+                    Delegation del = new Delegation()
+                    {
+                        StartDate = (DateTime)reader["StartDate"],
+                        EndDate = (DateTime)reader["EndDate"],
+                    };
 
-                delegation.Add(del);
+                    delegation.Add(del);
+                }
             }
-            reader.Close();
-          
+            finally {
+                if(reader != null) reader.Close();
+                connection.Close();
+            }
+
             return delegation;
         }
 
@@ -75,8 +83,7 @@ namespace StationeryStore_ADTeam11.DAOs
         public bool CancelDelegation(string deptId,int delegationId)
         {
             SqlTransaction transaction = null;
-            DateTime now = DateTime.Now;
-            string sqlFormattedDate = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+           
             try
             {
                 connection.Open();
@@ -89,7 +96,7 @@ namespace StationeryStore_ADTeam11.DAOs
 
                 if (cmd.ExecuteNonQuery() == 0) throw new Exception();
 
-                sql = @"UPDATE Delegation SET EndDate = '" +sqlFormattedDate + "' where ID = @delegationId";
+                sql = @"UPDATE Delegation SET EndDate = '" +DateUtils.Now() + "' where ID = @delegationId";
                 cmd = new SqlCommand(sql, connection, transaction);
                 cmd.Parameters.AddWithValue("@delegationId", delegationId);
 
@@ -175,19 +182,27 @@ namespace StationeryStore_ADTeam11.DAOs
         public Delegation GetDelegationById(int id)
         {
             Delegation delegation = new Delegation();
+            SqlDataReader reader = null;
             SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select * from Delegation where ID='" + id + "'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
+            try
             {
-                delegation.Id = (int)reader["ID"];
-                delegation.EmployeeId = (int)reader["EmpID"];
-                delegation.StartDate = (DateTime)reader["StartDate"];
-                delegation.EndDate = (DateTime)reader["EndDate"];
+                conn.Open();
+                string sql = @"select * from Delegation where ID='" + id + "'";
+                SqlCommand command = new SqlCommand(sql, conn);
+                reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    delegation.Id = (int)reader["ID"];
+                    delegation.EmployeeId = (int)reader["EmpID"];
+                    delegation.StartDate = (DateTime)reader["StartDate"];
+                    delegation.EndDate = (DateTime)reader["EndDate"];
+                }
             }
-            conn.Close();
+            finally
+            {
+                if (reader != null) reader.Close();
+                connection.Close();
+            }
             return delegation;
         }
         public List<Delegation> GetDelegationsByEmpId(int empId, string deptId)
@@ -248,26 +263,36 @@ namespace StationeryStore_ADTeam11.DAOs
         public void CreateDelegation(Delegation delegation)
         {
             SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"INSERT INTO Delegation(StartDate,EndDate,EmpID,Reason) 
+            try
+            {
+                conn.Open();
+                string sql = @"INSERT INTO Delegation(StartDate,EndDate,EmpID,Reason) 
                                 VALUES ('" + delegation.StartDate + "', '" + delegation.EndDate + "', '" +
-                                delegation.EmployeeId + "', '" + delegation.Reason + "')";
-            SqlCommand command = new SqlCommand(sql, conn);
-            command.ExecuteNonQuery();
-            conn.Close();
+                                    delegation.EmployeeId + "', '" + delegation.Reason + "')";
+                SqlCommand command = new SqlCommand(sql, conn);
+                command.ExecuteNonQuery();
+            }
+            finally {
+                conn.Close();
+            }
             //Email
 
         }
         public void CancelDelegation(int delegationId)
         {
-            DateTime now = DateTime.Now;
-            string sqlFormattedDate = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            
             SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"update Delegation set EndDate = '" + now + "' where ID = " + delegationId;
-            SqlCommand command = new SqlCommand(sql, conn);
-            command.ExecuteNonQuery();
-            conn.Close();
+            try
+            {
+                conn.Open();
+                string sql = @"update Delegation set EndDate = '" + DateUtils.Now() + "' where ID = " + delegationId;
+                SqlCommand command = new SqlCommand(sql, conn);
+                command.ExecuteNonQuery();
+            }
+            finally
+            {
+                conn.Close();
+            }
 
         }
 

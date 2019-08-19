@@ -14,12 +14,14 @@ namespace StationeryStore_ADTeam11.DAOs
         public  List<StockCard> GetAllStockCards()
         {
             List<StockCard> stockCards = new List<StockCard>();
-         
+            SqlDataReader reader = null;
+            try
+            {
                 connection.Open();
 
                 string sql = @"SELECT * FROM Stockcard";
                 SqlCommand cmd = new SqlCommand(sql, connection);
-                SqlDataReader reader = cmd.ExecuteReader();
+                 reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -34,8 +36,12 @@ namespace StationeryStore_ADTeam11.DAOs
                     };
                     stockCards.Add(stockCard);
                 }
-                reader.Close();
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
                 connection.Close();
+            }
             
 
             stockCards = stockCards.OrderByDescending(x => x.Date).ToList();

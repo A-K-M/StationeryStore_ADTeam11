@@ -126,33 +126,46 @@ namespace StationeryStore_ADTeam11.DAOs
         {
             string deptId = null;
             SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select DeptID from Employee where Username='" + username + "'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
+            SqlDataReader reader = null;
+            try
             {
-                deptId = (string)reader["DeptID"];
+                conn.Open();
+                string sql = @"select DeptID from Employee where Username='" + username + "'";
+                SqlCommand command = new SqlCommand(sql, conn);
+                reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    deptId = (string)reader["DeptID"];
 
+                }
             }
-            conn.Close();
+            finally
+            {
+                if (reader != null) reader.Close();
+                conn.Close();
+            }
             return deptId;
         }
 
         public bool UpdateUserRole(int empId)
         {
-            string sql = "UPDATE Employee SET Role = 'Representative'WHERE ID = @id";
-            SqlCommand cmd = new SqlCommand(sql, connection);
-            cmd.Parameters.AddWithValue("@id", empId);
-            connection.Open();
-
-            if (cmd.ExecuteNonQuery() == 0)
+            try
             {
-                connection.Close();
+                connection.Open();
+                string sql = "UPDATE Employee SET Role = 'Representative'WHERE ID = @id";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@id", empId);
+
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception();
+                
+            }
+            catch {
                 return false;
             }
-
-            connection.Close();
+            finally
+            {
+                connection.Close();
+            }
             return true;
         }
 
@@ -161,53 +174,68 @@ namespace StationeryStore_ADTeam11.DAOs
             List<Employee> employees = new List<Employee>();
             Employee employee = null;
             SqlConnection conn = connection;
-            conn.Open();
-            //string sql = @"select * from employee where DeptID = '" + deptId + "'";
-            //string sql = @"select * from Employee as e, Department as d
-            //                where not e.ID=d.HeadID and not e.ID=d.RepID and e.DeptID='"+deptId+"'";
-
-            string sql = "SELECT e.* " +
-                          "FROM Employee e, Department d " +
-                           "WHERE e.DeptID = d.ID " +
-                            "AND e.ID != d.HeadID " +
-                            //"AND e.ID != d.RepID " +
-                            "AND d.ID = '" + deptId + "'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            SqlDataReader reader = null;
+            try
             {
-                employee = new Employee()
+                conn.Open();
+                //string sql = @"select * from employee where DeptID = '" + deptId + "'";
+                //string sql = @"select * from Employee as e, Department as d
+                //                where not e.ID=d.HeadID and not e.ID=d.RepID and e.DeptID='"+deptId+"'";
+
+                string sql = "SELECT e.* " +
+                              "FROM Employee e, Department d " +
+                               "WHERE e.DeptID = d.ID " +
+                                "AND e.ID != d.HeadID " +
+                                //"AND e.ID != d.RepID " +
+                                "AND d.ID = '" + deptId + "'";
+                SqlCommand command = new SqlCommand(sql, conn);
+                reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    Id = (int)reader["id"],
-                    DepartmentId = (string)reader["DeptID"],
-                    Name = (string)reader["Name"],
-                    UserName = (string)reader["UserName"],
-                    Password = (string)reader["Password"],
-                    Email = (string)reader["Email"],
-                    Role = (string)reader["Role"]
-                };
-                employees.Add(employee);
+                    employee = new Employee()
+                    {
+                        Id = (int)reader["id"],
+                        DepartmentId = (string)reader["DeptID"],
+                        Name = (string)reader["Name"],
+                        UserName = (string)reader["UserName"],
+                        Password = (string)reader["Password"],
+                        Email = (string)reader["Email"],
+                        Role = (string)reader["Role"]
+                    };
+                    employees.Add(employee);
+                }
             }
-            conn.Close();
+            finally {
+                if(reader != null) { reader.Close(); }
+                conn.Close();
+            }
             return employees;
         }
         public Employee GetEmployeeByName(string deptId,string name)
         {
             Employee employee = null;
             SqlConnection conn = connection;
-            conn.Open();
-            string sql = @"select ID from Employee where Name = '" + name + "' and DeptID = '" + deptId + "'";
-            SqlCommand command = new SqlCommand(sql, conn);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
+            SqlDataReader reader = null;
+            try
             {
-                employee = new Employee()
+                conn.Open();
+                string sql = @"select ID from Employee where Name = '" + name + "' and DeptID = '" + deptId + "'";
+                SqlCommand command = new SqlCommand(sql, conn);
+               reader = command.ExecuteReader();
+                if (reader.Read())
                 {
-                    Id = (int)reader["id"]
-                };
+                    employee = new Employee()
+                    {
+                        Id = (int)reader["id"]
+                    };
 
+                }
             }
-            conn.Close();
+            finally
+            {
+                if (reader != null) { reader.Close(); }
+                conn.Close();
+            }
             return employee;
 
         }
@@ -257,60 +285,6 @@ namespace StationeryStore_ADTeam11.DAOs
             }
             return true;
         }
-
-        //public async Task<List<MEmployee>> GetEmployees()
-        //{
-
-        //    List<MEmployee> mEmployees = new List<MEmployee>();
-        //    await connection.OpenAsync().ConfigureAwait(false);
-        //    string sql = @"SELECT id,DeptID,Name,Email FROM employee";
-        //    SqlCommand cmd = new SqlCommand(sql, connection);
-        //    SqlDataReader reader = await cmd.ExecuteReaderAsync();
-        //    while (reader != null && await reader.ReadAsync())
-        //    {
-
-        //        mEmployees.Add(new MEmployee()
-        //        {
-        //            Id = (int)reader["id"],
-        //            DepartmentId = (string)reader["deptID"],
-        //            Name = (string)reader["Name"],
-        //            Email = (string)reader["Email"]
-        //        });
-        //        System.Diagnostics.Debug.WriteLine("Employee Read " + (string)reader["Name"]);
-
-        //    }
-        //    reader.Close();
-        //    connection.Close();
-        //    return mEmployees;
-        //}
-
-        //public Task<List<MEmployee>> GetEmployees()
-        //{
-        //    return Task.Run(async () =>
-        //    {
-        //        List<MEmployee> mEmployees = new List<MEmployee>();
-        //        await connection.OpenAsync().ConfigureAwait(false);
-        //        string sql = @"SELECT id,DeptID,Name,Email FROM employee";
-        //        SqlCommand cmd = new SqlCommand(sql, connection);
-        //        SqlDataReader reader = await cmd.ExecuteReaderAsync();
-        //        while (await reader.ReadAsync())
-        //        {
-
-        //            mEmployees.Add(new MEmployee()
-        //            {
-        //                Id = (int)reader["id"],
-        //                DepartmentId = (string)reader["deptID"],
-        //                Name = (string)reader["Name"],
-        //                Email = (string)reader["Email"]
-        //            });
-        //            System.Diagnostics.Debug.WriteLine("Employee Read " + (string)reader["Name"]);
-
-        //        }
-        //        reader.Close();
-        //        connection.Close();
-        //        return mEmployees;
-        //    });
-        //}
 
     }
 }

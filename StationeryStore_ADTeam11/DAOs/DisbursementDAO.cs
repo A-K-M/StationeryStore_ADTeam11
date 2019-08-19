@@ -243,7 +243,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@DeptID", deptId);
-                cmd.Parameters.AddWithValue("@Date", DateUtils.now());
+                cmd.Parameters.AddWithValue("@Date", DateUtils.Now());
                 
                 if (cmd.ExecuteNonQuery() == 0) throw new Exception();
             }
