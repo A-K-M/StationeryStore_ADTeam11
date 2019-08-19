@@ -107,7 +107,7 @@ namespace StationeryStore_ADTeam11.Controllers
         public MResponse ApproveAllRequst(string deptId)
         {
             RequestDAO dao = new RequestDAO();
-            return new MResponse() { Success = dao.ApproveAllRequests(deptId) };
+            return new MResponse() { Success = dao.ApproveAllRequest(deptId) };
         }
 
 
