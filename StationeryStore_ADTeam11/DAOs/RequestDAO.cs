@@ -44,28 +44,7 @@ namespace StationeryStore_ADTeam11.DAOs
             return requestlist;
         }
 
-        public bool ApproveAllRequest(string deptId) {
-            try
-            {
-                connection.Open();
-                string sql = @" UPDATE Request SET Status = 'Approved'
-                                WHERE ID IN( SELECT r.ID FROM Request r, Employee e
-                                             WHERE r.EmployeeID = e.ID AND e.DeptID = @deptId) AND Status = 'Pending'";
-                SqlCommand cmd = new SqlCommand(sql, connection);
-                cmd.Parameters.AddWithValue("@deptId", deptId);
-            }
-            catch
-            {
-                return false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-            return false;
-
-
-        }
+     
         public List<Request> GetRequests(int empId) //NZCK
         {
             //empId = 11237;

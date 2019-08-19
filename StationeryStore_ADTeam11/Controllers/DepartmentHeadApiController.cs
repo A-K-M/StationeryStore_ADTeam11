@@ -102,6 +102,15 @@ namespace StationeryStore_ADTeam11.Controllers
             return new MResponseList<MRequestItem>() { ResList = dao.GetRequestItems(reqId) };
         }
 
+        [Route("{deptId}/requests/approve_all")]
+        [HttpGet]
+        public MResponse ApproveAllRequst(string deptId)
+        {
+            RequestDAO dao = new RequestDAO();
+            return new MResponse() { Success = dao.ApproveAllRequests(deptId) };
+        }
+
+
         [Route("requests")]
         [HttpPatch]
         public MResponse UpdateReqStatus(RequisitionVM status)
