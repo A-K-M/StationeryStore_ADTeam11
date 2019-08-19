@@ -2,6 +2,7 @@
 using Microsoft.Ajax.Utilities;
 using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.Util;
 using StationeryStore_ADTeam11.View_Models;
 using System;
 using System.Collections.Generic;
@@ -256,9 +257,8 @@ namespace StationeryStore_ADTeam11.DAOs
 
         public bool Add(int employeeId, List<ItemAdjVoucher> itemAdjVouchers)
         {
-            DateTime now = DateTime.Now;
 
-            string sqlFormattedDate = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string sqlFormattedDate = DateUtils.now();
 
             string status = Constant.STATUS_PENDING;
 
@@ -460,11 +460,11 @@ namespace StationeryStore_ADTeam11.DAOs
                     cmd.ExecuteNonQuery();
 
                     string stockCardSql = "";
-
+                    string now = DateUtils.now();
                     foreach (var item in voucherItems)
                     {
                         stockCardSql += $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
-                           $" VALUES ('{item.ItemID}','{DateTime.Today}','{-item.Quantity}'," +
+                           $" VALUES ('{item.ItemID}','{now}','{-item.Quantity}'," +
                            $"(SELECT TOP 1 Balance FROM Stockcard WHERE ItemID='{item.ItemID}' ORDER BY ID DESC)-({item.Quantity})" +
                            $",'ADJ-{id}'); \n";
                     }
@@ -502,7 +502,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 connection.Open();
 
-                string sql = " SELECT av.Date,av.Status,av.VoucherID,SUM(iav.Qty) TotalQuantity " +
+                string sql = " SELECT av.Date,av.Status,av.VoucherID,SUM(ABS(iav.Qty)) TotalQuantity " +
                              " FROM AdjustmentVoucher av, ItemAdjVoucher iav "+
                              " WHERE av.VoucherID = iav.VoucherID "+
                              " AND av.EmployeeID = @clerkId "+
@@ -548,9 +548,11 @@ namespace StationeryStore_ADTeam11.DAOs
                 transaction = connection.BeginTransaction();
                 string sql = "INSERT INTO AdjustmentVoucher (EmployeeID, Date, Status) OUTPUT INSERTED.VoucherID VALUES (@employeeId, @date, @status)";
 
+                string now = DateUtils.now();
+
                 SqlCommand cmd = new SqlCommand(sql, connection,transaction);
                 cmd.Parameters.AddWithValue("@employeeId",clerkId);
-                cmd.Parameters.AddWithValue("@date", DateTime.Today);
+                cmd.Parameters.AddWithValue("@date", now);
                 cmd.Parameters.AddWithValue("@status",Constant.STATUS_PENDING);
                 int voucherID = Convert.ToInt32(cmd.ExecuteScalar());
                  
@@ -560,7 +562,7 @@ namespace StationeryStore_ADTeam11.DAOs
                 {
                     sql += $"INSERT INTO ItemAdjVoucher (ItemID, VoucherID, Qty, Reason) VALUES ('{item.ItemId}', {voucherID}, {item.Quantity}, '{item.Reason}'); \n";
                     temp = $" INSERT INTO Stockcard (ItemID,DateTime,Qty,Balance,RefType)" +
-                           $" VALUES ('{item.ItemId}','{DateTime.Today}','{item.Quantity}'," +
+                           $" VALUES ('{item.ItemId}','{now}','{item.Quantity}'," +
                            $"(SELECT TOP 1 Balance FROM Stockcard WHERE ItemID='{item.ItemId}' ORDER BY ID DESC)+{item.Quantity}" +
                            $",'ADJ-{voucherID}'); \n";
                     sqlStockCard += temp;

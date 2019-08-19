@@ -20,10 +20,10 @@ namespace StationeryStore_ADTeam11.DAOs
             try
             {
                 connection.Open();
-                string sql = "spRetrievalList";
+                string sql = "spRetrievalList2";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@date",DateUtils.getLastRequestDate());
+              //  cmd.Parameters.AddWithValue("@date",DateUtils.getLastRequestDate());
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -86,8 +86,9 @@ namespace StationeryStore_ADTeam11.DAOs
             conn.Open();
             string sql = @"select list.itemid as itemid, SUM(list.NeededQty) as sum from (select i.ID as itemid,r.ID as reqid,ir.NeededQty 
                         from Request r, ItemRequest ir, Item i 
-                        where r.Status  in ('Disbursed', 'Approved') and r.ID = ir.RequestID and ir.ItemID = i.id) as list group by list.itemid";
+                        where r.Status  in ('Disbursed', 'Approved') and convert(date,r.DateTime) < CONVERT(date, @date) and r.ID = ir.RequestID and ir.ItemID = i.id) as list group by list.itemid";
             SqlCommand command = new SqlCommand(sql, conn);
+            command.Parameters.AddWithValue("@date", DateUtils.getLastRequestDate());
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {

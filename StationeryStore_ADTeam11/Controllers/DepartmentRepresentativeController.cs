@@ -96,11 +96,13 @@ namespace StationeryStore_ADTeam11.Controllers
         {
             OutstandingDAO outstandingDAO = new OutstandingDAO();
             string deptId = GetDeptId(Session["username"].ToString());
-            foreach(var ir in itemRequestDAO.GetDisburseItems(deptId))
-            {
-                outstandingDAO.AddItemRequest(ir);
-                requestDAO.UpdateDisbursedDate(ir);
-            }
+            //foreach(var ir in itemRequestDAO.GetDisburseItems(deptId))
+            //{
+            //    outstandingDAO.AddItemRequest(ir);
+            //    requestDAO.UpdateDisbursedDate(ir);
+            //}
+            DisbursementDAO dao = new DisbursementDAO();
+            dao.ApproveDisbursement(deptId);
             return RedirectToAction("Disbursement");
         }
     }

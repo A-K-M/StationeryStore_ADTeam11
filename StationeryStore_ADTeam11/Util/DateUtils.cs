@@ -13,5 +13,9 @@ namespace StationeryStore_ADTeam11.Util
                 resDate = resDate.AddDays(-1);
             return resDate;
         }
+        public static string now() {
+            DateTime now = DateTime.Now;
+            return now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        }
     }
 }

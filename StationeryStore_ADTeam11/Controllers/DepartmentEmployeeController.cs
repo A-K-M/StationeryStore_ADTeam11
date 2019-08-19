@@ -152,13 +152,11 @@ namespace StationeryStore_ADTeam11.Controllers
          
         public ActionResult ReviewStationeryRequest()
         {
-            if (Session["delegation"].ToString() != "Yes")
-            {
-                return RedirectToAction("ShowError", "Base");
-            }
-
+            string username = Session["username"].ToString();
+            EmployeeDAO employeeDAO = new EmployeeDAO();
+            Employee employee = employeeDAO.GetEmployeeByUsername(username);
             RequestDAO reqlist = new RequestDAO();
-            ViewData["reqlist"] = reqlist.GetRequestList();
+            ViewData["reqlist"] = reqlist.GetRequestList(employee.DepartmentId);
             return View();
         }
 
