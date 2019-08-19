@@ -505,5 +505,29 @@ namespace StationeryStore_ADTeam11.DAOs
             return count;
         }
 
+        public bool ApproveAllRequests(string deptId)
+        {
+            try
+            {
+                connection.Open();
+
+                string sql = "UPDATE Request SET Status = 'Approved' " +
+                    " WHERE ID IN( SELECT r.ID FROM Request r, Employee e " +
+                    "  WHERE r.EmployeeID = e.ID AND e.DeptID = '@deptId') AND Status = 'Pending'";
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                if (count == 0) throw new Exception();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return true;
+        }
+
     }
 }

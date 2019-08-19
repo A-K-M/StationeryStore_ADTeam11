@@ -219,7 +219,12 @@ namespace StationeryStore_ADTeam11.Controllers
 
         public ActionResult ViewPendingRequestDetails(int id)
         {
+            string deptId = GetDeptId();
+
             RequestDAO requestDAO = new RequestDAO();
+
+            ViewBag.deptId = deptId;
+
             ViewData["PendingRequests"] = requestDAO.ViewPendingRequestDetails(id);
 
             return View();
@@ -236,6 +241,11 @@ namespace StationeryStore_ADTeam11.Controllers
             email.SendEmail(employee.Email, "Requesation Status", "Dear" + employee.Name + ",   \n Please check for Requestsation status. Regards,\n" + sender);
             return RedirectToAction("ReviewStationeryRequest", "DepartmentHead");
 
+        }
+
+        public ActionResult ApproveAllRequests()
+        {
+            return View();
         }
     }
 }

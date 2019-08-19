@@ -3,13 +3,18 @@
 @{
     ViewBag.Title = "ReviewStationeryRequest";
     var reqlist = (List<StationeryRequest>)ViewData["reqlist"];
+    var deptId = ViewBag.deptId;
 }
 
 
 <div class="card">
     <div class="card-header d-flex align-items-center">
-        
+        <div>
         <h4>Stationary Request List</h4>
+        </div>
+        <div>
+            <input type="button" class="btn btn-success btn-sm" value="Accept All" onclick="location.href='@Url.Action("AcceptAllRequests", "DepartmentHead",new { id= deptId})'" />
+        </div>
     </div>
     <div class="card-body">
         <table class="table  table-hover table-striped">
