@@ -216,17 +216,16 @@ namespace StationeryStore_ADTeam11.Controllers
             EmployeeDAO employeeDAO = new EmployeeDAO();
             Employee employee = employeeDAO.GetEmployeeByUsername(username);
             RequestDAO reqlist = new RequestDAO();
+            string deptId = GetDeptId();
+            ViewBag.deptId = deptId;
             ViewData["reqlist"] = reqlist.GetRequestList(employee.DepartmentId);
             return View();
         }
 
         public ActionResult ViewPendingRequestDetails(int id)
-        {
-            string deptId = GetDeptId();
+        {        
 
-            RequestDAO requestDAO = new RequestDAO();
-
-            ViewBag.deptId = deptId;
+            RequestDAO requestDAO = new RequestDAO();            
 
             ViewData["PendingRequests"] = requestDAO.ViewPendingRequestDetails(id);
 
@@ -246,9 +245,19 @@ namespace StationeryStore_ADTeam11.Controllers
 
         }
 
-        public ActionResult ApproveAllRequests()
+        public ActionResult ApproveAllRequests(string id)
         {
-            return View();
+            RequestDAO requestDAO = new RequestDAO();
+
+            if(!requestDAO.ApproveAllRequests(id))
+            {
+                SetFlash(Enums.FlashMessageType.Error, "Something went wrong!");
+
+                return RedirectToAction("ReviewStationeryRequest", "DepartmentHead");
+            }
+            SetFlash(Enums.FlashMessageType.Success, "Great! You've successfully approved all requests");
+
+            return RedirectToAction("ReviewStationeryRequest", "DepartmentHead");
         }
     }
 }
