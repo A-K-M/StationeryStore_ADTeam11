@@ -63,7 +63,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 connection.Close();
             }
-            return false;
+            return true;
 
 
         }
