@@ -69,7 +69,7 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 connection.Close();
             }
-            return false;
+            return true;
 
 
         }
@@ -572,11 +572,12 @@ namespace StationeryStore_ADTeam11.DAOs
             {
                 connection.Open();
 
-                string sql = "UPDATE Request SET Status = 'Approved' " +
+                string sql = @"UPDATE Request SET Status = 'Approved' " +
                     " WHERE ID IN( SELECT r.ID FROM Request r, Employee e " +
-                    "  WHERE r.EmployeeID = e.ID AND e.DeptID = '@deptId') AND Status = 'Pending'";
+                    " WHERE r.EmployeeID = e.ID AND e.DeptID = @deptId) AND Status = 'Pending'";
                 SqlCommand cmd = new SqlCommand(sql, connection);
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.Parameters.AddWithValue("@deptId",deptId);
+                int count = Convert.ToInt32(cmd.ExecuteNonQuery());
                 if (count == 0) throw new Exception();
             }
             catch (Exception e)
