@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.Util;
 using StationeryStore_ADTeam11.View_Models;
 
 namespace StationeryStore_ADTeam11.DAOs
@@ -78,7 +79,7 @@ namespace StationeryStore_ADTeam11.DAOs
             int outstandingQty = request.NeededQty - request.ActualQty;
             SqlConnection conn = connection;
             conn.Open();
-            string sql = @"update Request set DisbursedDate='" + DateTime.Now + "'where ID= @reqId";
+            string sql = @"update Request set DisbursedDate='" + DateUtils.now() + "', Status='Completed' where ID= @reqId";
             SqlCommand command = new SqlCommand(sql, conn);
             command.Parameters.AddWithValue("@reqId", request.RequestId);
             command.ExecuteNonQuery();

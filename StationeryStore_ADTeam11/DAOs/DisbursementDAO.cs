@@ -1,5 +1,6 @@
 ﻿using StationeryStore_ADTeam11.MobileModels;
 using StationeryStore_ADTeam11.Models;
+using StationeryStore_ADTeam11.Util;
 using StationeryStore_ADTeam11.View_Models;
 using System;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace StationeryStore_ADTeam11.DAOs
                         Description = reader["Description"].ToString(),
                         ItemId = reader["ItemID"].ToString(),
                         NeededQty = (int)reader["Total"],
-                        ActualQty = (int)reader["Total"]
+                        ActualQty = (int)reader["Actual"]
                     };
                     deptId = reader["deptID"].ToString();
                     System.Diagnostics.Debug.WriteLine("Dept Reader  " + deptId);
@@ -162,7 +163,7 @@ namespace StationeryStore_ADTeam11.DAOs
                         if (updatedQty >= actual)
                         {
                             updatedQty -= actual;
-                            reqSql += sqlUpdateRequestStatus(reqId);
+                          //  reqSql += sqlUpdateRequestStatus(reqId);
                             irSql += sqlUpdateItemReqQuantity(irID, 0);
                             outSql += sqlCreateOutstanding(irID, actual);
                         }
@@ -242,6 +243,8 @@ namespace StationeryStore_ADTeam11.DAOs
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@DeptID", deptId);
+                cmd.Parameters.AddWithValue("@Date", DateUtils.now());
+                
                 if (cmd.ExecuteNonQuery() == 0) throw new Exception();
             }
             catch (Exception e)

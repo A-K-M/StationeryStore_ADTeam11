@@ -233,7 +233,7 @@ namespace StationeryStore_ADTeam11.Controllers
             ViewBag.request_pen = request_pen.ToArray();
             ViewBag.request_stapler = request_stapler.ToArray();
 
-            using (var reader = new StreamReader(@"D:\AD Workspace\MLtesting\ReorderChart.csv"))
+            using (var reader = new StreamReader(@"D:\AD project\Final Testing\ReorderChart.csv"))
             {
                 List<int> paper = new List<int>();
                 List<int> pen = new List<int>();
